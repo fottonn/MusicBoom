@@ -1,3 +1,5 @@
+package ru.bugmakers;
+
 /**
  * Created by Ayrat on 09.11.2017.
  */
