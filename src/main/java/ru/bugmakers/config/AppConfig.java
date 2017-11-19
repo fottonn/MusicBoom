@@ -1,7 +1,8 @@
 package ru.bugmakers.config;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.ComponentScan.Filter;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
@@ -9,9 +10,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan("ru.bugmakers")
+@ComponentScan(value = "ru.bugmakers", excludeFilters = @Filter(Configuration.class))
+//@Import(PersistConfig.class)
 public class AppConfig {
-
 
 
 }
