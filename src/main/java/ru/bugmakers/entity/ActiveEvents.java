@@ -6,6 +6,8 @@ import java.util.GregorianCalendar;
 /**
  * Created by Ayrat on 16.11.2017.
  */
+@Entity
+@Table(name = "active_events")
 public class ActiveEvents {
     @Id
     @GeneratedValue

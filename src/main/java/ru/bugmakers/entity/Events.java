@@ -10,7 +10,7 @@ import java.util.GregorianCalendar;
  * Created by Ayrat on 14.11.2017.
  */
 @Entity
-@Table(name="EVENTS")
+@Table(name="events")
 public class Events {
     @Id
     @GeneratedValue
