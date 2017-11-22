@@ -1,9 +1,9 @@
 package ru.bugmakers.controller.mobile;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import ru.bugmakers.dto.ArtistEditRequest;
+import ru.bugmakers.dto.RegistrationListenerRequest;
+import ru.bugmakers.dto.RegistrationMusicianRequest;
 import ru.bugmakers.dto.ResponseToMobile;
 
 /**
@@ -18,8 +18,19 @@ public class MobileController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "registration/musician")
-    public ResponseToMobile musicianRegistration() {
+    public ResponseToMobile musicianRegistration(@RequestBody RegistrationMusicianRequest userRequest) {
         return null;
     }
+
+    @RequestMapping(method = RequestMethod.POST, value = "registration/listener")
+    public ResponseToMobile listenerRegistration(@RequestBody RegistrationListenerRequest userRequest) {
+        return null;
+    }
+
+
+
+
+
+
 
 }
