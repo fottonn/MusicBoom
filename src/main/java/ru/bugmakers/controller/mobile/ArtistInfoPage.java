@@ -26,8 +26,5 @@ public class ArtistInfoPage {
         return new ResponseEntity<ResponseToMobile>(null, responseHeaders, HttpStatus.OK);
     }
 
-
-
-
 }
 
