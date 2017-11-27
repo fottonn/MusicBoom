@@ -4,15 +4,15 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.bugmakers.dto.ResponseToMobile;
-import ru.bugmakers.dto.TransactionDto;
+import ru.bugmakers.dto.response.ResponseToMobile;
+import ru.bugmakers.dto.request.mobile.TransactionDtoRequest;
 
 /**
  * Created by Ayrat on 24.11.2017.
  */
 @RestController
 @RequestMapping("/mapi/")
-public class ArtistInfoPage {
+public class ArtistInfoPageMobile {
     @RequestMapping(method = RequestMethod.GET, value = "getArtist")
     public ResponseEntity<ResponseToMobile> getArtist(@RequestParam("session_id") String sessionId,
                                                    @RequestParam("id") String id,
@@ -21,7 +21,7 @@ public class ArtistInfoPage {
         return new ResponseEntity<ResponseToMobile>(null, responseHeaders, HttpStatus.OK);
     }
     @RequestMapping(method = RequestMethod.GET, value = "getArtist")
-    public ResponseEntity<ResponseToMobile> transaction(@RequestBody TransactionDto transactionDto) {
+    public ResponseEntity<ResponseToMobile> transaction(@RequestBody TransactionDtoRequest transactionDtoRequest) {
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToMobile>(null, responseHeaders, HttpStatus.OK);
     }

@@ -4,23 +4,23 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.bugmakers.dto.CardInfoDto;
-import ru.bugmakers.dto.ResponseToMobile;
+import ru.bugmakers.dto.request.mobile.CardInfoDtoRequest;
+import ru.bugmakers.dto.response.ResponseToMobile;
 
 /**
  * Created by Ayrat on 24.11.2017.
  */
 @RestController
 @RequestMapping("/mapi/artist/")
-public class ArtistFinanceManagement {
+public class ArtistFinanceManagementMobile {
     @RequestMapping(method = RequestMethod.POST, value = "card.attach")
-    public ResponseEntity<ResponseToMobile> cardAttach(@RequestBody CardInfoDto cardInfoDto) {
+    public ResponseEntity<ResponseToMobile> cardAttach(@RequestBody CardInfoDtoRequest cardInfoDtoRequest) {
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToMobile>(null, responseHeaders, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "card.update")
-    public ResponseEntity<ResponseToMobile> cardUpdate(@RequestBody CardInfoDto cardInfoDto) {
+    public ResponseEntity<ResponseToMobile> cardUpdate(@RequestBody CardInfoDtoRequest cardInfoDtoRequest) {
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToMobile>(null, responseHeaders, HttpStatus.OK);
     }

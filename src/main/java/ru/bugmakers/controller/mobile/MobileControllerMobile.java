@@ -1,17 +1,16 @@
 package ru.bugmakers.controller.mobile;
 
 import org.springframework.web.bind.annotation.*;
-import ru.bugmakers.dto.ArtistEditRequest;
-import ru.bugmakers.dto.RegistrationListenerRequest;
-import ru.bugmakers.dto.RegistrationMusicianRequest;
-import ru.bugmakers.dto.ResponseToMobile;
+import ru.bugmakers.dto.request.mobile.RegistrationListenerRequest;
+import ru.bugmakers.dto.request.mobile.RegistrationMusicianRequest;
+import ru.bugmakers.dto.response.ResponseToMobile;
 
 /**
  * Created by Ayrat on 20.11.2017.
  */
 @RestController
 @RequestMapping("/mapi")
-public class MobileController {
+public class MobileControllerMobile {
     @RequestMapping(method = RequestMethod.GET, value = "/authentification", params = {"login", "hash_password"})
     public ResponseToMobile authentification(@RequestParam("login") String login, @RequestParam("hash_password") String hashPassword ){
         return null;
