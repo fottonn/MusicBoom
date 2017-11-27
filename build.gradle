@@ -23,5 +23,7 @@ dependencies {
     compile 'org.springframework.data:spring-data-jpa:2.0.0.RELEASE'
     compile 'javax.servlet:javax.servlet-api:4.0.0'
     compile 'org.postgresql:postgresql:42.1.4'
+    compile 'org.springframework.security:spring-security-web:4.2.3.RELEASE'
+    compile 'org.apache.commons:commons-collections4:4.1'
 
 }

@@ -11,6 +11,6 @@
     <title>StreetPlay</title>
 </head>
 <body>
-    Hello, Ayrat!!!
+    Hello, <b>Ayrat</b>!!! Хэллер ничек?
 </body>
 </html>

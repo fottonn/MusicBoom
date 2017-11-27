@@ -12,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 @ComponentScan(value = "ru.bugmakers", excludeFilters = @Filter(Configuration.class))
 //@Import(PersistConfig.class)
+//@Import(SecurityConfig.class)
 public class AppConfig {
 
 

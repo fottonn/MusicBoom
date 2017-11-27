@@ -1,6 +1,9 @@
 package ru.bugmakers.entity;
 
+import ru.bugmakers.enums.Role;
+
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by Ayrat on 16.11.2017.
@@ -16,6 +19,10 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @ElementCollection
+    @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "user_id"))
+    private List<Role> roles;
+
     public Long getId() {
         return id;
     }
@@ -30,5 +37,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 }
