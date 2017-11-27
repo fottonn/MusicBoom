@@ -1,5 +1,7 @@
 package ru.bugmakers.entity;
 
+import ru.bugmakers.enums.Role;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -17,12 +19,9 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinTable(
-            name = "user_authority",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
-    private List<UserAuthority> authorities;
+    @ElementCollection
+    @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "user_id"))
+    private List<Role> roles;
 
     public Long getId() {
         return id;
@@ -40,11 +39,11 @@ public class User {
         this.password = password;
     }
 
-    public List<UserAuthority> getAuthorities() {
-        return authorities;
+    public List<Role> getRoles() {
+        return roles;
     }
 
-    public void setAuthorities(List<UserAuthority> authorities) {
-        this.authorities = authorities;
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 }
