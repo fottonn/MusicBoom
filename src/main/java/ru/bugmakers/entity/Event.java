@@ -10,15 +10,11 @@ import java.util.GregorianCalendar;
  * Created by Ayrat on 14.11.2017.
  */
 @Entity
-@Table(name="events")
-public class Events {
+@Table(name="event")
+public class Event {
     @Id
     @GeneratedValue
     private Long events_id;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private User userId;
 
     @Column(name="event_name")
     private String eventName;
@@ -50,14 +46,6 @@ public class Events {
 
     public void setEvents_id(Long events_id) {
         this.events_id = events_id;
-    }
-
-    public User getUserId() {
-        return userId;
-    }
-
-    public void setUserId(User userId) {
-        this.userId = userId;
     }
 
     public String getEventName() {

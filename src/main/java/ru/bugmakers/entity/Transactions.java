@@ -19,11 +19,11 @@ public class Transactions {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User senderId;
+    private UserLogin senderId;
     @ManyToOne
 
     @JoinColumn(name = "user_id")
-    private User recipientId;
+    private UserLogin recipientId;
 
     @Column(name = "sum")
     private BigDecimal sum;
@@ -45,19 +45,19 @@ public class Transactions {
         this.id = id;
     }
 
-    public User getSenderId() {
+    public UserLogin getSenderId() {
         return senderId;
     }
 
-    public void setSenderId(User senderId) {
+    public void setSenderId(UserLogin senderId) {
         this.senderId = senderId;
     }
 
-    public User getRecipientId() {
+    public UserLogin getRecipientId() {
         return recipientId;
     }
 
-    public void setRecipientId(User recipientId) {
+    public void setRecipientId(UserLogin recipientId) {
         this.recipientId = recipientId;
     }
 

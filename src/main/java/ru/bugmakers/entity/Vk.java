@@ -8,13 +8,10 @@ import javax.persistence.*;
 @Entity
 @Table(name = "vk_contacts")
 public class Vk {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private User user;
 
     @Column(name = "vk")
     private String vk;
@@ -25,14 +22,6 @@ public class Vk {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public String getVk() {

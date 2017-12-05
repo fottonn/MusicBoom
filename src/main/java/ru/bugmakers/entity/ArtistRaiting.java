@@ -12,10 +12,6 @@ public class ArtistRaiting {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private User user;
-
     @Column(name = "city_raiting")
     private String cityRaitng;
 
@@ -28,14 +24,6 @@ public class ArtistRaiting {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public String getCityRaitng() {

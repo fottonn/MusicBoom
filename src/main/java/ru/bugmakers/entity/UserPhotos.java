@@ -12,10 +12,6 @@ public class UserPhotos {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
     @Column(name = "photo")
     private String photoPath;
 
@@ -28,14 +24,6 @@ public class UserPhotos {
 
     public void setId(Long id) {
         Id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public String getPhotoPath() {
