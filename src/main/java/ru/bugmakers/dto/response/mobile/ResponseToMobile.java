@@ -1,4 +1,4 @@
-package ru.bugmakers.dto.response;
+package ru.bugmakers.dto.response.mobile;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

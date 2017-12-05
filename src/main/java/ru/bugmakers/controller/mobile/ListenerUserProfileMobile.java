@@ -4,8 +4,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.bugmakers.dto.request.mobile.ListenerProfileDto;
-import ru.bugmakers.dto.response.ResponseToMobile;
+import ru.bugmakers.dto.request.mobile.ListenerProfileRequest;
+import ru.bugmakers.dto.response.mobile.ResponseToMobile;
 
 /**
  * Created by Ayrat on 27.11.2017.
@@ -14,7 +14,7 @@ import ru.bugmakers.dto.response.ResponseToMobile;
 @RequestMapping("/mapi/listener/editing")
 public class ListenerUserProfileMobile {
     @RequestMapping(method = RequestMethod.POST, value = "listeer.editing")
-    public ResponseEntity<ResponseToMobile> editProfile(@RequestBody ListenerProfileDto listenerProfileDto) {
+    public ResponseEntity<ResponseToMobile> editProfile(@RequestBody ListenerProfileRequest listenerProfileRequest) {
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToMobile>(null, responseHeaders, HttpStatus.OK);
     }

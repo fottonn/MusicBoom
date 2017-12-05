@@ -4,9 +4,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.bugmakers.dto.request.mobile.PerformaneStartValidationDtoRequest;
-import ru.bugmakers.dto.response.ResponseToMobile;
-import ru.bugmakers.dto.request.mobile.UpdateMapDtoRequest;
+import ru.bugmakers.dto.request.mobile.PerformaneStartValidationRequest;
+import ru.bugmakers.dto.response.mobile.ResponseToMobile;
+import ru.bugmakers.dto.request.mobile.UpdateMapRequestArtist;
 
 /**
  * Created by Ayrat on 24.11.2017.
@@ -15,17 +15,17 @@ import ru.bugmakers.dto.request.mobile.UpdateMapDtoRequest;
 @RequestMapping("/mapi/artist/")
 public class ArtistDesktopFunctionalMobile {
     @RequestMapping(method = RequestMethod.POST, value = "upadateMap")
-    public ResponseEntity<ResponseToMobile> updateMap(@RequestBody UpdateMapDtoRequest updateMapDtoRequest) {
+    public ResponseEntity<ResponseToMobile> updateMap(@RequestBody UpdateMapRequestArtist updateMapRequestArtist) {
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToMobile>(null, responseHeaders, HttpStatus.OK);
     }
     @RequestMapping(method = RequestMethod.POST, value = "performance.start")
-    public ResponseEntity<ResponseToMobile> startPerformane(@RequestBody PerformaneStartValidationDtoRequest performaneStartValidationDtoRequest) {
+    public ResponseEntity<ResponseToMobile> startPerformane(@RequestBody PerformaneStartValidationRequest performaneStartValidationRequest) {
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToMobile>(null, responseHeaders, HttpStatus.OK);
     }
     @RequestMapping(method = RequestMethod.POST, value = "performance.validation")
-    public ResponseEntity<ResponseToMobile> validationPerformane(@RequestBody PerformaneStartValidationDtoRequest performaneStartValidationDtoRequest) {
+    public ResponseEntity<ResponseToMobile> validationPerformane(@RequestBody PerformaneStartValidationRequest performaneStartValidationRequest) {
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToMobile>(null, responseHeaders, HttpStatus.OK);
     }

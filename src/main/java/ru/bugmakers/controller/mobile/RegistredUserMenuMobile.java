@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.bugmakers.dto.request.mobile.FeedBackRequest;
-import ru.bugmakers.dto.response.ResponseToMobile;
+import ru.bugmakers.dto.response.mobile.ResponseToMobile;
 
 /**
  * Created by Ayrat on 24.11.2017.

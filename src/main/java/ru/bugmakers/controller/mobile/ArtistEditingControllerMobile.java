@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.bugmakers.dto.request.mobile.ArtistEditRequest;
-import ru.bugmakers.dto.response.ResponseToMobile;
+import ru.bugmakers.dto.response.mobile.ResponseToMobile;
 
 /**
  * Created by Ayrat on 21.11.2017.
