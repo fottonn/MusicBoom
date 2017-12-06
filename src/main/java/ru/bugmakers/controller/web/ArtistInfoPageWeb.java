@@ -10,17 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.bugmakers.dto.response.web.ResponseToWeb;
 
 /**
- * Created by Ayrat on 05.12.2017.
+ * Created by Ayrat on 06.12.2017.
  */
 @RestController
 @RequestMapping("/webapi")
-public class ArtistAuthenticationWeb {
-    //TODO это не точно
-    @RequestMapping(method = RequestMethod.GET, value = "/authentication")
-    public ResponseEntity<ResponseToWeb> ArtistWebAuthentication(@RequestParam("id") String id,
-                                                                 @RequestParam("hash_password") String passwordHash) {
+public class ArtistInfoPageWeb {
+    @RequestMapping(method = RequestMethod.GET, value = "/getArtistInfo")
+    public ResponseEntity<ResponseToWeb> ArtistWebAuthentication(@RequestParam("artistId") String artistId) {
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToWeb>(null, responseHeaders, HttpStatus.OK);
     }
-
 }

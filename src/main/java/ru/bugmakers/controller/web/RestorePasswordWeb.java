@@ -26,7 +26,7 @@ public class RestorePasswordWeb {
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToWeb>(null, responseHeaders, HttpStatus.OK);
     }
-    @RequestMapping(method = RequestMethod.POST, value = "chngpassword")
+    @RequestMapping(method = RequestMethod.POST, value = "/chngpassword")
     public ResponseEntity<ResponseToWeb> artistProfileEdit(@RequestBody NewPasswordRequest newPasswordRequest) {
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToWeb>(null, responseHeaders, HttpStatus.OK);
