@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.bugmakers.dto.request.mobile.ArtistEditRequest;
+import ru.bugmakers.dto.request.mobile.UploadPhotosRequest;
 import ru.bugmakers.dto.response.mobile.ResponseToMobile;
 
 /**
@@ -13,9 +14,9 @@ import ru.bugmakers.dto.response.mobile.ResponseToMobile;
  */
 @RestController
 @RequestMapping("/mapi/artist/editing")
-public class ArtistEditingControllerMobile {
+public class ArtistProfileEditMobile {
     @RequestMapping(method = RequestMethod.POST, value = "/artist.personal")
-    public ResponseEntity<ResponseToMobile> artistEditi(@RequestBody ArtistEditRequest artistEditRequest) {
+    public ResponseEntity<ResponseToMobile> artistEditing(@RequestBody ArtistEditRequest artistEditRequest) {
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToMobile>(null, responseHeaders, HttpStatus.OK);
     }
@@ -79,9 +80,7 @@ public class ArtistEditingControllerMobile {
 
     //TODO Узнать как принимать массив фоток
     @RequestMapping(method = RequestMethod.POST, value = "/artist.uploadPhotos")
-    public ResponseEntity<ResponseToMobile> artistUploadPhotos (@RequestParam("session_id") String sessionId,
-                                                               @RequestParam("id") String id,
-                                                               @RequestParam("image") MultipartFile file) {
+    public ResponseEntity<ResponseToMobile> artistUploadPhotos (@RequestBody UploadPhotosRequest uploadPhotosRequest) {
          HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToMobile>(null, responseHeaders, HttpStatus.OK);
     }

@@ -46,5 +46,4 @@ public class AdminConsoleWeb {
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToWeb>(null, responseHeaders, HttpStatus.OK);
     }
-
 }

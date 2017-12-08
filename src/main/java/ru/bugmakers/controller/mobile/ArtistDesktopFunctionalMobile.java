@@ -4,7 +4,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.bugmakers.dto.request.mobile.PerformaneStartValidationRequest;
+import ru.bugmakers.dto.request.mobile.PerformanceStartValidationRequest;
 import ru.bugmakers.dto.response.mobile.ResponseToMobile;
 import ru.bugmakers.dto.request.mobile.UpdateMapRequestArtist;
 
@@ -20,12 +20,12 @@ public class ArtistDesktopFunctionalMobile {
         return new ResponseEntity<ResponseToMobile>(null, responseHeaders, HttpStatus.OK);
     }
     @RequestMapping(method = RequestMethod.POST, value = "performance.start")
-    public ResponseEntity<ResponseToMobile> startPerformane(@RequestBody PerformaneStartValidationRequest performaneStartValidationRequest) {
+    public ResponseEntity<ResponseToMobile> startPerformane(@RequestBody PerformanceStartValidationRequest performanceStartValidationRequest) {
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToMobile>(null, responseHeaders, HttpStatus.OK);
     }
     @RequestMapping(method = RequestMethod.POST, value = "performance.validation")
-    public ResponseEntity<ResponseToMobile> validationPerformane(@RequestBody PerformaneStartValidationRequest performaneStartValidationRequest) {
+    public ResponseEntity<ResponseToMobile> validationPerformane(@RequestBody PerformanceStartValidationRequest performanceStartValidationRequest) {
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToMobile>(null, responseHeaders, HttpStatus.OK);
     }
