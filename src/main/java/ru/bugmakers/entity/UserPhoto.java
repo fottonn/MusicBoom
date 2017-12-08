@@ -5,16 +5,13 @@ import javax.persistence.*;
 /**
  * Created by Ayrat on 20.11.2017.
  */
+@Entity
 @Table(name = "user_photos")
-@javax.persistence.Entity
-public class UserPhotos {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long Id;
+public class UserPhoto {
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Id
+    @GeneratedValue
+    private Long Id;
 
     @Column(name = "photo")
     private String photoPath;
@@ -28,14 +25,6 @@ public class UserPhotos {
 
     public void setId(Long id) {
         Id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public String getPhotoPath() {
@@ -54,3 +43,8 @@ public class UserPhotos {
         isAvatar = avatar;
     }
 }
+
+
+
+
+

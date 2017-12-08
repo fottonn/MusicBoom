@@ -8,17 +8,13 @@ import javax.print.attribute.standard.MediaSize;
 /**
  * Created by Ayrat on 20.11.2017.
  */
-@Table(name = "artist_info")
 @Entity
+@Table(name = "artist_info")
 public class ArtistInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private User user;
 
     @Column(name = "creativity")
     private String creativity;
@@ -27,10 +23,15 @@ public class ArtistInfo {
     private String instrument;
 
     @Column(name = "genre")
+    @Enumerated(EnumType.STRING)
     private Genre genre;
 
     @Column(name = "is_ordered")
     private Boolean isOrdered;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Long getId() {
         return id;
@@ -38,14 +39,6 @@ public class ArtistInfo {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public String getCreativity() {
@@ -79,4 +72,13 @@ public class ArtistInfo {
     public void setOrdered(Boolean ordered) {
         isOrdered = ordered;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
+

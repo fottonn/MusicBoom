@@ -3,61 +3,56 @@ package ru.bugmakers.entity;
 import ru.bugmakers.enums.EventType;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
 import java.util.GregorianCalendar;
 
 /**
  * Created by Ayrat on 14.11.2017.
  */
 @Entity
-@Table(name="events")
-public class Events {
+@Table(name = "event")
+public class Event {
+
     @Id
     @GeneratedValue
-    private Long events_id;
+    private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private User userId;
-
-    @Column(name="event_name")
+    @Column(name = "event_name")
     private String eventName;
 
-    @Column(name="event_type")
+    @Column(name = "event_type")
+    @Enumerated(EnumType.STRING)
     private EventType eventType;
 
-    @Column(name="event_description")
+    @Column(name = "event_description")
     private String eventDescription;
 
-    @Column(name="start_date")
+    @Column(name = "start_date")
+    @Temporal(TemporalType.DATE)
     private GregorianCalendar startDate;
 
-    @Column(name="end_date")
+    @Column(name = "end_date")
+    @Temporal(TemporalType.DATE)
     private GregorianCalendar endDate;
 
-    @Column(name="location")
+    @Column(name = "location")
     private String location;
 
-    @Column(name="lng")
+    @Column(name = "lng")
     private String lng;
 
-    @Column(name="lat")
+    @Column(name = "lat")
     private String lat;
 
-    public Long getEvents_id() {
-        return events_id;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public Long getId() {
+        return id;
     }
 
-    public void setEvents_id(Long events_id) {
-        this.events_id = events_id;
-    }
-
-    public User getUserId() {
-        return userId;
-    }
-
-    public void setUserId(User userId) {
-        this.userId = userId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getEventName() {
