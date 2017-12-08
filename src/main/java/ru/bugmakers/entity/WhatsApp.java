@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class WhatsApp {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private Long id;
 
     @Column(name = "whatsapp")

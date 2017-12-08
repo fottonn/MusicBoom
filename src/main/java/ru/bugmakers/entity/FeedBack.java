@@ -7,14 +7,15 @@ import javax.persistence.*;
 /**
  * Created by Ayrat on 16.11.2017.
  */
-@javax.persistence.Entity
-@Table(name="feedback")
+@Entity
+@Table(name = "feedback")
 public class FeedBack {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name = "feed_back_type")
+    @Enumerated(EnumType.STRING)
     private FeedBackType feedBackType;
 
     @Column(name = "text")

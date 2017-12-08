@@ -7,8 +7,9 @@ import java.util.GregorianCalendar;
  * Created by Ayrat on 16.11.2017.
  */
 @Entity
-@Table(name = "active_events")
-public class ActiveEvents {
+@Table(name = "active_event")
+public class ActiveEvent {
+
     @Id
     @GeneratedValue
     private Long id;
@@ -25,12 +26,11 @@ public class ActiveEvents {
     @Column(name = "end_time")
     private GregorianCalendar endTime;
 
-    public void setEndTime(GregorianCalendar endTime) {
-        this.endTime = endTime;
-    }
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Long getId() {
-
         return id;
     }
 
@@ -60,5 +60,21 @@ public class ActiveEvents {
 
     public void setBeginTime(GregorianCalendar beginTime) {
         this.beginTime = beginTime;
+    }
+
+    public GregorianCalendar getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(GregorianCalendar endTime) {
+        this.endTime = endTime;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

@@ -36,12 +36,12 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getUserLogin().getPassword();
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getUserLogin().getLogin();
+        return user.getLogin();
     }
 
     @Override

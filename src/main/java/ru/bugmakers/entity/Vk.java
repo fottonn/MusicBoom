@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class Vk {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private Long id;
 
     @Column(name = "vk")

@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Table(name = "telegram_contact")
 public class TelegramContact {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private Long id;
 
     @Column(name = "telegram")

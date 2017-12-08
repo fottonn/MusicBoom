@@ -5,11 +5,12 @@ import javax.persistence.*;
 /**
  * Created by Ayrat on 20.11.2017.
  */
+@Entity
 @Table(name = "user_photos")
-@javax.persistence.Entity
-public class UserPhotos {
+public class UserPhoto {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private Long Id;
 
     @Column(name = "photo")
@@ -42,3 +43,8 @@ public class UserPhotos {
         isAvatar = avatar;
     }
 }
+
+
+
+
+

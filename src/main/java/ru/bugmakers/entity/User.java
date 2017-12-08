@@ -12,15 +12,12 @@ import java.util.List;
  */
 @Entity
 @Table(name = "user")
+@SecondaryTable(name = "user_login", pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
 public class User {
 
     @Id
     @GeneratedValue
     private Long id;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_login_id")
-    private UserLogin userLogin;
 
     @Column(name = "name")
     private String name;
@@ -63,20 +60,52 @@ public class User {
     @Enumerated(EnumType.STRING)
     private List<Role> roles;
 
+    @Column(name = "login", table = "user_login")
+    private String login;
+
+    @Column(name = "password", table = "user_login")
+    private String password;
+
+    @OneToOne(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
+    private ArtistInfo artistInfo;
+
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name = "vk_id")
+    private Vk vk;
+
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name = "telegram_id")
+    private TelegramContact telegramContact;
+
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name = "whatsapp_id")
+    private WhatsApp whatsApp;
+
+    @OneToOne(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
+    private ActiveEvent activeEvent;
+
+    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<Event> events;
+
+    @OneToMany(mappedBy = "sender")
+    private List<Transaction> senderTransactions;
+
+    @OneToMany(mappedBy = "recipient")
+    private List<Transaction> recipientTransactions;
+
+    @OneToOne(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
+    private ArtistRating artistRating;
+
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private List<UserPhoto> photos;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public UserLogin getUserLogin() {
-        return userLogin;
-    }
-
-    public void setUserLogin(UserLogin userLogin) {
-        this.userLogin = userLogin;
     }
 
     public String getName() {
@@ -181,5 +210,101 @@ public class User {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public ArtistInfo getArtistInfo() {
+        return artistInfo;
+    }
+
+    public void setArtistInfo(ArtistInfo artistInfo) {
+        this.artistInfo = artistInfo;
+    }
+
+    public Vk getVk() {
+        return vk;
+    }
+
+    public void setVk(Vk vk) {
+        this.vk = vk;
+    }
+
+    public TelegramContact getTelegramContact() {
+        return telegramContact;
+    }
+
+    public void setTelegramContact(TelegramContact telegramContact) {
+        this.telegramContact = telegramContact;
+    }
+
+    public WhatsApp getWhatsApp() {
+        return whatsApp;
+    }
+
+    public void setWhatsApp(WhatsApp whatsApp) {
+        this.whatsApp = whatsApp;
+    }
+
+    public ActiveEvent getActiveEvent() {
+        return activeEvent;
+    }
+
+    public void setActiveEvent(ActiveEvent activeEvent) {
+        this.activeEvent = activeEvent;
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
+    }
+
+    public List<Transaction> getSenderTransactions() {
+        return senderTransactions;
+    }
+
+    public void setSenderTransactions(List<Transaction> senderTransactions) {
+        this.senderTransactions = senderTransactions;
+    }
+
+    public List<Transaction> getRecipientTransactions() {
+        return recipientTransactions;
+    }
+
+    public void setRecipientTransactions(List<Transaction> recipientTransactions) {
+        this.recipientTransactions = recipientTransactions;
+    }
+
+    public ArtistRating getArtistRating() {
+        return artistRating;
+    }
+
+    public void setArtistRating(ArtistRating artistRating) {
+        this.artistRating = artistRating;
+    }
+
+    public List<UserPhoto> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<UserPhoto> photos) {
+        this.photos = photos;
     }
 }

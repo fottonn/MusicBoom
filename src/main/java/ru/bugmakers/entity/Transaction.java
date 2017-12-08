@@ -9,21 +9,21 @@ import java.util.GregorianCalendar;
 /**
  * Created by Ayrat on 16.11.2017.
  */
-@javax.persistence.Entity
-@Table(name="transactions")
-public class Transactions {
+@Entity
+@Table(name = "transaction")
+public class Transaction {
 
     @Id
     @GeneratedValue
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserLogin senderId;
-    @ManyToOne
+    @JoinColumn(name = "sender_id")
+    private User sender;
 
-    @JoinColumn(name = "user_id")
-    private UserLogin recipientId;
+    @ManyToOne
+    @JoinColumn(name = "recipient_id")
+    private User recipient;
 
     @Column(name = "sum")
     private BigDecimal sum;
@@ -32,6 +32,7 @@ public class Transactions {
     private String number;
 
     @Column(name = "date")
+    @Temporal(TemporalType.DATE)
     private GregorianCalendar date;
 
     @Column(name = "status")
@@ -45,20 +46,20 @@ public class Transactions {
         this.id = id;
     }
 
-    public UserLogin getSenderId() {
-        return senderId;
+    public User getSender() {
+        return sender;
     }
 
-    public void setSenderId(UserLogin senderId) {
-        this.senderId = senderId;
+    public void setSender(User sender) {
+        this.sender = sender;
     }
 
-    public UserLogin getRecipientId() {
-        return recipientId;
+    public User getRecipient() {
+        return recipient;
     }
 
-    public void setRecipientId(UserLogin recipientId) {
-        this.recipientId = recipientId;
+    public void setRecipient(User recipient) {
+        this.recipient = recipient;
     }
 
     public BigDecimal getSum() {
