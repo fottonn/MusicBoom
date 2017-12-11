@@ -4,8 +4,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.bugmakers.dto.request.mobile.UpdateMapRequestArtistOrListener;
 import ru.bugmakers.dto.response.mobile.ResponseToMobile;
-import ru.bugmakers.dto.request.mobile.UpdateMapRequestListener;
 
 /**
  * Created by Ayrat on 27.11.2017.
@@ -14,7 +14,7 @@ import ru.bugmakers.dto.request.mobile.UpdateMapRequestListener;
 @RequestMapping("/mapi")
 public class ListenerMainPageMobile {
     @RequestMapping(method = RequestMethod.POST, value = "updateMap")
-    public ResponseEntity<ResponseToMobile> updateMap(@RequestBody UpdateMapRequestListener updateMapRequestListener) {
+    public ResponseEntity<ResponseToMobile> updateMap(@RequestBody UpdateMapRequestArtistOrListener updateMapRequestListener) {
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToMobile>(null, responseHeaders, HttpStatus.OK);
     }

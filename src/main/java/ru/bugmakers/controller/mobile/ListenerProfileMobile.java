@@ -12,7 +12,7 @@ import ru.bugmakers.dto.response.mobile.ResponseToMobile;
  */
 @RestController
 @RequestMapping("/mapi/listener/editing")
-public class ListenerUserProfileMobile {
+public class ListenerProfileMobile {
     @RequestMapping(method = RequestMethod.POST, value = "listeer.editing")
     public ResponseEntity<ResponseToMobile> editProfile(@RequestBody ListenerProfileRequest listenerProfileRequest) {
         HttpHeaders responseHeaders = new HttpHeaders();

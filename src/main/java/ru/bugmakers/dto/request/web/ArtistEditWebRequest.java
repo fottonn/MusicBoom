@@ -1,11 +1,9 @@
-package ru.bugmakers.dto.request.mobile;
-
-import ru.bugmakers.dto.request.SessionDataRequest;
+package ru.bugmakers.dto.request.web;
 
 /**
- * Created by Ayrat on 21.11.2017.
+ * Created by Ayrat on 11.12.2017.
  */
-public class ArtistEditRequest extends SessionDataRequest {
+public class ArtistEditWebRequest {
     /**
      * Имя
      */
@@ -42,6 +40,11 @@ public class ArtistEditRequest extends SessionDataRequest {
      */
     private String public_name;
 
+    private String creativity;
+    private String instrument;
+    private String genre;
+    private String aboutMe;
+    private String setInvitable;
 
     public String getName() {
         return name;
@@ -115,6 +118,14 @@ public class ArtistEditRequest extends SessionDataRequest {
         this.tlg = tlg;
     }
 
+    public String getWhatsapp() {
+        return whatsapp;
+    }
+
+    public void setWhatsapp(String whatsapp) {
+        this.whatsapp = whatsapp;
+    }
+
     public String getPublic_name() {
         return public_name;
     }
@@ -123,11 +134,43 @@ public class ArtistEditRequest extends SessionDataRequest {
         this.public_name = public_name;
     }
 
-    public String getWhatsapp() {
-        return whatsapp;
+    public String getCreativity() {
+        return creativity;
     }
 
-    public void setWhatsapp(String whatsapp) {
-        this.whatsapp = whatsapp;
+    public void setCreativity(String creativity) {
+        this.creativity = creativity;
+    }
+
+    public String getUnstrument() {
+        return instrument;
+    }
+
+    public void setUnstrument(String unstrument) {
+        this.instrument = unstrument;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public String getAboutMe() {
+        return aboutMe;
+    }
+
+    public void setAboutMe(String aboutMe) {
+        this.aboutMe = aboutMe;
+    }
+
+    public String getSetInvitable() {
+        return setInvitable;
+    }
+
+    public void setSetInvitable(String setInvitable) {
+        this.setInvitable = setInvitable;
     }
 }

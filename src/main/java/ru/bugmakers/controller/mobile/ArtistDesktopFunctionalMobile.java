@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.bugmakers.dto.request.mobile.PerformanceStartValidationRequest;
 import ru.bugmakers.dto.response.mobile.ResponseToMobile;
-import ru.bugmakers.dto.request.mobile.UpdateMapRequestArtist;
+import ru.bugmakers.dto.request.mobile.UpdateMapRequestArtistOrListener;
 
 /**
  * Created by Ayrat on 24.11.2017.
@@ -15,17 +15,17 @@ import ru.bugmakers.dto.request.mobile.UpdateMapRequestArtist;
 @RequestMapping("/mapi/artist/")
 public class ArtistDesktopFunctionalMobile {
     @RequestMapping(method = RequestMethod.POST, value = "upadateMap")
-    public ResponseEntity<ResponseToMobile> updateMap(@RequestBody UpdateMapRequestArtist updateMapRequestArtist) {
+    public ResponseEntity<ResponseToMobile> updateMap(@RequestBody UpdateMapRequestArtistOrListener updateMapRequestArtistOrListener) {
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToMobile>(null, responseHeaders, HttpStatus.OK);
     }
     @RequestMapping(method = RequestMethod.POST, value = "performance.start")
-    public ResponseEntity<ResponseToMobile> startPerformane(@RequestBody PerformanceStartValidationRequest performanceStartValidationRequest) {
+    public ResponseEntity<ResponseToMobile> startPerformance(@RequestBody PerformanceStartValidationRequest performanceStartValidationRequest) {
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToMobile>(null, responseHeaders, HttpStatus.OK);
     }
     @RequestMapping(method = RequestMethod.POST, value = "performance.validation")
-    public ResponseEntity<ResponseToMobile> validationPerformane(@RequestBody PerformanceStartValidationRequest performanceStartValidationRequest) {
+    public ResponseEntity<ResponseToMobile> validationPerformance(@RequestBody PerformanceStartValidationRequest performanceStartValidationRequest) {
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToMobile>(null, responseHeaders, HttpStatus.OK);
     }

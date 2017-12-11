@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import ru.bugmakers.dto.request.mobile.ArtistEditRequest;
 import ru.bugmakers.dto.request.web.*;
 import ru.bugmakers.dto.response.web.ResponseToWeb;
 
@@ -16,8 +17,13 @@ import ru.bugmakers.dto.response.web.ResponseToWeb;
 @RestController
 @RequestMapping("/webapi/admin")
 public class AdminConsoleWeb {
-    @RequestMapping(method = RequestMethod.POST, value = "/getartistinfo")
-    public ResponseEntity<ResponseToWeb> getArtistInfo(@RequestBody ArtistInfoRequest artistInfoRequest) {
+    @RequestMapping(method = RequestMethod.POST, value = "/getartistlist")
+    public ResponseEntity<ResponseToWeb> getArtistInfo(@RequestBody ArtistListRequest artistListRequest) {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        return new ResponseEntity<ResponseToWeb>(null, responseHeaders, HttpStatus.OK);
+    }
+    @RequestMapping(method = RequestMethod.POST, value = "/artists/artist.edit")
+    public ResponseEntity<ResponseToWeb> editArtist(@RequestBody ArtistEditWebRequest artistBlockRequest) {
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToWeb>(null, responseHeaders, HttpStatus.OK);
     }
@@ -42,8 +48,14 @@ public class AdminConsoleWeb {
         return new ResponseEntity<ResponseToWeb>(null, responseHeaders, HttpStatus.OK);
     }
     @RequestMapping(method = RequestMethod.POST, value = "/artists/artist.stat.period")
-    public ResponseEntity<ResponseToWeb> getArtistStatisticWithPeriod(@RequestBody ArtistStatisticWithPeriodRequest artistStatisticWithPeriodRequest) {
+    public ResponseEntity<ResponseToWeb> getArtistStatisticWithPeriod(@RequestBody ArtistStatisticWithPeriodRequest artistStatisticRequest) {
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToWeb>(null, responseHeaders, HttpStatus.OK);
     }
+
+
+
+
+
+
 }
