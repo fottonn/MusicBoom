@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.bugmakers.dto.request.web.ArtistProfileEditingRequest;
+import ru.bugmakers.dto.request.web.ArtistEditWebRequest;
 import ru.bugmakers.dto.request.web.PhotosDeleteRequest;
 import ru.bugmakers.dto.request.web.PhotosUploadRequest;
 import ru.bugmakers.dto.response.web.ResponseToWeb;
@@ -17,7 +17,7 @@ import ru.bugmakers.dto.response.web.ResponseToWeb;
 @RequestMapping("/webapi/artist/")
 public class ArtistProfileWeb {
     @RequestMapping(method = RequestMethod.POST, value = "editing/artist.personal")
-    public ResponseEntity<ResponseToWeb> artistProfileEdit(@RequestBody ArtistProfileEditingRequest artistProfileEditing) {
+    public ResponseEntity<ResponseToWeb> artistProfileEdit(@RequestBody ArtistEditWebRequest artistProfileEditing) {
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToWeb>(null, responseHeaders, HttpStatus.OK);
     }
@@ -54,13 +54,13 @@ public class ArtistProfileWeb {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "editing/photos.delete")
-    public ResponseEntity<ResponseToWeb> deletePhotos(@RequestBody PhotosDeleteRequest photosDeleteRequest) {
+    public ResponseEntity<ResponseToWeb> deletePhotos(@RequestBody PhotosUploadRequest photosDeleteRequest) {
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToWeb>(null, responseHeaders, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "editing/photos.upload")
-    public ResponseEntity<ResponseToWeb> deletePhotos(@RequestBody PhotosUploadRequest photosUploadRequest) {
+    public ResponseEntity<ResponseToWeb> uploadPhotos(@RequestBody PhotosUploadRequest photosUploadRequest) {
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToWeb>(null, responseHeaders, HttpStatus.OK);
     }

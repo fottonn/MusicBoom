@@ -4,8 +4,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.bugmakers.dto.response.mobile.GetArtistResponse;
 import ru.bugmakers.dto.response.mobile.ResponseToMobile;
 import ru.bugmakers.dto.request.mobile.TransactionRequest;
+import ru.bugmakers.dto.response.mobile.TransactionResponse;
 
 /**
  * Created by Ayrat on 24.11.2017.
@@ -18,12 +20,14 @@ public class ArtistInfoPageMobile {
                                                    @RequestParam("id") String id,
                                                    @RequestParam("artist_id") String artistId) {
         HttpHeaders responseHeaders = new HttpHeaders();
-        return new ResponseEntity<ResponseToMobile>(null, responseHeaders, HttpStatus.OK);
+        GetArtistResponse getArtistResponse = null;
+        return new ResponseEntity<ResponseToMobile>(getArtistResponse, responseHeaders, HttpStatus.OK);
     }
     @RequestMapping(method = RequestMethod.GET, value = "getArtist")
     public ResponseEntity<ResponseToMobile> transaction(@RequestBody TransactionRequest transactionRequest) {
         HttpHeaders responseHeaders = new HttpHeaders();
-        return new ResponseEntity<ResponseToMobile>(null, responseHeaders, HttpStatus.OK);
+        TransactionResponse transactionResponse = null;
+        return new ResponseEntity<ResponseToMobile>(transactionResponse, responseHeaders, HttpStatus.OK);
     }
 
 }

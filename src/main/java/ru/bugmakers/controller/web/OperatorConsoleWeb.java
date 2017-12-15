@@ -19,7 +19,7 @@ import ru.bugmakers.dto.response.web.ResponseToWeb;
 @RequestMapping("/webapi/operator")
 public class OperatorConsoleWeb {
     @RequestMapping(method = RequestMethod.GET, value = "/getopenwithdrawlist/getcount")
-    private ResponseEntity<ResponseToWeb> getOpenWithdrawListCount(){
+    private ResponseEntity<ResponseToWeb> getOpenWithdrawListCount(@RequestBody OpenWithdrawListRequest openWithdrawListRequest){
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToWeb>(null, responseHeaders, HttpStatus.OK);
     }
@@ -29,7 +29,7 @@ public class OperatorConsoleWeb {
         return new ResponseEntity<ResponseToWeb>(null, responseHeaders, HttpStatus.OK);
     }
     @RequestMapping(method = RequestMethod.POST, value = "/getclosedwithdrawlist/getcount")
-    private ResponseEntity<ResponseToWeb> getClosedWithdrawListCount(){
+    private ResponseEntity<ResponseToWeb> getClosedWithdrawListCount(@RequestBody ClosedWithdrawListRequest closedWithdrawListRequest){
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToWeb>(null, responseHeaders, HttpStatus.OK);
     }
