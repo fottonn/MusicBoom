@@ -1,10 +1,15 @@
 package ru.bugmakers.entity;
 
+import org.hibernate.annotations.Type;
 import ru.bugmakers.enums.Status;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.GregorianCalendar;
+
+import static ru.bugmakers.entity.EntityConstants.LOCAL_DATE_TIME_TYPE;
 
 /**
  * Created by Ayrat on 16.11.2017.
@@ -32,8 +37,8 @@ public class Transaction {
     private String number;
 
     @Column(name = "date")
-    @Temporal(TemporalType.DATE)
-    private GregorianCalendar date;
+    @Type(type = LOCAL_DATE_TIME_TYPE)
+    private LocalDateTime date;
 
     @Column(name = "status")
     private Status status;
@@ -78,11 +83,11 @@ public class Transaction {
         this.number = number;
     }
 
-    public GregorianCalendar getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(GregorianCalendar date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

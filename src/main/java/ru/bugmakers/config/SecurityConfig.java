@@ -12,6 +12,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import static ru.bugmakers.enums.Role.ADMIN;
+import static ru.bugmakers.enums.Role.ARTIST;
+
 /**
  * Created by Ivan
  */
@@ -27,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+    public void configAuthentication(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(authenticationProvider());
     }
 
@@ -42,7 +45,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         //TODO
-        super.configure(http);
+
+        http
+                .authorizeRequests()
+                .mvcMatchers("/admin").hasRole(ADMIN.name())
+                .mvcMatchers("/artist").hasRole(ARTIST.name())
+                .mvcMatchers("/login").permitAll()
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("/login/success")
+                .permitAll()
+                .and()
+                .logout()
+                .logoutUrl("/")
+                .logoutSuccessUrl("/");
     }
 
     @Bean

@@ -1,9 +1,12 @@
 package ru.bugmakers.entity;
 
+import org.hibernate.annotations.Type;
 import ru.bugmakers.enums.EventType;
 
 import javax.persistence.*;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
+
+import static ru.bugmakers.entity.EntityConstants.LOCAL_DATE_TIME_TYPE;
 
 /**
  * Created by Ayrat on 14.11.2017.
@@ -27,12 +30,12 @@ public class Event {
     private String eventDescription;
 
     @Column(name = "start_date")
-    @Temporal(TemporalType.DATE)
-    private GregorianCalendar startDate;
+    @Type(type = LOCAL_DATE_TIME_TYPE)
+    private LocalDateTime startDate;
 
     @Column(name = "end_date")
-    @Temporal(TemporalType.DATE)
-    private GregorianCalendar endDate;
+    @Type(type = LOCAL_DATE_TIME_TYPE)
+    private LocalDateTime endDate;
 
     @Column(name = "location")
     private String location;
@@ -79,19 +82,19 @@ public class Event {
         this.eventDescription = eventDescription;
     }
 
-    public GregorianCalendar getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(GregorianCalendar startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public GregorianCalendar getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(GregorianCalendar endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 
@@ -117,5 +120,13 @@ public class Event {
 
     public void setLat(String lat) {
         this.lat = lat;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

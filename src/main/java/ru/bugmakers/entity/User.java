@@ -1,17 +1,21 @@
 package ru.bugmakers.entity;
 
+import org.hibernate.annotations.Type;
 import ru.bugmakers.enums.Role;
 import ru.bugmakers.enums.UserType;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.GregorianCalendar;
 import java.util.List;
+
+import static ru.bugmakers.entity.EntityConstants.LOCAL_DATE_TIME_TYPE;
 
 /**
  * Created by Ayrat on 16.11.2017.
  */
 @Entity
-@Table(name = "user")
+@Table(name = "user_t")
 @SecondaryTable(name = "user_login", pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
 public class User {
 
@@ -29,7 +33,8 @@ public class User {
     private String patronymic;
 
     @Column(name = "birthday")
-    private GregorianCalendar birthDay;
+    @Type(type = LOCAL_DATE_TIME_TYPE)
+    private LocalDateTime birthDay;
 
     @Column(name = "country")
     private String country;
@@ -132,11 +137,11 @@ public class User {
         this.patronymic = patronymic;
     }
 
-    public GregorianCalendar getBirthDay() {
+    public LocalDateTime getBirthDay() {
         return birthDay;
     }
 
-    public void setBirthDay(GregorianCalendar birthDay) {
+    public void setBirthDay(LocalDateTime birthDay) {
         this.birthDay = birthDay;
     }
 
