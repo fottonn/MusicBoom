@@ -6,8 +6,6 @@ import ru.bugmakers.enums.Status;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 import static ru.bugmakers.entity.EntityConstants.LOCAL_DATE_TIME_TYPE;
 
@@ -30,8 +28,8 @@ public class Transaction {
     @JoinColumn(name = "recipient_id")
     private User recipient;
 
-    @Column(name = "sum")
-    private BigDecimal sum;
+    @Column(name = "amount")
+    private BigDecimal amount;
 
     @Column(name = "number")
     private String number;
@@ -67,12 +65,12 @@ public class Transaction {
         this.recipient = recipient;
     }
 
-    public BigDecimal getSum() {
-        return sum;
+    public BigDecimal getAmount() {
+        return amount;
     }
 
-    public void setSum(BigDecimal sum) {
-        this.sum = sum;
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 
     public String getNumber() {

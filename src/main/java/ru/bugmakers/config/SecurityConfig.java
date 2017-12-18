@@ -1,6 +1,7 @@
 package ru.bugmakers.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -22,10 +23,10 @@ import static ru.bugmakers.enums.Role.ARTIST;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     @Autowired
-    public void setUserDetailsService(UserDetailsService userDetailsService) {
+    public SecurityConfig(@Qualifier("userSecurityDetailService") UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 

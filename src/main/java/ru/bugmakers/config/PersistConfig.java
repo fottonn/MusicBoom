@@ -4,6 +4,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
@@ -30,6 +31,8 @@ public class PersistConfig {
     private String dbPassword;
     @Value("${db.driver}")
     private String dbDriver;
+    @Value("${db.dialect}")
+    private String dbDialect;
     @Value("${db.pool.initial}")
     private Integer dbPoolInitial;
     @Value("${db.pool.min}")
@@ -47,7 +50,7 @@ public class PersistConfig {
         return emf;
     }
 
-    @Bean
+    @Bean(destroyMethod = "close")
     public ComboPooledDataSource dataSource() throws PropertyVetoException {
         ComboPooledDataSource dataSource = new ComboPooledDataSource();
         dataSource.setDriverClass(dbDriver);
@@ -64,9 +67,9 @@ public class PersistConfig {
     public HibernateJpaVendorAdapter jpaVendorAdapter() {
         HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
         jpaVendorAdapter.setShowSql(true);
-        jpaVendorAdapter.setDatabase(Database.POSTGRESQL);
+        jpaVendorAdapter.setDatabase(Database.MYSQL);
         jpaVendorAdapter.setGenerateDdl(true);
-        jpaVendorAdapter.setDatabasePlatform("org.hibernate.dialect.PostgreSQL9Dialect");
+        jpaVendorAdapter.setDatabasePlatform(dbDialect);
         return jpaVendorAdapter;
     }
 
