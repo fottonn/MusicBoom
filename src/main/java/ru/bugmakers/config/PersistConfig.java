@@ -76,7 +76,7 @@ public class PersistConfig {
         emf.setDataSource(dataSource());
         emf.setJpaVendorAdapter(jpaVendorAdapter());
         emf.setPackagesToScan("ru.bugmakers.entity");
-        emf.setJpaProperties(getAdditionalProperties());
+//        emf.setJpaProperties(getAdditionalProperties());
         return emf;
     }
 
