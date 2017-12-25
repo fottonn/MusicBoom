@@ -25,7 +25,7 @@ public class UserSecurityDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepo.findByEmail(username);
+        User user = userRepo.findByLoginIgnoreCase(username);
         if (user == null) {
             //TODO throw нинди бер хата
         }
