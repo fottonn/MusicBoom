@@ -5,10 +5,10 @@ import ru.bugmakers.errors.Errors;
 /**
  * Created by Ayrat on 15.12.2017.
  */
-public class ValidatePerformanceResponse extends CommonResponseToMobile implements ResponseToMobile {
+public class ValidatePerformanceResponseMobile extends CommonResponseToMobile {
  private String currentEarnedMoney;
 
-    public ValidatePerformanceResponse(Errors errors, String successMessage) {
+    public ValidatePerformanceResponseMobile(Errors errors, String successMessage) {
         super(errors, successMessage);
     }
 

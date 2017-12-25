@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class Photos implements Serializable {
     private String avatar;
-    private List<String> phots;
+    private List<String> photos;
 
     public String getAvatar() {
         return avatar;
@@ -18,11 +18,11 @@ public class Photos implements Serializable {
         this.avatar = avatar;
     }
 
-    public List<String> getPhots() {
-        return phots;
+    public List<String> getPhotos() {
+        return photos;
     }
 
-    public void setPhots(List<String> phots) {
-        this.phots = phots;
+    public void setPhotos(List<String> photos) {
+        this.photos = photos;
     }
 }

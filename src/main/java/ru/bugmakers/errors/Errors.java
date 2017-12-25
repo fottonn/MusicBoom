@@ -5,7 +5,7 @@ package ru.bugmakers.errors;
  */
 public class Errors {
     private Boolean isError;
-    private String descpription;
+    private String description;
 
     public Boolean getError() {
         return isError;
@@ -15,11 +15,11 @@ public class Errors {
         isError = error;
     }
 
-    public String getDescpription() {
-        return descpription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescpription(String descpription) {
-        this.descpription = descpription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

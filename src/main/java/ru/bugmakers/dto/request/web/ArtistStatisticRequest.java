@@ -1,18 +1,18 @@
 package ru.bugmakers.dto.request.web;
 
-import ru.bugmakers.dto.Artist;
+import ru.bugmakers.dto.ArtistPerformanceDuration;
 
 /**
  * Created by Ayrat on 06.12.2017.
  */
 public class ArtistStatisticRequest {
-    private Artist artist;
+    private ArtistPerformanceDuration artistPerformanceDuration;
 
-    public Artist getArtist() {
-        return artist;
+    public ArtistPerformanceDuration getArtistPerformanceDuration() {
+        return artistPerformanceDuration;
     }
 
-    public void setArtist(Artist artist) {
-        this.artist = artist;
+    public void setArtistPerformanceDuration(ArtistPerformanceDuration artistPerformanceDuration) {
+        this.artistPerformanceDuration = artistPerformanceDuration;
     }
 }

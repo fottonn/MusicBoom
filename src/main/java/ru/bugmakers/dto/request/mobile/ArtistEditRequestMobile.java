@@ -5,7 +5,7 @@ import ru.bugmakers.dto.request.SessionDataRequest;
 /**
  * Created by Ayrat on 21.11.2017.
  */
-public class ArtistEditRequest extends SessionDataRequest {
+public class ArtistEditRequestMobile extends SessionDataRequest {
     /**
      * Имя
      */

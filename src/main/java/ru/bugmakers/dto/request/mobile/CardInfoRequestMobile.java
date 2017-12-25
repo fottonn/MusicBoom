@@ -5,7 +5,7 @@ import ru.bugmakers.dto.request.SessionDataRequest;
 /**
  * Created by Ayrat on 24.11.2017.
  */
-public class CardInfoRequest extends SessionDataRequest{
+public class CardInfoRequestMobile extends SessionDataRequest{
     private String cardNumber;
 
     public String getCardNumber() {

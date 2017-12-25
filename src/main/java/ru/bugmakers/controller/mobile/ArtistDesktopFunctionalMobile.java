@@ -17,26 +17,26 @@ public class ArtistDesktopFunctionalMobile {
     @RequestMapping(method = RequestMethod.POST, value = "upadateMap")
     public ResponseEntity<ResponseToMobile> updateMap(@RequestBody UpdateMapRequestArtistOrListener updateMapRequestArtistOrListener) {
         HttpHeaders responseHeaders = new HttpHeaders();
-        UpdateMapResponse updateMapResponse = null;
+        UpdateMapResponseMobile updateMapResponseMobile = null;
 
-        return new ResponseEntity<ResponseToMobile>(updateMapResponse, responseHeaders, HttpStatus.OK);
+        return new ResponseEntity<ResponseToMobile>(updateMapResponseMobile, responseHeaders, HttpStatus.OK);
     }
     @RequestMapping(method = RequestMethod.POST, value = "performance.start")
     public ResponseEntity<ResponseToMobile> startPerformance(@RequestBody PerformanceStartValidationRequest performanceStartValidationRequest) {
-        StartPerformance startPerformance = null;
+        StartPerformanceResponseMobile startPerformanceResponseMobile = null;
         HttpHeaders responseHeaders = new HttpHeaders();
-        return new ResponseEntity<ResponseToMobile>(startPerformance, responseHeaders, HttpStatus.OK);
+        return new ResponseEntity<ResponseToMobile>(startPerformanceResponseMobile, responseHeaders, HttpStatus.OK);
     }
     @RequestMapping(method = RequestMethod.POST, value = "performance.validation")
     public ResponseEntity<ResponseToMobile> validationPerformance(@RequestBody PerformanceStartValidationRequest performanceStartValidationRequest) {
         HttpHeaders responseHeaders = new HttpHeaders();
-        ValidatePerformanceResponse validatePerformanceResponse = null;
-        return new ResponseEntity<ResponseToMobile>(validatePerformanceResponse, responseHeaders, HttpStatus.OK);
+        ValidatePerformanceResponseMobile validatePerformanceResponseMobile = null;
+        return new ResponseEntity<ResponseToMobile>(validatePerformanceResponseMobile, responseHeaders, HttpStatus.OK);
     }
     @RequestMapping(method = RequestMethod.GET, value = "performance.end")
     public ResponseEntity<ResponseToMobile> endPerformane(@RequestParam("id") String id, @RequestParam("session_id") String sessionId) {
-        EndPerformanceResponse endPerformanceResponse = null;
+        EndPerformanceResponseMobile endPerformanceResponseMobile = null;
         HttpHeaders responseHeaders = new HttpHeaders();
-        return new ResponseEntity<ResponseToMobile>(endPerformanceResponse, responseHeaders, HttpStatus.OK);
+        return new ResponseEntity<ResponseToMobile>(endPerformanceResponseMobile, responseHeaders, HttpStatus.OK);
     }
 }

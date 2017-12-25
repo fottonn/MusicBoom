@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ru.bugmakers.dto.request.mobile.RegistrationListenerRequest;
+import ru.bugmakers.dto.response.mobile.ArtistRegistrationResponse;
 import ru.bugmakers.dto.response.mobile.ResponseToMobile;
 
 /**
@@ -18,7 +19,8 @@ import ru.bugmakers.dto.response.mobile.ResponseToMobile;
 public class ListenerRegistartionMobile {
     @RequestMapping(method = RequestMethod.POST, value = "/listener")
     public ResponseEntity<ResponseToMobile> listenerRegistration(@RequestBody RegistrationListenerRequest userRequest) {
+        ArtistRegistrationResponse artistRegistrationResponse = null;
         HttpHeaders responseHeaders = new HttpHeaders();
-        return new ResponseEntity<ResponseToMobile>(null, responseHeaders, HttpStatus.OK);
+        return new ResponseEntity<ResponseToMobile>(artistRegistrationResponse, responseHeaders, HttpStatus.OK);
     }
 }

@@ -1,17 +1,17 @@
-package ru.bugmakers.dto.response.mobile;
+package ru.bugmakers.dto.response.web;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import ru.bugmakers.errors.Errors;
 
 /**
- * Created by Ayrat on 13.12.2017.
+ * Created by Ayrat on 25.12.2017.
  */
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class CommonResponseToMobile implements ResponseToMobile {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class CommonResponseToWeb implements ResponseToWeb {
     private Errors errors;
     private String successMessage;
 
-    public CommonResponseToMobile(Errors errors, String successMessage) {
+    public CommonResponseToWeb(Errors errors, String successMessage) {
         this.errors = errors;
         this.successMessage = successMessage;
     }

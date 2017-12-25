@@ -1,6 +1,5 @@
 package ru.bugmakers.dto.response.mobile;
 
-import ru.bugmakers.dto.Artist;
 import ru.bugmakers.dto.ArtistsLocation;
 import ru.bugmakers.errors.Errors;
 
@@ -9,10 +8,10 @@ import java.util.List;
 /**
  * Created by Ayrat on 13.12.2017.
  */
-public class UpdateMapResponse extends CommonResponseToMobile implements ResponseToMobile {
+public class UpdateMapResponseMobile extends CommonResponseToMobile {
     private List<ArtistsLocation> artistsLocations;
 
-    public UpdateMapResponse(Errors errors, String successMessage) {
+    public UpdateMapResponseMobile(Errors errors, String successMessage) {
         super(errors, successMessage);
     }
 
