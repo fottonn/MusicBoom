@@ -1,13 +1,20 @@
 package ru.bugmakers.dto.request.web;
 
-import ru.bugmakers.dto.request.SessionDataRequest;
-
 /**
- * Created by Ayrat on 13.12.2017.
+ * Created by Ayrat on 06.12.2017.
  */
-public class ArtistFeedBackRequest extends SessionDataRequest {
+public class UserFeedbackRequest {
+    private String sessionId;
     private String reason;
     private String msg;
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
 
     public String getReason() {
         return reason;

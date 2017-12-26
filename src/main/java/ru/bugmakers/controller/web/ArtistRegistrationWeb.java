@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ru.bugmakers.dto.request.web.ArtistRegistrationRequest;
+import ru.bugmakers.dto.response.web.ArtistRegistrationResponseWeb;
 import ru.bugmakers.dto.response.web.ResponseToWeb;
 
 /**
@@ -17,8 +18,10 @@ import ru.bugmakers.dto.response.web.ResponseToWeb;
 @RequestMapping("/webapi/artist/")
 public class ArtistRegistrationWeb {
     @RequestMapping(method = RequestMethod.POST, value = "registration")
-    public ResponseEntity<ResponseToWeb> artistProfileEdit(@RequestBody ArtistRegistrationRequest artistProfileEditing) {
+    public ResponseEntity<ResponseToWeb> artistRegistration(@RequestBody ArtistRegistrationRequest artistProfileEditing) {
+        ArtistRegistrationResponseWeb artistRegistrationResponseWeb = null;
+
         HttpHeaders responseHeaders = new HttpHeaders();
-        return new ResponseEntity<ResponseToWeb>(null, responseHeaders, HttpStatus.OK);
+        return new ResponseEntity<ResponseToWeb>(artistRegistrationResponseWeb, responseHeaders, HttpStatus.OK);
     }
 }
