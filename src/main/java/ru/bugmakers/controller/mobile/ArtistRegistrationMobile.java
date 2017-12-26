@@ -21,6 +21,7 @@ public class ArtistRegistrationMobile {
     @RequestMapping(method = RequestMethod.POST, value = "/musician")
     public ResponseEntity<ResponseToMobile> musicianRegistration(@RequestBody RegistrationAtistRequest userRequest) {
         ArtistRegistrationResponse artistRegistrationResponse = null;
+
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToMobile>(artistRegistrationResponse, responseHeaders, HttpStatus.OK);
     }

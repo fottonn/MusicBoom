@@ -24,8 +24,15 @@ public class Artist {
     private String wapp;
     private String isPersonalData;
     private String isContract;
-    private String cityRaiting;
-    private String countryRaiting;
+    private Raiting cityRaiting;
+
+    public Raiting getCityRaiting() {
+        return cityRaiting;
+    }
+
+    public void setCityRaiting(Raiting cityRaiting) {
+        this.cityRaiting = cityRaiting;
+    }
 
     public String getEmail() {
         return email;
