@@ -3,7 +3,8 @@ package ru.bugmakers.dto.request.web;
 /**
  * Created by Ayrat on 06.12.2017.
  */
-public class UserFeedbackRequest {
+public class UserFeedbackRequestWeb {
+
     private String sessionId;
     private String reason;
     private String msg;

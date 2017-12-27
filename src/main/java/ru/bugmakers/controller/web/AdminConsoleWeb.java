@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import ru.bugmakers.controller.CommonController;
 import ru.bugmakers.dto.request.web.*;
 import ru.bugmakers.dto.response.web.*;
 
@@ -15,49 +16,41 @@ import ru.bugmakers.dto.response.web.*;
  */
 @RestController
 @RequestMapping("/webapi/admin")
-public class AdminConsoleWeb {
+public class AdminConsoleWeb extends CommonController{
     @RequestMapping(method = RequestMethod.POST, value = "/getartistlist")
-    public ResponseEntity<ResponseToWeb> getArtistInfo(@RequestBody ArtistListRequest artistListRequest) {
+    public ResponseEntity<ResponseToWeb> getArtistInfo(@RequestBody ArtistListRequestWeb artistListRequestWeb) {
         ArtistInfoFromAdminConsoleResponseWeb artistInfoFromAdminConsoleResponseWeb = null;
-        HttpHeaders responseHeaders = new HttpHeaders();
-        return new ResponseEntity<ResponseToWeb>(artistInfoFromAdminConsoleResponseWeb, responseHeaders, HttpStatus.OK);
+        return ResponseEntity.ok().headers(responseHeaders).body(artistInfoFromAdminConsoleResponseWeb);
     }
     @RequestMapping(method = RequestMethod.POST, value = "/artists/artist.edit")
-    public ResponseEntity<ResponseToWeb> editArtist(@RequestBody ArtistEditWebRequest artistBlockRequest) {
+    public ResponseEntity<ResponseToWeb> editArtist(@RequestBody ArtistEditWebRequestWeb artistBlockRequest) {
         ArtistEditingResponseWeb artistEditingResponseWeb = null;
-        HttpHeaders responseHeaders = new HttpHeaders();
-        return new ResponseEntity<ResponseToWeb>(artistEditingResponseWeb, responseHeaders, HttpStatus.OK);
+        return ResponseEntity.ok().headers(responseHeaders).body(artistEditingResponseWeb);
     }
     @RequestMapping(method = RequestMethod.POST, value = "/artists/artist.block")
-    public ResponseEntity<ResponseToWeb> blockArtist(@RequestBody ArtistBlockRequest artistBlockRequest) {
+    public ResponseEntity<ResponseToWeb> blockArtist(@RequestBody ArtistBlockRequestWeb artistBlockRequestWeb) {
         ArtistBlockResponseWeb artistBlockResponseWeb = null;
-        HttpHeaders responseHeaders = new HttpHeaders();
-        return new ResponseEntity<ResponseToWeb>(artistBlockResponseWeb, responseHeaders, HttpStatus.OK);
+        return ResponseEntity.ok().headers(responseHeaders).body(artistBlockResponseWeb);
     }
     @RequestMapping(method = RequestMethod.POST, value = "/artists/artist.delete")
-    public ResponseEntity<ResponseToWeb> deleteArtist(@RequestBody ArtistDeleteRequest artistDeleteRequest) {
+    public ResponseEntity<ResponseToWeb> deleteArtist(@RequestBody ArtistDeleteRequestWeb artistDeleteRequestWeb) {
         ArtistDeleteResponseWeb artistDeleteResponseWeb = null;
-        HttpHeaders responseHeaders = new HttpHeaders();
-        return new ResponseEntity<ResponseToWeb>(artistDeleteResponseWeb, responseHeaders, HttpStatus.OK);
+        return ResponseEntity.ok().headers(responseHeaders).body(artistDeleteResponseWeb);
     }
     @RequestMapping(method = RequestMethod.POST, value = "/artists/sendmessage")
-    public ResponseEntity<ResponseToWeb> sendMessage(@RequestBody SendMessageRequest sendMessagerequest) {
+    public ResponseEntity<ResponseToWeb> sendMessage(@RequestBody SendMessageRequestWeb sendMessagerequestWeb) {
         SendMessageResponseMobile sendMessageResponseMobile = null;
-        HttpHeaders responseHeaders = new HttpHeaders();
-        return new ResponseEntity<ResponseToWeb>(sendMessageResponseMobile, responseHeaders, HttpStatus.OK);
+        return ResponseEntity.ok().headers(responseHeaders).body(sendMessageResponseMobile);
     }
     @RequestMapping(method = RequestMethod.POST, value = "/artists/artist.stat")
-    public ResponseEntity<ResponseToWeb> getArtistStatistic(@RequestBody ArtistStatisticRequest artistStatisticRequest) {
+    public ResponseEntity<ResponseToWeb> getArtistStatistic(@RequestBody ArtistStatisticRequestWeb artistStatisticRequestWeb) {
         ArtistStatisticFromAdminConsoleResponseWeb artistStatisticFromAdminConsoleResponseWeb = null;
-
-        HttpHeaders responseHeaders = new HttpHeaders();
-        return new ResponseEntity<ResponseToWeb>(artistStatisticFromAdminConsoleResponseWeb, responseHeaders, HttpStatus.OK);
+        return ResponseEntity.ok().headers(responseHeaders).body(artistStatisticFromAdminConsoleResponseWeb);
     }
     @RequestMapping(method = RequestMethod.POST, value = "/artists/artist.stat.period")
-    public ResponseEntity<ResponseToWeb> getArtistStatisticWithPeriod(@RequestBody ArtistStatisticWithPeriodRequest artistStatisticRequest) {
+    public ResponseEntity<ResponseToWeb> getArtistStatisticWithPeriod(@RequestBody ArtistStatisticWithPeriodRequestWeb artistStatisticRequest) {
         ArtistStatisticFromAdminConsoleResponseWeb artistStatisticFromAdminConsoleResponseWeb = null;
-        HttpHeaders responseHeaders = new HttpHeaders();
-        return new ResponseEntity<ResponseToWeb>(artistStatisticFromAdminConsoleResponseWeb, responseHeaders, HttpStatus.OK);
+        return ResponseEntity.ok().headers(responseHeaders).body(artistStatisticFromAdminConsoleResponseWeb);
     }
 
 

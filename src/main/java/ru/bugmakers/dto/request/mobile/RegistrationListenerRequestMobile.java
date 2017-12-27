@@ -3,7 +3,7 @@ package ru.bugmakers.dto.request.mobile;
 /**
  * Created by Ayrat on 21.11.2017.
  */
-public class RegistrationListenerRequest {
+public class RegistrationListenerRequestMobile {
     private String email;
     private String password;
     private String country;

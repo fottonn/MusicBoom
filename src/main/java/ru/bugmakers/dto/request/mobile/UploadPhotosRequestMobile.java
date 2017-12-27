@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by Ayrat on 08.12.2017.
  */
-public class UploadPhotosRequest extends SessionDataRequest {
+public class UploadPhotosRequestMobile extends SessionDataRequest {
 
     private List<String> photos;
 

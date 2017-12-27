@@ -4,7 +4,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.bugmakers.dto.request.mobile.ListenerProfileRequest;
+import ru.bugmakers.controller.CommonController;
+import ru.bugmakers.dto.request.mobile.ListenerProfileRequestMobile;
 import ru.bugmakers.dto.response.mobile.ArtistEditingResponseMobile;
 import ru.bugmakers.dto.response.mobile.ResponseToMobile;
 
@@ -13,19 +14,18 @@ import ru.bugmakers.dto.response.mobile.ResponseToMobile;
  */
 @RestController
 @RequestMapping("/mapi/listener/editing/")
-public class ListenerProfileMobile {
+public class ListenerProfileMobile extends CommonController{
     @RequestMapping(method = RequestMethod.POST, value = "listener.editing")
-    public ResponseEntity<ResponseToMobile> editProfile(@RequestBody ListenerProfileRequest listenerProfileRequest) {
+    public ResponseEntity<ResponseToMobile> editProfile(@RequestBody ListenerProfileRequestMobile listenerProfileRequestMobile) {
         ArtistEditingResponseMobile listenerEditingResponse = null;
-        HttpHeaders responseHeaders = new HttpHeaders();
-        return new ResponseEntity<ResponseToMobile>(listenerEditingResponse, responseHeaders, HttpStatus.OK);
+        return ResponseEntity.ok().headers(responseHeaders).body(listenerEditingResponse);
     }
     @RequestMapping(method = RequestMethod.GET, value = "attachCard")
     public ResponseEntity<ResponseToMobile> getArtist(@RequestParam("session_id") String sessionId,
                                                       @RequestParam("id") String id,
                                                       @RequestParam("is_attached") Boolean isAttached) {
         //TODO Пока не понятно какой будет ответ, необходимо изучить API
-        HttpHeaders responseHeaders = new HttpHeaders();
-        return new ResponseEntity<ResponseToMobile>(null, responseHeaders, HttpStatus.OK);
+
+        return ResponseEntity.ok().headers(responseHeaders).body(null);
     }
 }

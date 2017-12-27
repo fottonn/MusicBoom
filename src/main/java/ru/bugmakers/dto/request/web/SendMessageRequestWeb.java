@@ -5,7 +5,7 @@ import ru.bugmakers.dto.request.SessionDataRequest;
 /**
  * Created by Ayrat on 06.12.2017.
  */
-public class SendMessageRequest extends SessionDataRequest {
+public class SendMessageRequestWeb extends SessionDataRequest {
     private String message;
 
     public String getMessage() {

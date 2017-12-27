@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by Ayrat on 05.12.2017.
  */
-public class PhotosUploadRequest extends SessionDataRequest {
+public class PhotosUploadRequestWeb extends SessionDataRequest {
     List<String> photoId;
 
     public List<String> getPhotoId() {

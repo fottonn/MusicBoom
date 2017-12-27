@@ -5,7 +5,7 @@ import ru.bugmakers.dto.Artist;
 /**
  * Created by Ayrat on 11.12.2017.
  */
-public class ArtistEditWebRequest {
+public class ArtistEditWebRequestWeb {
     private Artist atrist;
 
     public Artist getAtrist() {

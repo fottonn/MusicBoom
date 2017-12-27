@@ -5,7 +5,7 @@ import ru.bugmakers.dto.request.SessionDataRequest;
 /**
  * Created by Ayrat on 24.11.2017.
  */
-public class FeedBackRequest extends SessionDataRequest{
+public class FeedBackRequestMobile extends SessionDataRequest{
 
     private String type;
     private String text;

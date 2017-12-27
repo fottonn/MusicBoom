@@ -4,7 +4,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.bugmakers.dto.request.mobile.UpdateMapRequestArtistOrListener;
+import ru.bugmakers.controller.CommonController;
+import ru.bugmakers.dto.request.mobile.UpdateMapRequestArtistOrListenerMobile;
 import ru.bugmakers.dto.response.mobile.FindArtistResponseMobile;
 import ru.bugmakers.dto.response.mobile.ResponseToMobile;
 import ru.bugmakers.dto.response.mobile.UpdateMapResponseMobile;
@@ -14,12 +15,11 @@ import ru.bugmakers.dto.response.mobile.UpdateMapResponseMobile;
  */
 @RestController
 @RequestMapping("/mapi/")
-public class ListenerMainPageMobile {
+public class ListenerMainPageMobile extends CommonController {
     @RequestMapping(method = RequestMethod.POST, value = "updateMap")
-    public ResponseEntity<ResponseToMobile> updateMap(@RequestBody UpdateMapRequestArtistOrListener updateMapRequestListener) {
+    public ResponseEntity<ResponseToMobile> updateMap(@RequestBody UpdateMapRequestArtistOrListenerMobile updateMapRequestListener) {
         UpdateMapResponseMobile updateMapResponseMobile = null;
-        HttpHeaders responseHeaders = new HttpHeaders();
-        return new ResponseEntity<ResponseToMobile>(updateMapResponseMobile, responseHeaders, HttpStatus.OK);
+        return ResponseEntity.ok().headers(responseHeaders).body(updateMapResponseMobile);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "findArtist")
@@ -27,8 +27,7 @@ public class ListenerMainPageMobile {
                                                       @RequestParam("id") String id,
                                                       @RequestParam("alias_text") String aliasText) {
         FindArtistResponseMobile findArtistResponseMobile = null;
-        HttpHeaders responseHeaders = new HttpHeaders();
-        return new ResponseEntity<ResponseToMobile>(findArtistResponseMobile, responseHeaders, HttpStatus.OK);
+        return ResponseEntity.ok().headers(responseHeaders).body(findArtistResponseMobile);
     }
 
 }

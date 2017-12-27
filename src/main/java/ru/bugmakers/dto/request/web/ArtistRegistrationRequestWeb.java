@@ -3,7 +3,7 @@ package ru.bugmakers.dto.request.web;
 /**
  * Created by Ayrat on 05.12.2017.
  */
-public class ArtistRegistrationRequest {
+public class ArtistRegistrationRequestWeb {
     private String email;
     private String password;
     private String name;

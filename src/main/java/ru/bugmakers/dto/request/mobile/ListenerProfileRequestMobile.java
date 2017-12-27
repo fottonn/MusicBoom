@@ -5,7 +5,7 @@ import ru.bugmakers.dto.request.SessionDataRequest;
 /**
  * Created by Ayrat on 27.11.2017.
  */
-public class ListenerProfileRequest extends SessionDataRequest {
+public class ListenerProfileRequestMobile extends SessionDataRequest {
     private String country;
     private String city;
 

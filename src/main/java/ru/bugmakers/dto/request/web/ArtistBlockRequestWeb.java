@@ -6,7 +6,7 @@ import ru.bugmakers.dto.request.SessionDataRequest;
 /**
  * Created by Ayrat on 06.12.2017.
  */
-public class ArtistBlockRequest extends SessionDataRequest {
+public class ArtistBlockRequestWeb extends SessionDataRequest {
     private ArtistPerformanceDuration artistPerformanceDuration;
 
 }

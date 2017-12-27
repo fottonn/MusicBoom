@@ -6,7 +6,7 @@ import ru.bugmakers.dto.request.SessionDataRequest;
  * Created by Ayrat on 27.11.2017.
  */
 
-public class TransactionRequest extends SessionDataRequest {
+public class TransactionRequestMobile extends SessionDataRequest {
     private String sum;
     private String numberOfTransaction;
     private String date;

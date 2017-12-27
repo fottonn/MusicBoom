@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import ru.bugmakers.dto.request.web.ArtistFeedbackRequest;
-import ru.bugmakers.dto.request.web.UserFeedbackRequest;
+import ru.bugmakers.controller.CommonController;
+import ru.bugmakers.dto.request.web.ArtistFeedbackRequestWeb;
+import ru.bugmakers.dto.request.web.UserFeedbackRequestWeb;
 import ru.bugmakers.dto.response.web.ArtistFeedbackResponseWeb;
 import ru.bugmakers.dto.response.web.ResponseToWeb;
 import ru.bugmakers.dto.response.web.UserFeedbackResponseWeb;
@@ -18,18 +19,16 @@ import ru.bugmakers.dto.response.web.UserFeedbackResponseWeb;
  */
 @RestController
 @RequestMapping("/webapi/feedback/")
-public class FeedbackWeb {
+public class FeedbackWeb extends CommonController{
     @RequestMapping(method = RequestMethod.POST, value = "artist")
-    public ResponseEntity<ResponseToWeb> artistFeedback(@RequestBody ArtistFeedbackRequest feedBackRequest) {
+    public ResponseEntity<ResponseToWeb> artistFeedback(@RequestBody ArtistFeedbackRequestWeb feedBackRequest) {
         ArtistFeedbackResponseWeb artistFeedbackResponseWeb = null;
-        HttpHeaders responseHeaders = new HttpHeaders();
-        return new ResponseEntity<ResponseToWeb>(artistFeedbackResponseWeb, responseHeaders, HttpStatus.OK);
+        return ResponseEntity.ok().headers(responseHeaders).body(artistFeedbackResponseWeb);
     }
     @RequestMapping(method = RequestMethod.POST, value = "user")
-    public ResponseEntity<ResponseToWeb> userFeedback(@RequestBody UserFeedbackRequest feedBackRequest) {
+    public ResponseEntity<ResponseToWeb> userFeedback(@RequestBody UserFeedbackRequestWeb feedBackRequest) {
         UserFeedbackResponseWeb userFeedbackResponseWeb = null;
-        HttpHeaders responseHeaders = new HttpHeaders();
-        return new ResponseEntity<ResponseToWeb>(userFeedbackResponseWeb, responseHeaders, HttpStatus.OK);
+        return ResponseEntity.ok().headers(responseHeaders).body(userFeedbackResponseWeb);
     }
 }
 

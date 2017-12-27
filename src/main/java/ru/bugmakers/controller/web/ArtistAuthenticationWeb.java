@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.bugmakers.controller.CommonController;
 import ru.bugmakers.dto.response.web.ResponseToWeb;
 
 /**
@@ -15,13 +16,13 @@ import ru.bugmakers.dto.response.web.ResponseToWeb;
 //TODO это не точно, нужно узнать как это делается, используя ВК и прочие сети
 @RestController
 @RequestMapping("/webapi/")
-public class ArtistAuthenticationWeb {
+public class ArtistAuthenticationWeb extends CommonController {
 
     @RequestMapping(method = RequestMethod.GET, value = "authentication")
     public ResponseEntity<ResponseToWeb> ArtistWebAuthentication(@RequestParam("id") String id,
                                                                  @RequestParam("hash_password") String passwordHash) {
         HttpHeaders responseHeaders = new HttpHeaders();
-        return new ResponseEntity<ResponseToWeb>(null, responseHeaders, HttpStatus.OK);
+        return ResponseEntity.ok().headers(responseHeaders).body(null);
     }
 
 }
