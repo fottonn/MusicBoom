@@ -14,9 +14,9 @@ import ru.bugmakers.dto.response.web.ResponseToWeb;
  * Created by Ayrat on 06.12.2017.
  */
 @RestController
-@RequestMapping("/webapi")
+@RequestMapping("/webapi/")
 public class ArtistInfoPageWeb {
-    @RequestMapping(method = RequestMethod.GET, value = "/getArtistInfo")
+    @RequestMapping(method = RequestMethod.GET, value = "getArtistInfo")
     public ResponseEntity<ResponseToWeb> ArtistWebAuthentication(@RequestParam("artistId") String artistId) {
         ArtistInfoResponseWeb artistInfoResponseWeb = null;
         HttpHeaders responseHeaders = new HttpHeaders();

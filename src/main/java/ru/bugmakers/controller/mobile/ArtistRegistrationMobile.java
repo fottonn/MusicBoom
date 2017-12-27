@@ -1,5 +1,6 @@
 package ru.bugmakers.controller.mobile;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,18 +11,25 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.bugmakers.dto.request.mobile.RegistrationAtistRequest;
 import ru.bugmakers.dto.response.mobile.ArtistRegistrationResponse;
 import ru.bugmakers.dto.response.mobile.ResponseToMobile;
+import ru.bugmakers.service.ArtistRegistrationService;
 
 /**
  * Регистрация музыканта
  * Created by Ayrat on 20.11.2017.
  */
 @RestController
-@RequestMapping("/mapi/registration")
+@RequestMapping("/mapi/registration/")
 public class ArtistRegistrationMobile {
-    @RequestMapping(method = RequestMethod.POST, value = "/musician")
-    public ResponseEntity<ResponseToMobile> musicianRegistration(@RequestBody RegistrationAtistRequest userRequest) {
-        ArtistRegistrationResponse artistRegistrationResponse = null;
+    private ArtistRegistrationService artistRegistrationService;
+    @Autowired
+    public void setArtistRegistrationService(ArtistRegistrationService artistRegistrationService) {
+        this.artistRegistrationService = artistRegistrationService;
+    }
 
+    @RequestMapping(method = RequestMethod.POST, value = "musician")
+    public ResponseEntity<ResponseToMobile> musicianRegistration(@RequestBody RegistrationAtistRequest userRequest) {
+        ArtistRegistrationResponse artistRegistrationResponse;
+        artistRegistrationResponse = artistRegistrationService.artistRegister(userRequest);
         HttpHeaders responseHeaders = new HttpHeaders();
         return new ResponseEntity<ResponseToMobile>(artistRegistrationResponse, responseHeaders, HttpStatus.OK);
     }

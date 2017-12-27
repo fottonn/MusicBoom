@@ -17,7 +17,7 @@ import ru.bugmakers.dto.response.mobile.ResponseToMobile;
 @RestController
 @RequestMapping("/mapi/")
 public class ListenerRegistartionMobile {
-    @RequestMapping(method = RequestMethod.POST, value = "/listener")
+    @RequestMapping(method = RequestMethod.POST, value = "listener")
     public ResponseEntity<ResponseToMobile> listenerRegistration(@RequestBody RegistrationListenerRequest userRequest) {
         ArtistRegistrationResponse artistRegistrationResponse = null;
         HttpHeaders responseHeaders = new HttpHeaders();

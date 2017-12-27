@@ -14,10 +14,10 @@ import ru.bugmakers.dto.response.web.ResponseToWeb;
  */
 //TODO это не точно, нужно узнать как это делается, используя ВК и прочие сети
 @RestController
-@RequestMapping("/webapi")
+@RequestMapping("/webapi/")
 public class ArtistAuthenticationWeb {
 
-    @RequestMapping(method = RequestMethod.GET, value = "/authentication")
+    @RequestMapping(method = RequestMethod.GET, value = "authentication")
     public ResponseEntity<ResponseToWeb> ArtistWebAuthentication(@RequestParam("id") String id,
                                                                  @RequestParam("hash_password") String passwordHash) {
         HttpHeaders responseHeaders = new HttpHeaders();

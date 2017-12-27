@@ -13,7 +13,7 @@ import ru.bugmakers.dto.response.mobile.UpdateMapResponseMobile;
  * Created by Ayrat on 27.11.2017.
  */
 @RestController
-@RequestMapping("/mapi")
+@RequestMapping("/mapi/")
 public class ListenerMainPageMobile {
     @RequestMapping(method = RequestMethod.POST, value = "updateMap")
     public ResponseEntity<ResponseToMobile> updateMap(@RequestBody UpdateMapRequestArtistOrListener updateMapRequestListener) {
