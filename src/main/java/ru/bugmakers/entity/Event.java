@@ -1,63 +1,61 @@
 package ru.bugmakers.entity;
 
+import org.hibernate.annotations.Type;
 import ru.bugmakers.enums.EventType;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import java.util.GregorianCalendar;
+import java.time.LocalDateTime;
+
+import static ru.bugmakers.entity.EntityConstants.LOCAL_DATE_TIME_TYPE;
 
 /**
  * Created by Ayrat on 14.11.2017.
  */
 @Entity
-@Table(name="events")
-public class Events {
+@Table(name = "event")
+public class Event {
+
     @Id
     @GeneratedValue
-    private Long events_id;
+    private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private User userId;
-
-    @Column(name="event_name")
+    @Column(name = "event_name")
     private String eventName;
 
-    @Column(name="event_type")
+    @Column(name = "event_type")
+    @Enumerated(EnumType.STRING)
     private EventType eventType;
 
-    @Column(name="event_description")
+    @Column(name = "event_description")
     private String eventDescription;
 
-    @Column(name="start_date")
-    private GregorianCalendar startDate;
+    @Column(name = "start_date")
+    @Type(type = LOCAL_DATE_TIME_TYPE)
+    private LocalDateTime startDate;
 
-    @Column(name="end_date")
-    private GregorianCalendar endDate;
+    @Column(name = "end_date")
+    @Type(type = LOCAL_DATE_TIME_TYPE)
+    private LocalDateTime endDate;
 
-    @Column(name="location")
+    @Column(name = "location")
     private String location;
 
-    @Column(name="lng")
+    @Column(name = "lng")
     private String lng;
 
-    @Column(name="lat")
+    @Column(name = "lat")
     private String lat;
 
-    public Long getEvents_id() {
-        return events_id;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public Long getId() {
+        return id;
     }
 
-    public void setEvents_id(Long events_id) {
-        this.events_id = events_id;
-    }
-
-    public User getUserId() {
-        return userId;
-    }
-
-    public void setUserId(User userId) {
-        this.userId = userId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getEventName() {
@@ -84,19 +82,19 @@ public class Events {
         this.eventDescription = eventDescription;
     }
 
-    public GregorianCalendar getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(GregorianCalendar startDate) {
+    public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public GregorianCalendar getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(GregorianCalendar endDate) {
+    public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 
@@ -122,5 +120,13 @@ public class Events {
 
     public void setLat(String lat) {
         this.lat = lat;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

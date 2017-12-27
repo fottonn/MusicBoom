@@ -8,13 +8,10 @@ import javax.persistence.*;
 @Entity
 @Table(name = "whatsapp_contact")
 public class WhatsApp {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private User user;
+    @Id
+    @GeneratedValue
+    private Long id;
 
     @Column(name = "whatsapp")
     private String whatsapp;
@@ -25,14 +22,6 @@ public class WhatsApp {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public String getWhatsapp() {
