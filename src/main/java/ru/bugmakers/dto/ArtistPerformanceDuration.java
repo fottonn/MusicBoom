@@ -1,21 +1,19 @@
 package ru.bugmakers.dto;
 
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 /**
  * Created by Ayrat on 11.12.2017.
  */
 public class ArtistPerformanceDuration {
-    private Artist artist;
+    private CommonUser commonUser;
     private Period period;
 
-    public Artist getArtist() {
-        return artist;
+    public CommonUser getCommonUser() {
+        return commonUser;
     }
 
-    public void setArtist(Artist artist) {
-        this.artist = artist;
+    public void setCommonUser(CommonUser commonUser) {
+        this.commonUser = commonUser;
     }
 
     public Period getPeriod() {

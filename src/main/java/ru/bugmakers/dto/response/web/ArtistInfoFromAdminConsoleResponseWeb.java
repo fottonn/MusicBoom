@@ -1,6 +1,6 @@
 package ru.bugmakers.dto.response.web;
 
-import ru.bugmakers.dto.Artist;
+import ru.bugmakers.dto.CommonUser;
 import ru.bugmakers.errors.Errors;
 
 import java.util.List;
@@ -13,13 +13,13 @@ public class ArtistInfoFromAdminConsoleResponseWeb extends CommonResponseToWeb {
     public ArtistInfoFromAdminConsoleResponseWeb(Errors errors, String successMessage) {
         super(errors, successMessage);
     }
-    private List<Artist> artists;
+    private List<CommonUser> commonUsers;
 
-    public List<Artist> getArtists() {
-        return artists;
+    public List<CommonUser> getCommonUsers() {
+        return commonUsers;
     }
 
-    public void setArtists(List<Artist> artists) {
-        this.artists = artists;
+    public void setCommonUsers(List<CommonUser> commonUsers) {
+        this.commonUsers = commonUsers;
     }
 }

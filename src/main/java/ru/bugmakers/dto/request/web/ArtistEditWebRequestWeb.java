@@ -1,18 +1,18 @@
 package ru.bugmakers.dto.request.web;
 
-import ru.bugmakers.dto.Artist;
+import ru.bugmakers.dto.CommonUser;
 
 /**
  * Created by Ayrat on 11.12.2017.
  */
 public class ArtistEditWebRequestWeb {
-    private Artist atrist;
+    private CommonUser atrist;
 
-    public Artist getAtrist() {
+    public CommonUser getAtrist() {
         return atrist;
     }
 
-    public void setAtrist(Artist atrist) {
+    public void setAtrist(CommonUser atrist) {
         this.atrist = atrist;
     }
 }

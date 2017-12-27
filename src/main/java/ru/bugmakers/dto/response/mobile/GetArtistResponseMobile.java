@@ -1,6 +1,6 @@
 package ru.bugmakers.dto.response.mobile;
 
-import ru.bugmakers.dto.Artist;
+import ru.bugmakers.dto.CommonUser;
 import ru.bugmakers.dto.Photos;
 import ru.bugmakers.errors.Errors;
 
@@ -12,7 +12,7 @@ public class GetArtistResponseMobile extends CommonResponseToMobile {
         super(errors, successMessage);
     }
     private Photos photos;
-    private Artist artist;
+    private CommonUser commonUser;
     public Photos getPhotos() {
         return photos;
     }
@@ -21,11 +21,11 @@ public class GetArtistResponseMobile extends CommonResponseToMobile {
         this.photos = photos;
     }
 
-    public Artist getArtist() {
-        return artist;
+    public CommonUser getCommonUser() {
+        return commonUser;
     }
 
-    public void setArtist(Artist artist) {
-        this.artist = artist;
+    public void setCommonUser(CommonUser commonUser) {
+        this.commonUser = commonUser;
     }
 }

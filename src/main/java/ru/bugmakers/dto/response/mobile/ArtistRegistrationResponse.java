@@ -1,6 +1,6 @@
 package ru.bugmakers.dto.response.mobile;
 
-import ru.bugmakers.dto.Artist;
+import ru.bugmakers.dto.CommonUser;
 import ru.bugmakers.dto.Photos;
 import ru.bugmakers.dto.StatOfPerformance;
 import ru.bugmakers.errors.Errors;
@@ -12,8 +12,8 @@ public class ArtistRegistrationResponse extends CommonResponseToMobile {
     public ArtistRegistrationResponse(Errors errors, String successMessage) {
         super(errors, successMessage);
     }
-    private Artist artist;
-    //TODO возможно эти поля тоже добавить в Artist
+    private CommonUser commonUser;
+    //TODO возможно эти поля тоже добавить в CommonUser
     private String allEarnedMoney;
     private String allDerivedMoney;
     private String currentBalance;
@@ -21,12 +21,12 @@ public class ArtistRegistrationResponse extends CommonResponseToMobile {
     private Photos photos;
     private StatOfPerformance statOfPerformance;
 
-    public Artist getArtist() {
-        return artist;
+    public CommonUser getCommonUser() {
+        return commonUser;
     }
 
-    public void setArtist(Artist artist) {
-        this.artist = artist;
+    public void setCommonUser(CommonUser commonUser) {
+        this.commonUser = commonUser;
     }
 
     public String getAllEarnedMoney() {

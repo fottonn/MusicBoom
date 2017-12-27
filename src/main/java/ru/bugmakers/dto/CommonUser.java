@@ -1,10 +1,13 @@
 package ru.bugmakers.dto;
 
+import ru.bugmakers.enums.UserType;
+
 /**
  * Created by Ayrat on 25.12.2017.
  */
-public class Artist {
+public class CommonUser {
     private String email;
+    private UserType userType;
     private String password;
     private String confirmedPassword;
     private String name;
@@ -24,14 +27,112 @@ public class Artist {
     private String wapp;
     private String isPersonalData;
     private String isContract;
-    private Raiting cityRaiting;
+    private String cityRaiting;
+    private String countryRaiting;
+    private Boolean isOrdered;
+    private String regDate;
+    private String allEarnedMoney;
+    private String allDerivedMoney;
+    private String currentBalance;
+    private String allDonatedArtists;
+    private String isLinkedCard;
+    private String isAllowsOfPersonalData;
+    private String isArtistContract;
 
-    public Raiting getCityRaiting() {
+    public UserType getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
+    }
+
+    public Boolean getOrdered() {
+        return isOrdered;
+    }
+
+    public void setOrdered(Boolean ordered) {
+        isOrdered = ordered;
+    }
+
+    public String getRegDate() {
+        return regDate;
+    }
+
+    public void setRegDate(String regDate) {
+        this.regDate = regDate;
+    }
+
+    public String getAllEarnedMoney() {
+        return allEarnedMoney;
+    }
+
+    public void setAllEarnedMoney(String allEarnedMoney) {
+        this.allEarnedMoney = allEarnedMoney;
+    }
+
+    public String getAllDerivedMoney() {
+        return allDerivedMoney;
+    }
+
+    public void setAllDerivedMoney(String allDerivedMoney) {
+        this.allDerivedMoney = allDerivedMoney;
+    }
+
+    public String getCurrentBalance() {
+        return currentBalance;
+    }
+
+    public void setCurrentBalance(String currentBalance) {
+        this.currentBalance = currentBalance;
+    }
+
+    public String getAllDonatedArtists() {
+        return allDonatedArtists;
+    }
+
+    public void setAllDonatedArtists(String allDonatedArtists) {
+        this.allDonatedArtists = allDonatedArtists;
+    }
+
+    public String getIsLinkedCard() {
+        return isLinkedCard;
+    }
+
+    public void setIsLinkedCard(String isLinkedCard) {
+        this.isLinkedCard = isLinkedCard;
+    }
+
+    public String getIsAllowsOfPersonalData() {
+        return isAllowsOfPersonalData;
+    }
+
+    public void setIsAllowsOfPersonalData(String isAllowsOfPersonalData) {
+        this.isAllowsOfPersonalData = isAllowsOfPersonalData;
+    }
+
+    public String getIsArtistContract() {
+        return isArtistContract;
+    }
+
+    public void setIsArtistContract(String isArtistContract) {
+        this.isArtistContract = isArtistContract;
+    }
+
+    public String getCityRaiting() {
         return cityRaiting;
     }
 
-    public void setCityRaiting(Raiting cityRaiting) {
+    public void setCityRaiting(String cityRaiting) {
         this.cityRaiting = cityRaiting;
+    }
+
+    public String getCountryRaiting() {
+        return countryRaiting;
+    }
+
+    public void setCountryRaiting(String countryRaiting) {
+        this.countryRaiting = countryRaiting;
     }
 
     public String getEmail() {
