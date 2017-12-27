@@ -5,7 +5,7 @@ import ru.bugmakers.dto.ArtistPerformanceDuration;
 /**
  * Created by Ayrat on 06.12.2017.
  */
-public class ArtistStatisticWithPeriodRequest {
+public class ArtistStatisticRequestWeb {
     private ArtistPerformanceDuration artistPerformanceDuration;
 
     public ArtistPerformanceDuration getArtistPerformanceDuration() {

@@ -6,6 +6,6 @@ import ru.bugmakers.dto.request.SessionDataRequest;
 /**
  * Created by Ayrat on 08.12.2017.
  */
-public class ApproveTransactionRequest extends SessionDataRequest {
+public class ApproveTransactionRequestWeb extends SessionDataRequest {
     private TransactionApprove transactionRequest;
 }

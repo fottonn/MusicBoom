@@ -5,7 +5,7 @@ import ru.bugmakers.dto.request.SessionDataRequest;
 /**
  * Created by Ayrat on 24.11.2017.
  */
-public class PerformanceStartValidationRequest extends SessionDataRequest {
+public class PerformanceStartValidationRequestMobile extends SessionDataRequest {
 
     private String longitude;
     private String lantitude;

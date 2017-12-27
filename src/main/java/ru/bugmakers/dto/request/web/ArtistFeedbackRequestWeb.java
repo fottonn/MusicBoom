@@ -5,7 +5,7 @@ import ru.bugmakers.dto.request.SessionDataRequest;
 /**
  * Created by Ayrat on 13.12.2017.
  */
-public class ArtistFeedbackRequest extends SessionDataRequest {
+public class ArtistFeedbackRequestWeb extends SessionDataRequest {
     private String reason;
     private String msg;
 

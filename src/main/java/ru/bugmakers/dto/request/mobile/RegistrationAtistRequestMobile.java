@@ -5,7 +5,7 @@ import ru.bugmakers.dto.Artist;
 /**
  * Created by Ayrat on 21.11.2017.
  */
-public class RegistrationAtistRequest {
+public class RegistrationAtistRequestMobile {
 
     private Artist artist;
 
