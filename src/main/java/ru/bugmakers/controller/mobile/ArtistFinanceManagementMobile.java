@@ -37,7 +37,7 @@ public class ArtistFinanceManagementMobile extends CommonController{
         return ResponseEntity.ok().headers(responseHeaders).body(financeManagementResponseMobile);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "card.detach")
+    @RequestMapping(method = RequestMethod.GET, value = "withdraw")
     public ResponseEntity<ResponseToMobile> withdraw(@RequestParam("session_id") String sessionId,
                                                      @RequestParam("id") String id,
                                                      @RequestParam("sum") String summ) {

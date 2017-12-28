@@ -23,7 +23,7 @@ public class ArtistInfoPageMobile extends CommonController {
         GetArtistResponseMobile getArtistResponseMobile = null;
         return ResponseEntity.ok().headers(responseHeaders).body(getArtistResponseMobile);
     }
-    @RequestMapping(method = RequestMethod.GET, value = "getArtist")
+    @RequestMapping(method = RequestMethod.GET, value = "transaction")
     public ResponseEntity<ResponseToMobile> transaction(@RequestBody TransactionRequestMobile transactionRequestMobile) {
         TransactionResponseMobile transactionResponseMobile = null;
         return ResponseEntity.ok().headers(responseHeaders).body(transactionResponseMobile);
