@@ -18,9 +18,10 @@ import ru.bugmakers.dto.response.mobile.ResponseToMobile;
 @RestController
 @RequestMapping("/mapi/")
 public class ListenerRegistartionMobile extends CommonController{
+
     @RequestMapping(method = RequestMethod.POST, value = "listener")
     public ResponseEntity<ResponseToMobile> listenerRegistration(@RequestBody RegistrationListenerRequestMobile userRequest) {
         ArtistRegistrationResponse artistRegistrationResponse = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(artistRegistrationResponse);
+        return ResponseEntity.ok(artistRegistrationResponse);
     }
 }

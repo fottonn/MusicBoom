@@ -18,9 +18,10 @@ import ru.bugmakers.dto.response.web.ResponseToWeb;
 @RestController
 @RequestMapping("/webapi/artist/")
 public class ArtistRegistrationWeb extends CommonController {
+
     @RequestMapping(method = RequestMethod.POST, value = "registration")
     public ResponseEntity<ResponseToWeb> artistRegistration(@RequestBody ArtistRegistrationRequestWeb artistProfileEditing) {
         ArtistRegistrationResponseWeb artistRegistrationResponseWeb = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(artistRegistrationResponseWeb);
+        return ResponseEntity.ok(artistRegistrationResponseWeb);
     }
 }

@@ -19,14 +19,14 @@ public class ArtistFinanceManagementMobile extends CommonController{
     public ResponseEntity<ResponseToMobile> cardAttach(@RequestBody CardInfoRequestMobile cardInfoRequestMobile) {
 
         FinanceManagementResponseMobile financeManagementResponseMobile = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(financeManagementResponseMobile);
+        return ResponseEntity.ok(financeManagementResponseMobile);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "card.update")
     public ResponseEntity<ResponseToMobile> cardUpdate(@RequestBody CardInfoRequestMobile cardInfoRequestMobile) {
 
         FinanceManagementResponseMobile financeManagementResponseMobile = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(financeManagementResponseMobile);
+        return ResponseEntity.ok(financeManagementResponseMobile);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "card.detach")
@@ -34,7 +34,7 @@ public class ArtistFinanceManagementMobile extends CommonController{
                                                        @RequestParam("id") String id) {
 
         FinanceManagementResponseMobile financeManagementResponseMobile = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(financeManagementResponseMobile);
+        return ResponseEntity.ok(financeManagementResponseMobile);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "withdraw")
@@ -43,6 +43,6 @@ public class ArtistFinanceManagementMobile extends CommonController{
                                                      @RequestParam("sum") String summ) {
 
         FinanceManagementResponseMobile financeManagementResponseMobile = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(financeManagementResponseMobile);
+        return ResponseEntity.ok(financeManagementResponseMobile);
     }
 }

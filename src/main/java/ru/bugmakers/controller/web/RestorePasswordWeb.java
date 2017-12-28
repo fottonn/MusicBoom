@@ -1,7 +1,5 @@
 package ru.bugmakers.controller.web;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.bugmakers.controller.CommonController;
@@ -16,22 +14,24 @@ import ru.bugmakers.dto.response.web.RestorePasswordResponseWeb;
  */
 @RestController
 @RequestMapping("/webapi/")
-public class RestorePasswordWeb extends CommonController{
+public class RestorePasswordWeb extends CommonController {
+
     @RequestMapping(method = RequestMethod.GET, value = "restorepassword")
     public ResponseEntity<ResponseToWeb> restorePassword(@RequestParam("email") String email) {
         RestorePasswordResponseWeb restorePasswordResponseWeb = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(restorePasswordResponseWeb);
+        return ResponseEntity.ok(restorePasswordResponseWeb);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "codefromemail")
     public ResponseEntity<ResponseToWeb> chngPassword(@RequestParam("code") String code,
                                                       @RequestParam("user_id") String userId) {
         CodeFromEmailValidationResponseWeb codeFromEmailValidationResponseWeb = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(codeFromEmailValidationResponseWeb);
+        return ResponseEntity.ok(codeFromEmailValidationResponseWeb);
     }
+
     @RequestMapping(method = RequestMethod.POST, value = "chngpassword")
     public ResponseEntity<ResponseToWeb> artistProfileEdit(@RequestBody NewPasswordRequestWeb newPasswordRequestWeb) {
         ChangePasswordResponseWeb changePasswordResponseWeb = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(changePasswordResponseWeb);
+        return ResponseEntity.ok(changePasswordResponseWeb);
     }
 }

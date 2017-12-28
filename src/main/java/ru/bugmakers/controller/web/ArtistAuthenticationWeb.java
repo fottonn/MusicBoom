@@ -1,7 +1,5 @@
 package ru.bugmakers.controller.web;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,8 +19,7 @@ public class ArtistAuthenticationWeb extends CommonController {
     @RequestMapping(method = RequestMethod.GET, value = "authentication")
     public ResponseEntity<ResponseToWeb> ArtistWebAuthentication(@RequestParam("id") String id,
                                                                  @RequestParam("hash_password") String passwordHash) {
-        HttpHeaders responseHeaders = new HttpHeaders();
-        return ResponseEntity.ok().headers(responseHeaders).body(null);
+        return ResponseEntity.ok(null);
     }
 
 }
