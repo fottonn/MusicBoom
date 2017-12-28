@@ -12,5 +12,4 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 public class CommonController {
-    protected HttpHeaders responseHeaders;
 }

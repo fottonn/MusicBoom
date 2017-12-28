@@ -32,7 +32,7 @@ public class ArtistRegistrationMobile extends CommonController {
         ArtistRegistrationResponse artistRegistrationResponse;
         artistRegistrationResponse = artistRegistrationService.artistRegister(userRequest);
 
-        return ResponseEntity.ok().headers(responseHeaders).body(artistRegistrationResponse);
+        return ResponseEntity.ok(artistRegistrationResponse);
     }
 
 

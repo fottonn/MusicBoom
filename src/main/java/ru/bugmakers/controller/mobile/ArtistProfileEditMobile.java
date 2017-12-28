@@ -22,7 +22,7 @@ public class ArtistProfileEditMobile extends CommonController {
     public ResponseEntity<ResponseToMobile> artistEditing(@RequestBody ArtistEditRequestMobile artistEditRequestMobile) {
         ArtistEditingResponseMobile artistEditingResponseMobile = null;
 
-        return ResponseEntity.ok().headers(responseHeaders).body(artistEditingResponseMobile);
+        return ResponseEntity.ok(artistEditingResponseMobile);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/avatar.change")
@@ -31,7 +31,7 @@ public class ArtistProfileEditMobile extends CommonController {
                                                                @RequestParam("image") MultipartFile file) {
 
         ArtistEditingResponseMobile artistEditingResponseMobile = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(artistEditingResponseMobile);
+        return ResponseEntity.ok(artistEditingResponseMobile);
     }
     @RequestMapping(method = RequestMethod.GET, value = "/phone.change")
     public ResponseEntity<ResponseToMobile> changeArtistPhone(@RequestParam("session_id") String sessionId,
@@ -39,7 +39,7 @@ public class ArtistProfileEditMobile extends CommonController {
                                                               @RequestParam("hash_phone_number") String phoneNumber) {
 
         ArtistEditingResponseMobile artistEditingResponseMobile = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(artistEditingResponseMobile);
+        return ResponseEntity.ok(artistEditingResponseMobile);
     }
     @RequestMapping(method = RequestMethod.GET, value = "/password.change")
     public ResponseEntity<ResponseToMobile> changeArtistPassword(@RequestParam("session_id") String sessionId,
@@ -47,7 +47,7 @@ public class ArtistProfileEditMobile extends CommonController {
                                                                  @RequestParam("hash_password") String password) {
 
         ArtistEditingResponseMobile artistEditingResponseMobile = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(artistEditingResponseMobile);
+        return ResponseEntity.ok(artistEditingResponseMobile);
     }
     @RequestMapping(method = RequestMethod.GET, value = "/creativity.change")
     public ResponseEntity<ResponseToMobile> changeArtistCreativity(@RequestParam("session_id") String sessionId,
@@ -55,7 +55,7 @@ public class ArtistProfileEditMobile extends CommonController {
                                                                    @RequestParam("hash_password") String creativity) {
 
         ArtistEditingResponseMobile artistEditingResponseMobile = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(artistEditingResponseMobile);
+        return ResponseEntity.ok(artistEditingResponseMobile);
     }
     @RequestMapping(method = RequestMethod.GET, value = "/instrument.change")
     public ResponseEntity<ResponseToMobile> changeArtistInstrument(@RequestParam("session_id") String sessionId,
@@ -63,7 +63,7 @@ public class ArtistProfileEditMobile extends CommonController {
                                                                    @RequestParam("hash_password") String instrument) {
 
         ArtistEditingResponseMobile artistEditingResponseMobile = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(artistEditingResponseMobile);
+        return ResponseEntity.ok(artistEditingResponseMobile);
     }
     @RequestMapping(method = RequestMethod.GET, value = "/genre.change")
     public ResponseEntity<ResponseToMobile> changeArtistGenre(@RequestParam("session_id") String sessionId,
@@ -71,7 +71,7 @@ public class ArtistProfileEditMobile extends CommonController {
                                                               @RequestParam("hash_password") String genre) {
 
         ArtistEditingResponseMobile artistEditingResponseMobile = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(artistEditingResponseMobile);
+        return ResponseEntity.ok(artistEditingResponseMobile);
     }
     @RequestMapping(method = RequestMethod.GET, value = "/setOrderable.change")
     public ResponseEntity<ResponseToMobile> changeArtistSetOrderable (@RequestParam("session_id") String sessionId,
@@ -79,7 +79,7 @@ public class ArtistProfileEditMobile extends CommonController {
                                                               @RequestParam("hash_password") Boolean setOrderable) {
 
         ArtistEditingResponseMobile artistEditingResponseMobile = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(artistEditingResponseMobile);
+        return ResponseEntity.ok(artistEditingResponseMobile);
     }
     @RequestMapping(method = RequestMethod.GET, value = "/artist.deletePhotos")
     public ResponseEntity<ResponseToMobile> artistDeletePhotos (@RequestParam("session_id") String sessionId,
@@ -87,7 +87,7 @@ public class ArtistProfileEditMobile extends CommonController {
                                                               @RequestParam("photo_id") String photoId) {
 
         ArtistEditingResponseMobile artistEditingResponseMobile = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(artistEditingResponseMobile);
+        return ResponseEntity.ok(artistEditingResponseMobile);
     }
 
     //TODO Узнать как принимать массив фоток
@@ -95,6 +95,6 @@ public class ArtistProfileEditMobile extends CommonController {
     public ResponseEntity<ResponseToMobile> artistUploadPhotos (@RequestBody UploadPhotosRequestMobile uploadPhotosRequestMobile) {
 
         ArtistEditingResponseMobile artistEditingResponseMobile = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(artistEditingResponseMobile);
+        return ResponseEntity.ok(artistEditingResponseMobile);
     }
 }

@@ -1,7 +1,5 @@
 package ru.bugmakers.controller.mobile;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.bugmakers.controller.CommonController;
@@ -14,18 +12,20 @@ import ru.bugmakers.dto.response.mobile.ResponseToMobile;
  */
 @RestController
 @RequestMapping("/mapi/listener/editing/")
-public class ListenerProfileMobile extends CommonController{
+public class ListenerProfileMobile extends CommonController {
+
     @RequestMapping(method = RequestMethod.POST, value = "listener.editing")
     public ResponseEntity<ResponseToMobile> editProfile(@RequestBody ListenerProfileRequestMobile listenerProfileRequestMobile) {
         ArtistEditingResponseMobile listenerEditingResponse = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(listenerEditingResponse);
+        return ResponseEntity.ok(listenerEditingResponse);
     }
+
     @RequestMapping(method = RequestMethod.GET, value = "attachCard")
     public ResponseEntity<ResponseToMobile> getArtist(@RequestParam("session_id") String sessionId,
                                                       @RequestParam("id") String id,
                                                       @RequestParam("is_attached") Boolean isAttached) {
         //TODO Пока не понятно какой будет ответ, необходимо изучить API
 
-        return ResponseEntity.ok().headers(responseHeaders).body(null);
+        return ResponseEntity.ok(null);
     }
 }

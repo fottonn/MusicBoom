@@ -21,12 +21,12 @@ public class ArtistInfoPageMobile extends CommonController {
                                                    @RequestParam("id") String id,
                                                    @RequestParam("artist_id") String artistId) {
         GetArtistResponseMobile getArtistResponseMobile = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(getArtistResponseMobile);
+        return ResponseEntity.ok(getArtistResponseMobile);
     }
     @RequestMapping(method = RequestMethod.GET, value = "transaction")
     public ResponseEntity<ResponseToMobile> transaction(@RequestBody TransactionRequestMobile transactionRequestMobile) {
         TransactionResponseMobile transactionResponseMobile = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(transactionResponseMobile);
+        return ResponseEntity.ok(transactionResponseMobile);
     }
 
 }

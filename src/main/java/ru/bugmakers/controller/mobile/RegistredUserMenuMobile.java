@@ -1,7 +1,5 @@
 package ru.bugmakers.controller.mobile;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.bugmakers.controller.CommonController;
@@ -17,20 +15,23 @@ import ru.bugmakers.dto.response.mobile.ResponseToMobile;
 @RestController
 @RequestMapping("/mapi/registereduser/")
 public class RegistredUserMenuMobile extends CommonController {
+
     @RequestMapping(method = RequestMethod.POST, value = "feedback.send")
-        public ResponseEntity<ResponseToMobile> feedbackSend(@RequestBody FeedBackRequestMobile feedBackRequestMobile) {
+    public ResponseEntity<ResponseToMobile> feedbackSend(@RequestBody FeedBackRequestMobile feedBackRequestMobile) {
         FeedBackResponse feedBackResponse = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(feedBackResponse);
+        return ResponseEntity.ok(feedBackResponse);
     }
+
     @RequestMapping(method = RequestMethod.GET, value = "about.app")
     public ResponseEntity<ResponseToMobile> aboutApp() {
         AboutAppResponseMobile aboutAppResponseMobile = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(aboutAppResponseMobile);
+        return ResponseEntity.ok(aboutAppResponseMobile);
     }
+
     @RequestMapping(method = RequestMethod.GET, value = "logout")
     public ResponseEntity<ResponseToMobile> logout(@RequestParam("session_id") String sessionId,
-                                                       @RequestParam("id") String id) {
+                                                   @RequestParam("id") String id) {
         LogoutResponseMobile logoutResponseMobile = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(logoutResponseMobile);
+        return ResponseEntity.ok(logoutResponseMobile);
     }
 }

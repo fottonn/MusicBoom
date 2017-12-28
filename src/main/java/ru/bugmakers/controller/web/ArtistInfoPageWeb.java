@@ -17,9 +17,10 @@ import ru.bugmakers.dto.response.web.ResponseToWeb;
 @RestController
 @RequestMapping("/webapi/")
 public class ArtistInfoPageWeb extends CommonController {
+
     @RequestMapping(method = RequestMethod.GET, value = "getArtistInfo")
     public ResponseEntity<ResponseToWeb> ArtistWebAuthentication(@RequestParam("artistId") String artistId) {
         ArtistInfoResponseWeb artistInfoResponseWeb = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(artistInfoResponseWeb);
+        return ResponseEntity.ok(artistInfoResponseWeb);
     }
 }
