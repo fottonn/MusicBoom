@@ -14,25 +14,25 @@ import ru.bugmakers.dto.response.mobile.*;
 @RequestMapping("/mapi/artist/")
 public class ArtistDesktopFunctionalMobile extends CommonController {
 
-    @RequestMapping(method = RequestMethod.POST, value = "updateMap")
+    @PostMapping(value = "updateMap")
     public ResponseEntity<ResponseToMobile> updateMap(@RequestBody UpdateMapRequestArtistOrListenerMobile updateMapRequestArtistOrListenerMobile) {
         UpdateMapResponseMobile updateMapResponseMobile = null;
         return ResponseEntity.ok(updateMapResponseMobile);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "performance.start")
+    @PostMapping(value = "performance.start")
     public ResponseEntity<ResponseToMobile> startPerformance(@RequestBody PerformanceStartValidationRequestMobile performanceStartValidationRequestMobile) {
         StartPerformanceResponseMobile startPerformanceResponseMobile = null;
         return ResponseEntity.ok(startPerformanceResponseMobile);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "performance.validation")
+    @PostMapping(value = "performance.validation")
     public ResponseEntity<ResponseToMobile> validationPerformance(@RequestBody PerformanceStartValidationRequestMobile performanceStartValidationRequestMobile) {
         ValidatePerformanceResponseMobile validatePerformanceResponseMobile = null;
         return ResponseEntity.ok(validatePerformanceResponseMobile);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "performance.end")
+    @GetMapping(value = "performance.end")
     public ResponseEntity<ResponseToMobile> endPerformane(@RequestParam("id") String id, @RequestParam("session_id") String sessionId) {
         EndPerformanceResponseMobile endPerformanceResponseMobile = null;
         return ResponseEntity.ok(endPerformanceResponseMobile);

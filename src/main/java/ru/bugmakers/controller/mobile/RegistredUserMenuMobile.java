@@ -16,19 +16,19 @@ import ru.bugmakers.dto.response.mobile.ResponseToMobile;
 @RequestMapping("/mapi/registereduser/")
 public class RegistredUserMenuMobile extends CommonController {
 
-    @RequestMapping(method = RequestMethod.POST, value = "feedback.send")
+    @PostMapping(value = "feedback.send")
     public ResponseEntity<ResponseToMobile> feedbackSend(@RequestBody FeedBackRequestMobile feedBackRequestMobile) {
         FeedBackResponse feedBackResponse = null;
         return ResponseEntity.ok(feedBackResponse);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "about.app")
+    @GetMapping(value = "about.app")
     public ResponseEntity<ResponseToMobile> aboutApp() {
         AboutAppResponseMobile aboutAppResponseMobile = null;
         return ResponseEntity.ok(aboutAppResponseMobile);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "logout")
+    @GetMapping(value = "logout")
     public ResponseEntity<ResponseToMobile> logout(@RequestParam("session_id") String sessionId,
                                                    @RequestParam("id") String id) {
         LogoutResponseMobile logoutResponseMobile = null;
