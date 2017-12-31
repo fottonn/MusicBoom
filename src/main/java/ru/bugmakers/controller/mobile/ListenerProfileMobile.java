@@ -14,13 +14,13 @@ import ru.bugmakers.dto.response.mobile.ResponseToMobile;
 @RequestMapping("/mapi/listener/editing/")
 public class ListenerProfileMobile extends CommonController {
 
-    @RequestMapping(method = RequestMethod.POST, value = "listener.editing")
+    @PostMapping(value = "listener.editing")
     public ResponseEntity<ResponseToMobile> editProfile(@RequestBody ListenerProfileRequestMobile listenerProfileRequestMobile) {
         ArtistEditingResponseMobile listenerEditingResponse = null;
         return ResponseEntity.ok(listenerEditingResponse);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "attachCard")
+    @GetMapping(value = "attachCard")
     public ResponseEntity<ResponseToMobile> getArtist(@RequestParam("session_id") String sessionId,
                                                       @RequestParam("id") String id,
                                                       @RequestParam("is_attached") Boolean isAttached) {

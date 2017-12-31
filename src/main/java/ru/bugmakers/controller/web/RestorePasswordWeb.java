@@ -16,20 +16,20 @@ import ru.bugmakers.dto.response.web.RestorePasswordResponseWeb;
 @RequestMapping("/webapi/")
 public class RestorePasswordWeb extends CommonController {
 
-    @RequestMapping(method = RequestMethod.GET, value = "restorepassword")
+    @GetMapping(value = "restorepassword")
     public ResponseEntity<ResponseToWeb> restorePassword(@RequestParam("email") String email) {
         RestorePasswordResponseWeb restorePasswordResponseWeb = null;
         return ResponseEntity.ok(restorePasswordResponseWeb);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "codefromemail")
+    @GetMapping(value = "codefromemail")
     public ResponseEntity<ResponseToWeb> chngPassword(@RequestParam("code") String code,
                                                       @RequestParam("user_id") String userId) {
         CodeFromEmailValidationResponseWeb codeFromEmailValidationResponseWeb = null;
         return ResponseEntity.ok(codeFromEmailValidationResponseWeb);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "chngpassword")
+    @PostMapping(value = "chngpassword")
     public ResponseEntity<ResponseToWeb> artistProfileEdit(@RequestBody NewPasswordRequestWeb newPasswordRequestWeb) {
         ChangePasswordResponseWeb changePasswordResponseWeb = null;
         return ResponseEntity.ok(changePasswordResponseWeb);

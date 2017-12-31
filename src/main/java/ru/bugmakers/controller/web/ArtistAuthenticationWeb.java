@@ -1,8 +1,8 @@
 package ru.bugmakers.controller.web;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.bugmakers.controller.CommonController;
@@ -16,7 +16,7 @@ import ru.bugmakers.dto.response.web.ResponseToWeb;
 @RequestMapping("/webapi/")
 public class ArtistAuthenticationWeb extends CommonController {
 
-    @RequestMapping(method = RequestMethod.GET, value = "authentication")
+    @GetMapping(value = "authentication")
     public ResponseEntity<ResponseToWeb> ArtistWebAuthentication(@RequestParam("id") String id,
                                                                  @RequestParam("hash_password") String passwordHash) {
         return ResponseEntity.ok(null);

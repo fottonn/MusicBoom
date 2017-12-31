@@ -1,11 +1,9 @@
 package ru.bugmakers.controller.mobile;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ru.bugmakers.controller.CommonController;
 import ru.bugmakers.dto.request.mobile.RegistrationListenerRequestMobile;
@@ -17,9 +15,9 @@ import ru.bugmakers.dto.response.mobile.ResponseToMobile;
  */
 @RestController
 @RequestMapping("/mapi/")
-public class ListenerRegistartionMobile extends CommonController{
+public class ListenerRegistartionMobile extends CommonController {
 
-    @RequestMapping(method = RequestMethod.POST, value = "listener")
+    @PostMapping(value = "listener")
     public ResponseEntity<ResponseToMobile> listenerRegistration(@RequestBody RegistrationListenerRequestMobile userRequest) {
         ArtistRegistrationResponse artistRegistrationResponse = null;
         return ResponseEntity.ok(artistRegistrationResponse);

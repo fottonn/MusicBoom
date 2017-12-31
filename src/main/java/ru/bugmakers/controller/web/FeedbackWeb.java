@@ -1,9 +1,9 @@
 package ru.bugmakers.controller.web;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ru.bugmakers.controller.CommonController;
 import ru.bugmakers.dto.request.web.ArtistFeedbackRequestWeb;
@@ -19,13 +19,13 @@ import ru.bugmakers.dto.response.web.UserFeedbackResponseWeb;
 @RequestMapping("/webapi/feedback/")
 public class FeedbackWeb extends CommonController {
 
-    @RequestMapping(method = RequestMethod.POST, value = "artist")
+    @PostMapping(value = "artist")
     public ResponseEntity<ResponseToWeb> artistFeedback(@RequestBody ArtistFeedbackRequestWeb feedBackRequest) {
         ArtistFeedbackResponseWeb artistFeedbackResponseWeb = null;
         return ResponseEntity.ok(artistFeedbackResponseWeb);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "user")
+    @PostMapping(value = "user")
     public ResponseEntity<ResponseToWeb> userFeedback(@RequestBody UserFeedbackRequestWeb feedBackRequest) {
         UserFeedbackResponseWeb userFeedbackResponseWeb = null;
         return ResponseEntity.ok(userFeedbackResponseWeb);
