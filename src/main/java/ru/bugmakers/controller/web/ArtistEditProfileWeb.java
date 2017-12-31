@@ -15,13 +15,13 @@ import ru.bugmakers.dto.response.web.*;
 @RequestMapping("/webapi/artist/")
 public class ArtistEditProfileWeb extends CommonController {
 
-    @RequestMapping(method = RequestMethod.POST, value = "editing/artist.personal")
+    @PostMapping(value = "editing/artist.personal")
     public ResponseEntity<ResponseToWeb> artistProfileEdit(@RequestBody ArtistEditWebRequestWeb artistProfileEditing) {
         ArtistProfileEditReponseWeb artistProfileEditReponseWeb = null;
         return ResponseEntity.ok(artistProfileEditReponseWeb);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "editing/avatar.change")
+    @GetMapping(value = "editing/avatar.change")
     public ResponseEntity<ResponseToWeb> changeArtistAvatar(@RequestParam("session_id") String sessionId,
                                                             @RequestParam("id") String id,
                                                             @RequestParam("image") MultipartFile file) {
@@ -29,7 +29,7 @@ public class ArtistEditProfileWeb extends CommonController {
         return ResponseEntity.ok(artistAvatarEditResponseWeb);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "editing/phone.change")
+    @GetMapping(value = "editing/phone.change")
     public ResponseEntity<ResponseToWeb> changePhoneNumber(@RequestParam("session_id") String sessionId,
                                                            @RequestParam("id") String id,
                                                            @RequestParam("hash_phone_number") String phoneNumber) {
@@ -37,14 +37,14 @@ public class ArtistEditProfileWeb extends CommonController {
         return ResponseEntity.ok(artistPhoneEditResponseWeb);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "editing/password.change")
+    @GetMapping(value = "editing/password.change")
     public ResponseEntity<ResponseToWeb> changePassword(@RequestParam("session_id") String sessionId,
                                                         @RequestParam("id") String id) {
         ArtistPasswordEditResponseWeb artistPasswordEditResponseWeb = null;
         return ResponseEntity.ok(artistPasswordEditResponseWeb);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "editing/video.add")
+    @GetMapping(value = "editing/video.add")
     public ResponseEntity<ResponseToWeb> videoAdd(@RequestParam("session_id") String sessionId,
                                                   @RequestParam("id") String id,
                                                   @RequestParam("link") String videoLink) {
@@ -52,13 +52,13 @@ public class ArtistEditProfileWeb extends CommonController {
         return ResponseEntity.ok(artistVideoAddResponseWeb);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "editing/photos.delete")
+    @PostMapping(value = "editing/photos.delete")
     public ResponseEntity<ResponseToWeb> deletePhotos(@RequestBody PhotosUploadRequestWeb photosDeleteRequest) {
         ArtistPhotosDeleteResponseWeb artistPhotosDeleteResponseWeb = null;
         return ResponseEntity.ok(artistPhotosDeleteResponseWeb);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "editing/photos.upload")
+    @PostMapping(value = "editing/photos.upload")
     public ResponseEntity<ResponseToWeb> uploadPhotos(@RequestBody PhotosUploadRequestWeb photosUploadRequestWeb) {
         ArtistPhotosUploadResponseWeb artistPhotosUploadResponseWeb = null;
         return ResponseEntity.ok(artistPhotosUploadResponseWeb);

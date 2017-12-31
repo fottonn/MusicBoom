@@ -1,9 +1,9 @@
 package ru.bugmakers.controller.web;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ru.bugmakers.controller.CommonController;
 import ru.bugmakers.dto.request.web.*;
@@ -16,43 +16,43 @@ import ru.bugmakers.dto.response.web.*;
 @RequestMapping("/webapi/admin")
 public class AdminConsoleWeb extends CommonController {
 
-    @RequestMapping(method = RequestMethod.POST, value = "/getartistlist")
+    @PostMapping(value = "/getartistlist")
     public ResponseEntity<ResponseToWeb> getArtistInfo(@RequestBody ArtistListRequestWeb artistListRequestWeb) {
         ArtistInfoFromAdminConsoleResponseWeb artistInfoFromAdminConsoleResponseWeb = null;
         return ResponseEntity.ok(artistInfoFromAdminConsoleResponseWeb);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/artists/artist.edit")
+    @PostMapping(value = "/artists/artist.edit")
     public ResponseEntity<ResponseToWeb> editArtist(@RequestBody ArtistEditWebRequestWeb artistBlockRequest) {
         ArtistEditingResponseWeb artistEditingResponseWeb = null;
         return ResponseEntity.ok(artistEditingResponseWeb);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/artists/artist.block")
+    @PostMapping(value = "/artists/artist.block")
     public ResponseEntity<ResponseToWeb> blockArtist(@RequestBody ArtistBlockRequestWeb artistBlockRequestWeb) {
         ArtistBlockResponseWeb artistBlockResponseWeb = null;
         return ResponseEntity.ok(artistBlockResponseWeb);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/artists/artist.delete")
+    @PostMapping(value = "/artists/artist.delete")
     public ResponseEntity<ResponseToWeb> deleteArtist(@RequestBody ArtistDeleteRequestWeb artistDeleteRequestWeb) {
         ArtistDeleteResponseWeb artistDeleteResponseWeb = null;
         return ResponseEntity.ok(artistDeleteResponseWeb);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/artists/sendmessage")
+    @PostMapping(value = "/artists/sendmessage")
     public ResponseEntity<ResponseToWeb> sendMessage(@RequestBody SendMessageRequestWeb sendMessagerequestWeb) {
         SendMessageResponseMobile sendMessageResponseMobile = null;
         return ResponseEntity.ok(sendMessageResponseMobile);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/artists/artist.stat")
+    @PostMapping(value = "/artists/artist.stat")
     public ResponseEntity<ResponseToWeb> getArtistStatistic(@RequestBody ArtistStatisticRequestWeb artistStatisticRequestWeb) {
         ArtistStatisticFromAdminConsoleResponseWeb artistStatisticFromAdminConsoleResponseWeb = null;
         return ResponseEntity.ok(artistStatisticFromAdminConsoleResponseWeb);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/artists/artist.stat.period")
+    @PostMapping(value = "/artists/artist.stat.period")
     public ResponseEntity<ResponseToWeb> getArtistStatisticWithPeriod(@RequestBody ArtistStatisticWithPeriodRequestWeb artistStatisticRequest) {
         ArtistStatisticFromAdminConsoleResponseWeb artistStatisticFromAdminConsoleResponseWeb = null;
         return ResponseEntity.ok(artistStatisticFromAdminConsoleResponseWeb);

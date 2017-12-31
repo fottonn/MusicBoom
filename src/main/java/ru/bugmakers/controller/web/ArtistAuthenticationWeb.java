@@ -2,8 +2,8 @@ package ru.bugmakers.controller.web;
 
 import okhttp3.HttpUrl;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.bugmakers.controller.CommonController;
@@ -37,34 +37,34 @@ public class ArtistAuthenticationWeb extends CommonController {
                     .addQueryParameter("v", "5.69")
                     .toString();
 
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public ResponseEntity<ResponseToWeb> artistWebAuthentication(@RequestParam("id") String id,
                                                                  @RequestParam("hash_password") String passwordHash) {
         return ResponseEntity.ok(null);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "vk")
+    @GetMapping(value = "vk")
     public String artistWebAuthVk() {
         return redirectTo(VK_AUTH);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/callback/vk", params = {"code"})
+    @GetMapping(value = "/callback/vk", params = {"code"})
     public void vkCallbackCode(@RequestParam("code") String code) {
 
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/callback/vk", params = {"error", "error_description"})
+    @GetMapping(value = "/callback/vk", params = {"error", "error_description"})
     public ResponseEntity<ResponseToWeb> vkCallbackError(@RequestParam("error") String error,
                                                          @RequestParam("error_description") String description) {
         return ResponseEntity.ok(null);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "facebook")
+    @GetMapping(value = "facebook")
     public ResponseEntity<ResponseToWeb> artistWebAuthFacebook() {
         return ResponseEntity.ok(null);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "google")
+    @GetMapping(value = "google")
     public ResponseEntity<ResponseToWeb> artistWebAuthGoogle() {
         return ResponseEntity.ok(null);
     }

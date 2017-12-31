@@ -1,7 +1,5 @@
 package ru.bugmakers.controller.mobile;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.bugmakers.controller.CommonController;
@@ -17,16 +15,16 @@ import ru.bugmakers.dto.response.mobile.UpdateMapResponseMobile;
 @RequestMapping("/mapi/")
 public class ListenerMainPageMobile extends CommonController {
 
-    @RequestMapping(method = RequestMethod.POST, value = "updateMap")
+    @PostMapping(value = "updateMap")
     public ResponseEntity<ResponseToMobile> updateMap(@RequestBody UpdateMapRequestArtistOrListenerMobile updateMapRequestListener) {
         UpdateMapResponseMobile updateMapResponseMobile = null;
         return ResponseEntity.ok(updateMapResponseMobile);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "findArtist")
+    @GetMapping(value = "findArtist")
     public ResponseEntity<ResponseToMobile> findArtist(@RequestParam("session_id") String sessionId,
-                                                      @RequestParam("id") String id,
-                                                      @RequestParam("alias_text") String aliasText) {
+                                                       @RequestParam("id") String id,
+                                                       @RequestParam("alias_text") String aliasText) {
         FindArtistResponseMobile findArtistResponseMobile = null;
         return ResponseEntity.ok(findArtistResponseMobile);
     }
