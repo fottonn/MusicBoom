@@ -32,6 +32,7 @@ import ru.bugmakers.enums.UserType;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.service.UserService;
+import ru.bugmakers.validator.VkAccessTokenValidator;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -39,9 +40,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.util.Collections;
-
-import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * Created by Ayrat on 05.12.2017.
@@ -79,6 +77,7 @@ public class ArtistAuthenticationWeb extends MbController {
 
     private RestTemplate restTemplate;
     private UserService userService;
+    private VkAccessTokenValidator vkAccessTokenValidator;
 
     @Autowired
     public void setRestTemplate(RestTemplate restTemplate) {
@@ -88,6 +87,11 @@ public class ArtistAuthenticationWeb extends MbController {
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+
+    @Autowired
+    public void setVkAccessTokenValidator(VkAccessTokenValidator vkAccessTokenValidator) {
+        this.vkAccessTokenValidator = vkAccessTokenValidator;
     }
 
     @GetMapping
@@ -123,89 +127,84 @@ public class ArtistAuthenticationWeb extends MbController {
             final VkAccessTokenRs vkAccessTokenRs = restTemplate.getForObject(vkGetTokenUrl, VkAccessTokenRs.class);
 
             //Валидируем ответ на запрос токена
-            if (isBlank(vkAccessTokenRs.getAccessToken())
-                    || isBlank(vkAccessTokenRs.getUserId())
-                    || isNotBlank(vkAccessTokenRs.getError())) {
-                //TODO throw MBException() authentication error
-                return ResponseEntity.ok(null);
-            } else {
+            vkAccessTokenValidator.validate(vkAccessTokenRs);
 
-                User user = userService.findUserByVkSocialId(vkAccessTokenRs.getUserId());
-                //Если пользователь впервые аутентифицируется через сервис VK
-                if (user == null) {
+            User user = userService.findUserByVkSocialId(vkAccessTokenRs.getUserId());
+            //Если пользователь впервые аутентифицируется через сервис VK
+            if (user == null) {
 
-                    user = new User();
-                    VkAuth vkAuth = new VkAuth(
-                            vkAccessTokenRs.getUserId(),
-                            new OauthToken(vkAccessTokenRs.getAccessToken(), vkAccessTokenRs.getExpiresIn()));
-                    vkAuth.setUser(user);
-                    user.setRoles(Collections.singletonList(Role.ARTIST));
-                    user.setUserType(UserType.ARTIST);
-                    user.setVkAuth(vkAuth);
-                    //Записываем, полученный токен в БД
-                    user = userService.saveUser(user);
+                user = new User();
+                VkAuth vkAuth = new VkAuth(
+                        vkAccessTokenRs.getUserId(),
+                        new OauthToken(vkAccessTokenRs.getAccessToken(), vkAccessTokenRs.getExpiresIn()));
+                vkAuth.setUser(user);
+                user.setRoles(Collections.singletonList(Role.ARTIST));
+                user.setUserType(UserType.ARTIST);
+                user.setVkAuth(vkAuth);
+                //Записываем, полученный токен в БД
+                user = userService.saveUser(user);
 
-                    //Получаем дополнительные сведения о пользователе
-                    //В БД записывать сразу смысла нет, т.к. на фронте пользователь может поменять
-                    final URI vkGetUserInfoUrl =
-                            new HttpUrl.Builder()
-                                    .scheme(HTTPS)
-                                    .host(VK_API_HOST)
-                                    .addPathSegment("method")
-                                    .addPathSegment("users.get")
-                                    .addQueryParameter("user_ids", vkAccessTokenRs.getUserId())
-                                    .addQueryParameter("fields", "bdate, city, country, sex")
-                                    .addQueryParameter("access_token", vkAccessTokenRs.getAccessToken())
-                                    .addQueryParameter("v", VK_API_VERSION)
-                                    .build().uri();
-                    final VkUserInfoRs vkUserInfoRs = restTemplate.getForObject(vkGetUserInfoUrl, VkUserInfoRs.class);
-                    VkUserInfo userInfo = vkUserInfoRs.getVkUserInfo();
-                    user.withName(userInfo.getFirstName())
-                            .withSurName(userInfo.getLastName())
-                            .withEmail(vkAccessTokenRs.getEmail())
-                            .withCountry(userInfo.getVkCountryDTO() != null ? userInfo.getVkCountryDTO().getTitle() : null)
-                            .withCity(userInfo.getVkCityDTO() != null ? userInfo.getVkCityDTO().getTitle() : null);
-                    String vkSex = userInfo.getSex();
-                    user.setSex(vkSex == null || vkSex.equals("0") ? null : vkSex.equals("1") ? Sex.FEMALE : Sex.MALE);
-                    String bdate = userInfo.getBdate();
-                    if (StringUtils.isNotBlank(bdate)) {
-                        DateTimeFormatter formatter = null;
-                        if (bdate.matches("\\d{1,2}\\.\\d{1,2}")) {
-                            formatter = new DateTimeFormatterBuilder()
-                                    .appendPattern("d.M")
-                                    .parseDefaulting(ChronoField.YEAR, 1900L)
-                                    .toFormatter();
-                        } else if (bdate.matches("\\d{1,2}\\.\\d{1,2}.\\d{4}")) {
-                            formatter = DateTimeFormatter.ofPattern("d.M.yyyy");
-                        }
-                        if (formatter != null) {
-                            user.setBirthDay(LocalDate.parse(userInfo.getBdate(), formatter));
-                        }
+                //Получаем дополнительные сведения о пользователе
+                //В БД записывать сразу смысла нет, т.к. на фронте пользователь может поменять
+                final URI vkGetUserInfoUrl =
+                        new HttpUrl.Builder()
+                                .scheme(HTTPS)
+                                .addPathSegment("method")
+                                .addPathSegment("users.get")
+                                .addQueryParameter("user_ids", vkAccessTokenRs.getUserId())
+                                .addQueryParameter("fields", "bdate, city, country, sex")
+                                .addQueryParameter("access_token", vkAccessTokenRs.getAccessToken())
+                                .host(VK_API_HOST)
+                                .addQueryParameter("v", VK_API_VERSION)
+                                .build().uri();
+                final VkUserInfoRs vkUserInfoRs = restTemplate.getForObject(vkGetUserInfoUrl, VkUserInfoRs.class);
+                VkUserInfo userInfo = vkUserInfoRs.getVkUserInfo();
+                user.withName(userInfo.getFirstName())
+                        .withSurName(userInfo.getLastName())
+                        .withEmail(vkAccessTokenRs.getEmail())
+                        .withCountry(userInfo.getVkCountryDTO() != null ? userInfo.getVkCountryDTO().getTitle() : null)
+                        .withCity(userInfo.getVkCityDTO() != null ? userInfo.getVkCityDTO().getTitle() : null)
+                        .withVkContact(String.format("http://vk.com/id%s", vkAccessTokenRs.getUserId()));
+                String vkSex = userInfo.getSex();
+                user.setSex(vkSex == null || vkSex.equals("0") ? null : vkSex.equals("1") ? Sex.FEMALE : Sex.MALE);
+                String bdate = userInfo.getBdate();
+                if (StringUtils.isNotBlank(bdate)) {
+                    DateTimeFormatter formatter = null;
+                    if (bdate.matches("\\d{1,2}\\.\\d{1,2}")) {
+                        formatter = new DateTimeFormatterBuilder()
+                                .appendPattern("d.M")
+                                .parseDefaulting(ChronoField.YEAR, 1900L)
+                                .toFormatter();
+                    } else if (bdate.matches("\\d{1,2}\\.\\d{1,2}.\\d{4}")) {
+                        formatter = DateTimeFormatter.ofPattern("d.M.yyyy");
+                    }
+                    if (formatter != null) {
+                        user.setBirthDay(LocalDate.parse(userInfo.getBdate(), formatter));
                     }
                 }
-
-                //Устанавливаем SecurityContext
-                UserPrincipal userPrincipal = new UserPrincipal(user);
-                Authentication auth = new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
-                SecurityContextHolder.clearContext();
-                SecurityContextHolder.getContext().setAuthentication(auth);
-                //Получаем ID сессии
-                String sessionId = RequestContextHolder.getRequestAttributes().getSessionId();
-                //Маппим прикладной объект User на транспортный объект
-                ArtistAuthenticationResponseWeb rs = new ArtistAuthenticationResponseWeb(RsStatus.SUCCESS);
-                //TODO реализовать маппер
-                UserDTO userDto = new UserDTO()
-                        .withName(user.getName())
-                        .withSurname(user.getSurName())
-                        .withEmail(user.getEmail())
-                        .withCountry(user.getCountry())
-                        .withCity(user.getCity())
-                        .withSex(user.getSex() != null ? user.getSex().name() : null)
-                        .withBirthday(user.getBirthDay() != null ? user.getBirthDay().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) : null)
-                        .withSessionId(sessionId);
-                rs.setUser(userDto);
-                return ResponseEntity.ok(rs);
             }
+
+            //Устанавливаем SecurityContext
+            UserPrincipal userPrincipal = new UserPrincipal(user);
+            Authentication auth = new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
+            SecurityContextHolder.clearContext();
+            SecurityContextHolder.getContext().setAuthentication(auth);
+            //Получаем ID сессии
+            String sessionId = RequestContextHolder.getRequestAttributes().getSessionId();
+            //Маппим прикладной объект User на транспортный объект
+            ArtistAuthenticationResponseWeb rs = new ArtistAuthenticationResponseWeb(RsStatus.SUCCESS);
+            //TODO реализовать маппер
+            UserDTO userDto = new UserDTO()
+                    .withName(user.getName())
+                    .withSurname(user.getSurName())
+                    .withEmail(user.getEmail())
+                    .withCountry(user.getCountry())
+                    .withCity(user.getCity())
+                    .withSex(user.getSex() != null ? user.getSex().name() : null)
+                    .withBirthday(user.getBirthDay() != null ? user.getBirthDay().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) : null)
+                    .withSessionId(sessionId);
+            rs.setUser(userDto);
+            return ResponseEntity.ok(rs);
         } catch (MbException e) {
             return ResponseEntity.ok(new MbResponseToWeb(e, RsStatus.ERROR));
         } catch (Exception e) {
@@ -220,7 +219,9 @@ public class ArtistAuthenticationWeb extends MbController {
     @GetMapping(value = "/callback/vk", params = {"error", "error_description"})
     public ResponseEntity<MbResponseToWeb> vkCallbackError(@RequestParam("error") String error,
                                                            @RequestParam("error_description") String description) {
-        return ResponseEntity.ok(null);
+        MbException mbException = new MbException(MbError.AUE01);
+        mbException.setDescription(String.format("%s (%s)", error, description));
+        return ResponseEntity.ok(new MbResponseToWeb(mbException, RsStatus.ERROR));
     }
 
     @GetMapping(value = "facebook")
