@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.bugmakers.controller.CommonController;
+import ru.bugmakers.controller.MbController;
 import ru.bugmakers.dto.request.mobile.RegistrationAtistRequestMobile;
 import ru.bugmakers.dto.response.mobile.ArtistRegistrationResponse;
-import ru.bugmakers.dto.response.mobile.ResponseToMobile;
+import ru.bugmakers.dto.response.mobile.MbResponseToMobile;
 import ru.bugmakers.service.ArtistRegistrationService;
 
 /**
@@ -18,7 +18,7 @@ import ru.bugmakers.service.ArtistRegistrationService;
  */
 @RestController
 @RequestMapping("/mapi/registration/")
-public class ArtistRegistrationMobile extends CommonController {
+public class ArtistRegistrationMobile extends MbController {
 
     private ArtistRegistrationService artistRegistrationService;
 
@@ -28,7 +28,7 @@ public class ArtistRegistrationMobile extends CommonController {
     }
 
     @PostMapping(value = "musician")
-    public ResponseEntity<ResponseToMobile> musicianRegistration(@RequestBody RegistrationAtistRequestMobile userRequest) {
+    public ResponseEntity<MbResponseToMobile> musicianRegistration(@RequestBody RegistrationAtistRequestMobile userRequest) {
         ArtistRegistrationResponse artistRegistrationResponse;
         artistRegistrationResponse = artistRegistrationService.artistRegister(userRequest);
 

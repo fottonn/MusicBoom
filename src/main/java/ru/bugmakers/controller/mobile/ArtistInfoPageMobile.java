@@ -2,10 +2,10 @@ package ru.bugmakers.controller.mobile;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.bugmakers.controller.CommonController;
+import ru.bugmakers.controller.MbController;
 import ru.bugmakers.dto.request.mobile.TransactionRequestMobile;
 import ru.bugmakers.dto.response.mobile.GetArtistResponseMobile;
-import ru.bugmakers.dto.response.mobile.ResponseToMobile;
+import ru.bugmakers.dto.response.mobile.MbResponseToMobile;
 import ru.bugmakers.dto.response.mobile.TransactionResponseMobile;
 
 /**
@@ -13,18 +13,18 @@ import ru.bugmakers.dto.response.mobile.TransactionResponseMobile;
  */
 @RestController
 @RequestMapping("/mapi/")
-public class ArtistInfoPageMobile extends CommonController {
+public class ArtistInfoPageMobile extends MbController {
 
     @GetMapping(value = "getArtist")
-    public ResponseEntity<ResponseToMobile> getArtist(@RequestParam("session_id") String sessionId,
-                                                      @RequestParam("id") String id,
-                                                      @RequestParam("artist_id") String artistId) {
+    public ResponseEntity<MbResponseToMobile> getArtist(@RequestParam("session_id") String sessionId,
+                                                        @RequestParam("id") String id,
+                                                        @RequestParam("artist_id") String artistId) {
         GetArtistResponseMobile getArtistResponseMobile = null;
         return ResponseEntity.ok(getArtistResponseMobile);
     }
 
     @GetMapping(value = "transaction")
-    public ResponseEntity<ResponseToMobile> transaction(@RequestBody TransactionRequestMobile transactionRequestMobile) {
+    public ResponseEntity<MbResponseToMobile> transaction(@RequestBody TransactionRequestMobile transactionRequestMobile) {
         TransactionResponseMobile transactionResponseMobile = null;
         return ResponseEntity.ok(transactionResponseMobile);
     }
