@@ -1,15 +1,21 @@
 package ru.bugmakers.dto.response.mobile;
 
-import ru.bugmakers.errors.Errors;
+import ru.bugmakers.enums.RsStatus;
+import ru.bugmakers.exceptions.MbException;
 
 /**
  * Created by Ayrat on 15.12.2017.
  */
-public class EndPerformanceResponseMobile extends CommonResponseToMobile {
+public class EndPerformanceResponseMobile extends MbResponseToMobile {
+
     private String earnedMoney;
 
-    public EndPerformanceResponseMobile(Errors errors, String successMessage) {
-        super(errors, successMessage);
+    public EndPerformanceResponseMobile(MbException e, RsStatus status) {
+        super(e, status);
+    }
+
+    public EndPerformanceResponseMobile(RsStatus status) {
+        super(status);
     }
 
     public String getEarnedMoney() {

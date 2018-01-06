@@ -1,12 +1,17 @@
 package ru.bugmakers.dto.response.web;
 
-import ru.bugmakers.errors.Errors;
+import ru.bugmakers.enums.RsStatus;
+import ru.bugmakers.exceptions.MbException;
 
 /**
  * Created by Ayrat on 26.12.2017.
  */
-public class CodeFromEmailValidationResponseWeb extends CommonResponseToWeb {
-    public CodeFromEmailValidationResponseWeb(Errors errors, String successMessage) {
-        super(errors, successMessage);
+public class CodeFromEmailValidationResponseWeb extends MbResponseToWeb {
+    public CodeFromEmailValidationResponseWeb(MbException e, RsStatus status) {
+        super(e, status);
+    }
+
+    public CodeFromEmailValidationResponseWeb(RsStatus status) {
+        super(status);
     }
 }

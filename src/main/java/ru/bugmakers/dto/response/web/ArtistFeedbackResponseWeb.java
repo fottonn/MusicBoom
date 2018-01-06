@@ -1,12 +1,17 @@
 package ru.bugmakers.dto.response.web;
 
-import ru.bugmakers.errors.Errors;
+import ru.bugmakers.enums.RsStatus;
+import ru.bugmakers.exceptions.MbException;
 
 /**
  * Created by Ayrat on 26.12.2017.
  */
-public class ArtistFeedbackResponseWeb extends CommonResponseToWeb{
-    public ArtistFeedbackResponseWeb(Errors errors, String successMessage) {
-        super(errors, successMessage);
+public class ArtistFeedbackResponseWeb extends MbResponseToWeb {
+    public ArtistFeedbackResponseWeb(MbException e, RsStatus status) {
+        super(e, status);
+    }
+
+    public ArtistFeedbackResponseWeb(RsStatus status) {
+        super(status);
     }
 }

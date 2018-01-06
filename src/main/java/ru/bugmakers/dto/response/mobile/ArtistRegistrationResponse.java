@@ -3,15 +3,14 @@ package ru.bugmakers.dto.response.mobile;
 import ru.bugmakers.dto.Artist;
 import ru.bugmakers.dto.Photos;
 import ru.bugmakers.dto.StatOfPerformance;
-import ru.bugmakers.errors.Errors;
+import ru.bugmakers.enums.RsStatus;
+import ru.bugmakers.exceptions.MbException;
 
 /**
  * Created by Ayrat on 15.12.2017.
  */
-public class ArtistRegistrationResponse extends CommonResponseToMobile {
-    public ArtistRegistrationResponse(Errors errors, String successMessage) {
-        super(errors, successMessage);
-    }
+public class ArtistRegistrationResponse extends MbResponseToMobile {
+
     private Artist artist;
     //TODO возможно эти поля тоже добавить в Artist
     private String allEarnedMoney;
@@ -20,6 +19,14 @@ public class ArtistRegistrationResponse extends CommonResponseToMobile {
     private String allDonatedArtists;
     private Photos photos;
     private StatOfPerformance statOfPerformance;
+
+    public ArtistRegistrationResponse(MbException e, RsStatus status) {
+        super(e, status);
+    }
+
+    public ArtistRegistrationResponse(RsStatus status) {
+        super(status);
+    }
 
     public Artist getArtist() {
         return artist;
