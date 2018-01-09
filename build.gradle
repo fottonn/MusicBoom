@@ -26,5 +26,6 @@ dependencies {
     compile 'org.postgresql:postgresql:42.1.4'
     compile 'org.hsqldb:hsqldb:2.4.0'
     compile 'com.squareup.okhttp3:okhttp:3.9.1'
+    compile 'com.github.fge:json-schema-validator:2.2.6'
 
 }
