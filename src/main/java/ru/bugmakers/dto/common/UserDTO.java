@@ -15,6 +15,7 @@ public class UserDTO implements Serializable {
 
     private String sessionId;
     private String userType;
+    private String password;
     private String id;
     private String name;
     private String surname;
@@ -45,6 +46,14 @@ public class UserDTO implements Serializable {
 
     public UserDTO() {
 
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     private UserDTO(String sessionId, String userType, String id, String name, String surname, String patronimyc, String birthday, String sex, String nickname, String country, String city, String phoneNumber, String email, String creativity, String instrument, String genre, String vk, String tlg, String wapp, Boolean isOrdered, LocalDate regDate, String allEarnedMoney, String allDerivedMoney, Double cityRating, Double countryRating, String currentBalance, Integer allDonatedArtists, Boolean isLinkedCard, StatOfPerfomanceDTO statOfPerfomance) {

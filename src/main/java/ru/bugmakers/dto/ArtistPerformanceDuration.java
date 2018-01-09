@@ -1,19 +1,21 @@
 package ru.bugmakers.dto;
 
 
+import ru.bugmakers.dto.common.UserDTO;
+
 /**
  * Created by Ayrat on 11.12.2017.
  */
 public class ArtistPerformanceDuration {
-    private CommonUser commonUser;
+    private UserDTO userDTO;
     private Period period;
 
-    public CommonUser getCommonUser() {
-        return commonUser;
+    public UserDTO getUserDTO() {
+        return userDTO;
     }
 
-    public void setCommonUser(CommonUser commonUser) {
-        this.commonUser = commonUser;
+    public void setUserDTO(UserDTO userDTO) {
+        this.userDTO = userDTO;
     }
 
     public Period getPeriod() {

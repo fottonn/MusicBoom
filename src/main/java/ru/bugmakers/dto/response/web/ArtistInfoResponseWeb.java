@@ -1,8 +1,7 @@
 package ru.bugmakers.dto.response.web;
 
-import ru.bugmakers.dto.CommonUser;
 import ru.bugmakers.dto.Photos;
-import ru.bugmakers.dto.common.ErrorDTO;
+import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.exceptions.MbException;
 
@@ -11,7 +10,7 @@ import ru.bugmakers.exceptions.MbException;
  */
 public class ArtistInfoResponseWeb extends MbResponseToWeb {
 
-    private CommonUser commonUser;
+    private UserDTO userDTO;
 
     private Photos photos;
 
@@ -31,11 +30,11 @@ public class ArtistInfoResponseWeb extends MbResponseToWeb {
         this.photos = photos;
     }
 
-    public CommonUser getCommonUser() {
-        return commonUser;
+    public UserDTO getUserDTO() {
+        return userDTO;
     }
 
-    public void setCommonUser(CommonUser commonUser) {
-        this.commonUser = commonUser;
+    public void setUserDTO(UserDTO userDTO) {
+        this.userDTO = userDTO;
     }
 }

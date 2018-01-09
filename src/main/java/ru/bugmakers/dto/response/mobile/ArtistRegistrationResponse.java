@@ -1,8 +1,8 @@
 package ru.bugmakers.dto.response.mobile;
 
-import ru.bugmakers.dto.Artist;
 import ru.bugmakers.dto.Photos;
 import ru.bugmakers.dto.StatOfPerformance;
+import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.exceptions.MbException;
 
@@ -11,7 +11,7 @@ import ru.bugmakers.exceptions.MbException;
  */
 public class ArtistRegistrationResponse extends MbResponseToMobile {
 
-    private Artist artist;
+    private UserDTO artist;
     //TODO возможно эти поля тоже добавить в Artist
     private String allEarnedMoney;
     private String allDerivedMoney;
@@ -28,11 +28,11 @@ public class ArtistRegistrationResponse extends MbResponseToMobile {
         super(status);
     }
 
-    public Artist getArtist() {
+    public UserDTO getArtist() {
         return artist;
     }
 
-    public void setArtist(Artist artist) {
+    public void setArtist(UserDTO artist) {
         this.artist = artist;
     }
 
