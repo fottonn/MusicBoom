@@ -38,6 +38,7 @@ public class CommonUser {
     private String isLinkedCard;
     private String isAllowsOfPersonalData;
     private String isArtistContract;
+    private StatOfPerformance statOfPerformance;
 
     public UserType getUserType() {
         return userType;
@@ -294,4 +295,13 @@ public class CommonUser {
     public void setIsContract(String isContract) {
         this.isContract = isContract;
     }
+
+    public StatOfPerformance getStatOfPerformance() {
+        return statOfPerformance;
+    }
+
+    public void setStatOfPerformance(StatOfPerformance statOfPerformance) {
+        this.statOfPerformance = statOfPerformance;
+    }
 }
+

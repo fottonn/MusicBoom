@@ -10,7 +10,9 @@ import ru.bugmakers.controller.CommonController;
 import ru.bugmakers.dto.request.mobile.RegistrationArtistRequestMobile;
 import ru.bugmakers.dto.response.mobile.ArtistRegistrationResponse;
 import ru.bugmakers.dto.response.mobile.ResponseToMobile;
+import ru.bugmakers.dto.response.mobile.ValidatePerformanceResponseMobile;
 import ru.bugmakers.service.ArtistRegistrationService;
+import ru.bugmakers.validator.Validator;
 
 /**
  * Регистрация музыканта
@@ -21,6 +23,7 @@ import ru.bugmakers.service.ArtistRegistrationService;
 public class ArtistRegistrationMobile extends CommonController {
 
     private ArtistRegistrationService artistRegistrationService;
+
     @Autowired
     public void setArtistRegistrationService(ArtistRegistrationService artistRegistrationService) {
         this.artistRegistrationService = artistRegistrationService;
