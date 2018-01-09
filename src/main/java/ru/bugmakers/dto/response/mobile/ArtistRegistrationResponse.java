@@ -1,19 +1,18 @@
 package ru.bugmakers.dto.response.mobile;
 
-import ru.bugmakers.dto.CommonUser;
+import ru.bugmakers.dto.Artist;
 import ru.bugmakers.dto.Photos;
 import ru.bugmakers.dto.StatOfPerformance;
-import ru.bugmakers.errors.Errors;
+import ru.bugmakers.enums.RsStatus;
+import ru.bugmakers.exceptions.MbException;
 
 /**
  * Created by Ayrat on 15.12.2017.
  */
-public class ArtistRegistrationResponse extends CommonResponseToMobile {
-    public ArtistRegistrationResponse(Errors errors, String successMessage) {
-        super(errors, successMessage);
-    }
-    private CommonUser commonUser;
-    //TODO возможно эти поля тоже добавить в CommonUser
+public class ArtistRegistrationResponse extends MbResponseToMobile {
+
+    private Artist artist;
+    //TODO возможно эти поля тоже добавить в Artist
     private String allEarnedMoney;
     private String allDerivedMoney;
     private String currentBalance;
@@ -21,12 +20,20 @@ public class ArtistRegistrationResponse extends CommonResponseToMobile {
     private Photos photos;
     private StatOfPerformance statOfPerformance;
 
-    public CommonUser getCommonUser() {
-        return commonUser;
+    public ArtistRegistrationResponse(MbException e, RsStatus status) {
+        super(e, status);
     }
 
-    public void setCommonUser(CommonUser commonUser) {
-        this.commonUser = commonUser;
+    public ArtistRegistrationResponse(RsStatus status) {
+        super(status);
+    }
+
+    public Artist getArtist() {
+        return artist;
+    }
+
+    public void setArtist(Artist artist) {
+        this.artist = artist;
     }
 
     public String getAllEarnedMoney() {

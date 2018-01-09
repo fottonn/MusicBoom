@@ -1,13 +1,11 @@
 package ru.bugmakers.controller.web;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import ru.bugmakers.controller.CommonController;
+import ru.bugmakers.controller.MbController;
 import ru.bugmakers.dto.request.web.*;
 import ru.bugmakers.dto.response.web.*;
 
@@ -16,46 +14,49 @@ import ru.bugmakers.dto.response.web.*;
  */
 @RestController
 @RequestMapping("/webapi/admin")
-public class AdminConsoleWeb extends CommonController{
-    @RequestMapping(method = RequestMethod.POST, value = "/getartistlist")
-    public ResponseEntity<ResponseToWeb> getArtistInfo(@RequestBody ArtistListRequestWeb artistListRequestWeb) {
+public class AdminConsoleWeb extends MbController {
+
+    @PostMapping(value = "/getartistlist")
+    public ResponseEntity<MbResponseToWeb> getArtistInfo(@RequestBody ArtistListRequestWeb artistListRequestWeb) {
         ArtistInfoFromAdminConsoleResponseWeb artistInfoFromAdminConsoleResponseWeb = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(artistInfoFromAdminConsoleResponseWeb);
+        return ResponseEntity.ok(artistInfoFromAdminConsoleResponseWeb);
     }
-    @RequestMapping(method = RequestMethod.POST, value = "/artists/artist.edit")
-    public ResponseEntity<ResponseToWeb> editArtist(@RequestBody ArtistEditWebRequestWeb artistBlockRequest) {
+
+    @PostMapping(value = "/artists/artist.edit")
+    public ResponseEntity<MbResponseToWeb> editArtist(@RequestBody ArtistEditWebRequestWeb artistBlockRequest) {
         ArtistEditingResponseWeb artistEditingResponseWeb = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(artistEditingResponseWeb);
+        return ResponseEntity.ok(artistEditingResponseWeb);
     }
-    @RequestMapping(method = RequestMethod.POST, value = "/artists/artist.block")
-    public ResponseEntity<ResponseToWeb> blockArtist(@RequestBody ArtistBlockRequestWeb artistBlockRequestWeb) {
+
+    @PostMapping(value = "/artists/artist.block")
+    public ResponseEntity<MbResponseToWeb> blockArtist(@RequestBody ArtistBlockRequestWeb artistBlockRequestWeb) {
         ArtistBlockResponseWeb artistBlockResponseWeb = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(artistBlockResponseWeb);
+        return ResponseEntity.ok(artistBlockResponseWeb);
     }
-    @RequestMapping(method = RequestMethod.POST, value = "/artists/artist.delete")
-    public ResponseEntity<ResponseToWeb> deleteArtist(@RequestBody ArtistDeleteRequestWeb artistDeleteRequestWeb) {
+
+    @PostMapping(value = "/artists/artist.delete")
+    public ResponseEntity<MbResponseToWeb> deleteArtist(@RequestBody ArtistDeleteRequestWeb artistDeleteRequestWeb) {
         ArtistDeleteResponseWeb artistDeleteResponseWeb = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(artistDeleteResponseWeb);
+        return ResponseEntity.ok(artistDeleteResponseWeb);
     }
-    @RequestMapping(method = RequestMethod.POST, value = "/artists/sendmessage")
-    public ResponseEntity<ResponseToWeb> sendMessage(@RequestBody SendMessageRequestWeb sendMessagerequestWeb) {
+
+    @PostMapping(value = "/artists/sendmessage")
+    public ResponseEntity<MbResponseToWeb> sendMessage(@RequestBody SendMessageRequestWeb sendMessagerequestWeb) {
         SendMessageResponseMobile sendMessageResponseMobile = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(sendMessageResponseMobile);
+        return ResponseEntity.ok(sendMessageResponseMobile);
     }
-    @RequestMapping(method = RequestMethod.POST, value = "/artists/artist.stat")
-    public ResponseEntity<ResponseToWeb> getArtistStatistic(@RequestBody ArtistStatisticRequestWeb artistStatisticRequestWeb) {
+
+    @PostMapping(value = "/artists/artist.stat")
+    public ResponseEntity<MbResponseToWeb> getArtistStatistic(@RequestBody ArtistStatisticRequestWeb artistStatisticRequestWeb) {
         ArtistStatisticFromAdminConsoleResponseWeb artistStatisticFromAdminConsoleResponseWeb = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(artistStatisticFromAdminConsoleResponseWeb);
+        return ResponseEntity.ok(artistStatisticFromAdminConsoleResponseWeb);
     }
-    @RequestMapping(method = RequestMethod.POST, value = "/artists/artist.stat.period")
-    public ResponseEntity<ResponseToWeb> getArtistStatisticWithPeriod(@RequestBody ArtistStatisticWithPeriodRequestWeb artistStatisticRequest) {
+
+    @PostMapping(value = "/artists/artist.stat.period")
+    public ResponseEntity<MbResponseToWeb> getArtistStatisticWithPeriod(@RequestBody ArtistStatisticWithPeriodRequestWeb artistStatisticRequest) {
         ArtistStatisticFromAdminConsoleResponseWeb artistStatisticFromAdminConsoleResponseWeb = null;
-        return ResponseEntity.ok().headers(responseHeaders).body(artistStatisticFromAdminConsoleResponseWeb);
+        return ResponseEntity.ok(artistStatisticFromAdminConsoleResponseWeb);
     }
-
-
-
-
 
 
 }

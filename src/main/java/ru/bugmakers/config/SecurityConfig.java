@@ -49,18 +49,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .authorizeRequests()
-                .mvcMatchers("/admin").hasRole(ADMIN.name())
-                .mvcMatchers("/artist").hasRole(ARTIST.name())
-                .mvcMatchers("/login").permitAll()
+                .mvcMatchers("/admin/**").hasRole(ADMIN.name())
+                .mvcMatchers("/mapi/artist/**").hasRole(ARTIST.name())
+                .anyRequest().permitAll()
                 .and()
                 .formLogin()
+                .usernameParameter("id")
+                .passwordParameter("hash_password")
                 .loginPage("/login")
+                .failureForwardUrl("/login/error")
                 .defaultSuccessUrl("/login/success")
                 .permitAll()
                 .and()
                 .logout()
                 .logoutUrl("/")
-                .logoutSuccessUrl("/");
+                .logoutSuccessUrl("/")
+                .and()
+                .csrf().disable();
+
     }
 
     @Bean

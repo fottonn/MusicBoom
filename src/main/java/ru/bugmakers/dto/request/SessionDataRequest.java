@@ -1,7 +1,5 @@
 package ru.bugmakers.dto.request;
 
-import ru.bugmakers.errors.Errors;
-
 /**
  * Created by Ayrat on 08.12.2017.
  */

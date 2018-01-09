@@ -1,18 +1,26 @@
 package ru.bugmakers.dto.response.mobile;
 
-import ru.bugmakers.dto.CommonUser;
+import ru.bugmakers.dto.Artist;
 import ru.bugmakers.dto.Photos;
-import ru.bugmakers.errors.Errors;
+import ru.bugmakers.enums.RsStatus;
+import ru.bugmakers.exceptions.MbException;
 
 /**
  * Created by Ayrat on 15.12.2017.
  */
-public class GetArtistResponseMobile extends CommonResponseToMobile {
-    public GetArtistResponseMobile(Errors errors, String successMessage) {
-        super(errors, successMessage);
-    }
+public class GetArtistResponseMobile extends MbResponseToMobile {
+
     private Photos photos;
-    private CommonUser commonUser;
+    private Artist artist;
+
+    public GetArtistResponseMobile(MbException e, RsStatus status) {
+        super(e, status);
+    }
+
+    public GetArtistResponseMobile(RsStatus status) {
+        super(status);
+    }
+
     public Photos getPhotos() {
         return photos;
     }
@@ -21,11 +29,11 @@ public class GetArtistResponseMobile extends CommonResponseToMobile {
         this.photos = photos;
     }
 
-    public CommonUser getCommonUser() {
-        return commonUser;
+    public Artist getArtist() {
+        return artist;
     }
 
-    public void setCommonUser(CommonUser commonUser) {
-        this.commonUser = commonUser;
+    public void setArtist(Artist artist) {
+        this.artist = artist;
     }
 }
