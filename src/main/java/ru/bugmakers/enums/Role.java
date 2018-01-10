@@ -4,8 +4,8 @@ package ru.bugmakers.enums;
  * Created by root
  */
 public enum Role {
-    ADMIN,
-    OPERATOR,
-    ARTIST,
-    LISTENER
+    ROLE_ADMIN,
+    ROLE_OPERATOR,
+    ROLE_ARTIST,
+    ROLE_LISTENER
 }

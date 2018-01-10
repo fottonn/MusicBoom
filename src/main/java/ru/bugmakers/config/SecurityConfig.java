@@ -13,8 +13,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static ru.bugmakers.enums.Role.ADMIN;
-import static ru.bugmakers.enums.Role.ARTIST;
+import static ru.bugmakers.enums.Role.ROLE_ADMIN;
+import static ru.bugmakers.enums.Role.ROLE_ARTIST;
 
 /**
  * Created by Ivan
@@ -48,24 +48,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //TODO
 
         http
+                .csrf().disable()
                 .authorizeRequests()
-                .mvcMatchers("/admin/**").hasRole(ADMIN.name())
-                .mvcMatchers("/mapi/artist/**").hasRole(ARTIST.name())
+                .mvcMatchers("/admin/**").hasRole(ROLE_ADMIN.name())
+                .mvcMatchers("/mapi/artist/**").hasRole(ROLE_ARTIST.name())
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
                 .usernameParameter("id")
                 .passwordParameter("hash_password")
                 .loginPage("/login")
+                .loginProcessingUrl("/login/process") //адрес, по которому отправляются пароль и логин
                 .failureForwardUrl("/login/error")
                 .defaultSuccessUrl("/login/success")
                 .permitAll()
                 .and()
                 .logout()
                 .logoutUrl("/")
-                .logoutSuccessUrl("/")
-                .and()
-                .csrf().disable();
+                .invalidateHttpSession(true)
+                .logoutSuccessUrl("/");
 
     }
 

@@ -138,7 +138,7 @@ public class ArtistAuthenticationWeb extends MbController {
                         vkAccessTokenRs.getUserId(),
                         new OauthToken(vkAccessTokenRs.getAccessToken(), vkAccessTokenRs.getExpiresIn()));
                 vkAuth.setUser(user);
-                user.setRoles(Collections.singletonList(Role.ARTIST));
+                user.setRoles(Collections.singletonList(Role.ROLE_ARTIST));
                 user.setUserType(UserType.ARTIST);
                 user.setVkAuth(vkAuth);
                 //Записываем, полученный токен в БД
