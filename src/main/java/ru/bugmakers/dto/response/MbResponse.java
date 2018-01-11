@@ -13,8 +13,9 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MbResponse implements Serializable {
 
-    private ErrorDTO error;
     private RsStatus status;
+    private String sessionId;
+    private ErrorDTO error;
 
     public MbResponse(MbException e, RsStatus status) {
         this.error = e != null ? new ErrorDTO(e.getMessage()) : null;
@@ -25,19 +26,27 @@ public class MbResponse implements Serializable {
         this(null, status);
     }
 
-    public ErrorDTO getError() {
-        return error;
-    }
-
-    public void setError(ErrorDTO error) {
-        this.error = error;
-    }
-
     public RsStatus getStatus() {
         return status;
     }
 
     public void setStatus(RsStatus status) {
         this.status = status;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public ErrorDTO getError() {
+        return error;
+    }
+
+    public void setError(ErrorDTO error) {
+        this.error = error;
     }
 }
