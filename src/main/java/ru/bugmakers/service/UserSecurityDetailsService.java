@@ -2,6 +2,7 @@ package ru.bugmakers.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,7 +14,8 @@ import ru.bugmakers.repository.UserRepo;
 /**
  * Created by Ivan
  */
-@Service @Qualifier("userSecurityDetailService")
+@Service
+@Qualifier("userSecurityDetailService")
 public class UserSecurityDetailsService implements UserDetailsService {
 
     private UserRepo userRepo;
@@ -27,7 +29,7 @@ public class UserSecurityDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepo.findByLoginIgnoreCase(username);
         if (user == null) {
-            //TODO throw нинди бер хата
+            throw new AuthenticationServiceException("Пользователь не найден");
         }
         return new UserPrincipal(user);
     }

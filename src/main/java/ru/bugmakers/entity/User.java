@@ -87,6 +87,9 @@ public class User {
     @Column(name = "password", table = USER_LOGIN)
     private String password;
 
+    @Column(name = "enabled", table = USER_LOGIN)
+    private boolean enabled;
+
     @JsonIgnore
     @OneToOne(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private VkAuth vkAuth;
@@ -133,7 +136,8 @@ public class User {
     public User() {
     }
 
-    private User(String name, String surName, String patronymic, LocalDate birthDay, String country, String city, String nickname, LocalDateTime registrationDate, String publicName, String email, UserType userType, String phone, Sex sex, List<Role> roles, String login, String password, VkAuth vkAuth, FbAuth fbAuth, GoogleAuth googleAuth, ArtistInfo artistInfo, String vkContact, String tlgContact, String whatsappContact, ActiveEvent activeEvent, List<Event> events, List<Transaction> senderTransactions, List<Transaction> recipientTransactions, ArtistRating artistRating, List<UserPhoto> photos) {
+
+    public User(String name, String surName, String patronymic, LocalDate birthDay, String country, String city, String nickname, LocalDateTime registrationDate, String publicName, String email, UserType userType, String phone, Sex sex, List<Role> roles, String login, String password, boolean enabled, VkAuth vkAuth, FbAuth fbAuth, GoogleAuth googleAuth, ArtistInfo artistInfo, String vkContact, String tlgContact, String whatsappContact, ActiveEvent activeEvent, List<Event> events, List<Transaction> senderTransactions, List<Transaction> recipientTransactions, ArtistRating artistRating, List<UserPhoto> photos) {
         this.name = name;
         this.surName = surName;
         this.patronymic = patronymic;
@@ -150,6 +154,7 @@ public class User {
         this.roles = roles;
         this.login = login;
         this.password = password;
+        this.enabled = enabled;
         this.vkAuth = vkAuth;
         this.fbAuth = fbAuth;
         this.googleAuth = googleAuth;
@@ -299,6 +304,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public VkAuth getVkAuth() {
@@ -482,6 +495,11 @@ public class User {
 
     public User withPassword(String password) {
         this.password = password;
+        return this;
+    }
+
+    public User withEnabled(boolean enabled) {
+        this.enabled = enabled;
         return this;
     }
 
