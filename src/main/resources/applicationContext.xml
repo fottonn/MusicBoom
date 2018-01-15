@@ -6,7 +6,7 @@
     <!--services-->
     <bean id="ArtistRegistrationService" class="ru.bugmakers.service.ArtistRegistrationService" />
     <!--mappers-->
-    <bean id="CommonUserToEntitiesMapper" class="ru.bugmakers.mappers.CommonUserToEntitiesConverter"/>
+    <bean id="CommonUserToEntitiesMapper" class="ru.bugmakers.mappers.UserDtoToEntitiesConverter"/>
     <!--controllers-->
     <bean id="ArtistRegistrationMobile" class="ru.bugmakers.controller.mobile.ArtistRegistrationMobile"/>
 </beans>

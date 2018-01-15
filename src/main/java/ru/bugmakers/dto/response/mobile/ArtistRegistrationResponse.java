@@ -1,5 +1,6 @@
 package ru.bugmakers.dto.response.mobile;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import ru.bugmakers.dto.Photos;
 import ru.bugmakers.dto.StatOfPerformance;
 import ru.bugmakers.dto.common.UserDTO;
@@ -9,10 +10,10 @@ import ru.bugmakers.exceptions.MbException;
 /**
  * Created by Ayrat on 15.12.2017.
  */
+@JsonInclude(JsonInclude.Include.ALWAYS)
 public class ArtistRegistrationResponse extends MbResponseToMobile {
 
-    private UserDTO artist;
-    //TODO возможно эти поля тоже добавить в Artist
+    private UserDTO userDTO;
     private String allEarnedMoney;
     private String allDerivedMoney;
     private String currentBalance;
@@ -28,12 +29,12 @@ public class ArtistRegistrationResponse extends MbResponseToMobile {
         super(status);
     }
 
-    public UserDTO getArtist() {
-        return artist;
+    public UserDTO getUserDTO() {
+        return userDTO;
     }
 
-    public void setArtist(UserDTO artist) {
-        this.artist = artist;
+    public void setUserDTO(UserDTO userDTO) {
+        this.userDTO = userDTO;
     }
 
     public String getAllEarnedMoney() {

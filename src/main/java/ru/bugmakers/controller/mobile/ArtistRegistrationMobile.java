@@ -10,6 +10,7 @@ import ru.bugmakers.controller.MbController;
 import ru.bugmakers.dto.request.mobile.RegistrationArtistRequestMobile;
 import ru.bugmakers.dto.response.mobile.ArtistRegistrationResponse;
 import ru.bugmakers.dto.response.mobile.MbResponseToMobile;
+import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.service.ArtistRegistrationService;
 import ru.bugmakers.validator.ArtistRegistrationMobileValidator;
@@ -36,13 +37,18 @@ public class ArtistRegistrationMobile extends MbController {
     }
 
     @PostMapping(value = "musician")
-    public ResponseEntity<MbResponseToMobile> musicianRegistration(@RequestBody RegistrationArtistRequestMobile userRequest) throws MbException {
+    public ResponseEntity<MbResponseToMobile> musicianRegistration(@RequestBody RegistrationArtistRequestMobile userRequest) {
         ArtistRegistrationResponse artistRegistrationResponse;
-        registrationMobileValidator.validate(userRequest);
-        artistRegistrationResponse = artistRegistrationService.artistRegister(userRequest);
-
-        return ResponseEntity.ok(artistRegistrationResponse);
+        try {
+            registrationMobileValidator.validate(userRequest);
+            artistRegistrationResponse = artistRegistrationService.artistRegister(userRequest);
+            return ResponseEntity.ok(artistRegistrationResponse);
+        }catch (Exception e){
+            if (e instanceof MbException) {
+                return ResponseEntity.ok(new ArtistRegistrationResponse((MbException) e, RsStatus.ERROR));
+            }else {
+                return ResponseEntity.ok(new ArtistRegistrationResponse(RsStatus.ERROR));
+            }
+        }
     }
-
-
 }
