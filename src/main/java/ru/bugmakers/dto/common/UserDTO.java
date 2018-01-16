@@ -365,6 +365,18 @@ public class UserDTO implements Serializable {
         this.surname = surname;
         return this;
     }
+    public UserDTO withPassword(String password){
+        this.password = password;
+        return this;
+    }
+    public UserDTO withAllowOfPersonalData(String isAllowOfPersonalData){
+        this.isAllowOfPersonalData = isAllowOfPersonalData;
+        return this;
+    }
+    public UserDTO withArtistContact(String isArtistContact){
+        this.isArtistContact = isArtistContact;
+        return this;
+    }
 
     public UserDTO withPatronimyc(String patronimyc) {
         this.patronimyc = patronimyc;

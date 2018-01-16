@@ -22,11 +22,15 @@ import java.util.List;
  */
 @Component
 public class UserDtoToEntitiesConverter {
-    @Autowired
     public PasswordEncoder passwordEncoder;
 
     public static final String D_M_YYYY = "d.M.yyyy";
     final DateTimeFormatter formatter  = DateTimeFormatter.ofPattern(D_M_YYYY);
+
+     @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public User convert(RegistrationArtistRequestMobile userRequest) {
         User user = new User();

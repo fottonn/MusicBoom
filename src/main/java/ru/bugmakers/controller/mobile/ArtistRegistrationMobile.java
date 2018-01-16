@@ -16,6 +16,8 @@ import ru.bugmakers.service.ArtistRegistrationService;
 import ru.bugmakers.validator.ArtistRegistrationMobileValidator;
 import ru.bugmakers.validator.MbValidator;
 
+import java.security.spec.ECField;
+
 /**
  * Регистрация музыканта
  * Created by Ayrat on 20.11.2017.
@@ -43,12 +45,10 @@ public class ArtistRegistrationMobile extends MbController {
             registrationMobileValidator.validate(userRequest);
             artistRegistrationResponse = artistRegistrationService.artistRegister(userRequest);
             return ResponseEntity.ok(artistRegistrationResponse);
-        }catch (Exception e){
-            if (e instanceof MbException) {
-                return ResponseEntity.ok(new ArtistRegistrationResponse((MbException) e, RsStatus.ERROR));
-            }else {
-                return ResponseEntity.ok(new ArtistRegistrationResponse(RsStatus.ERROR));
-            }
+        }catch (MbException e){
+            return ResponseEntity.ok(new ArtistRegistrationResponse(e, RsStatus.ERROR));
+        }catch (Exception e) {
+            return ResponseEntity.ok(new ArtistRegistrationResponse(RsStatus.ERROR));
         }
     }
 }

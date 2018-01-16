@@ -45,10 +45,10 @@ public class ArtistRegistrationService {
             if (resultUser != null) {
                 ArtistRegistrationResponse registrationResponse = registrationResponseConverter.convert(userRequest.getUserDTO());
                 if (registrationResponse == null) {
-                    throw new MbException(MbError.REG04);
+                    throw new MbException(MbError.RGE04);
                 }
             }else {
-                throw new MbException(MbError.REG03);
+                throw new MbException(MbError.RGE03);
             }
 
             return artistRegistrationResponse;
