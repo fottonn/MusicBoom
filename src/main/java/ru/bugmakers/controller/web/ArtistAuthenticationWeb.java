@@ -176,7 +176,7 @@ public class ArtistAuthenticationWeb extends MbController {
                                 .parseDefaulting(ChronoField.YEAR, 1900L)
                                 .toFormatter();
                     } else if (bdate.matches("\\d{1,2}\\.\\d{1,2}.\\d{4}")) {
-                        formatter = DateTimeFormatter.ofPattern("d.M.yyyy");
+                            formatter = DateTimeFormatter.ofPattern("d.M.yyyy");
                     }
                     if (formatter != null) {
                         user.setBirthDay(LocalDate.parse(userInfo.getBdate(), formatter));

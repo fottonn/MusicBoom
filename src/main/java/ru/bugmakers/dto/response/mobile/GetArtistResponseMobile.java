@@ -1,7 +1,7 @@
 package ru.bugmakers.dto.response.mobile;
 
-import ru.bugmakers.dto.Artist;
 import ru.bugmakers.dto.Photos;
+import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.exceptions.MbException;
 
@@ -11,7 +11,7 @@ import ru.bugmakers.exceptions.MbException;
 public class GetArtistResponseMobile extends MbResponseToMobile {
 
     private Photos photos;
-    private Artist artist;
+    private UserDTO userDTO;
 
     public GetArtistResponseMobile(MbException e, RsStatus status) {
         super(e, status);
@@ -29,11 +29,11 @@ public class GetArtistResponseMobile extends MbResponseToMobile {
         this.photos = photos;
     }
 
-    public Artist getArtist() {
-        return artist;
+    public UserDTO getUserDTO() {
+        return userDTO;
     }
 
-    public void setArtist(Artist artist) {
-        this.artist = artist;
+    public void setUserDTO(UserDTO userDTO) {
+        this.userDTO = userDTO;
     }
 }

@@ -5,5 +5,6 @@ package ru.bugmakers.enums;
  */
 public enum Sex {
     MALE,
-    FEMALE
+    FEMALE,
+    NONE
 }
