@@ -1,21 +1,21 @@
 package ru.bugmakers.dto;
 
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import ru.bugmakers.dto.common.UserDTO;
 
 /**
  * Created by Ayrat on 11.12.2017.
  */
 public class ArtistPerformanceDuration {
-    private Artist artist;
+    private UserDTO userDTO;
     private Period period;
 
-    public Artist getArtist() {
-        return artist;
+    public UserDTO getUserDTO() {
+        return userDTO;
     }
 
-    public void setArtist(Artist artist) {
-        this.artist = artist;
+    public void setUserDTO(UserDTO userDTO) {
+        this.userDTO = userDTO;
     }
 
     public Period getPeriod() {

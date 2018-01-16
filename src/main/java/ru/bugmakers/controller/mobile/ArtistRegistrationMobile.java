@@ -7,10 +7,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.bugmakers.controller.MbController;
-import ru.bugmakers.dto.request.mobile.RegistrationAtistRequestMobile;
+import ru.bugmakers.dto.request.mobile.RegistrationArtistRequestMobile;
 import ru.bugmakers.dto.response.mobile.ArtistRegistrationResponse;
 import ru.bugmakers.dto.response.mobile.MbResponseToMobile;
+import ru.bugmakers.enums.RsStatus;
+import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.service.ArtistRegistrationService;
+import ru.bugmakers.validator.ArtistRegistrationMobileValidator;
+import ru.bugmakers.validator.MbValidator;
+
+import java.security.spec.ECField;
 
 /**
  * Регистрация музыканта
@@ -21,19 +27,28 @@ import ru.bugmakers.service.ArtistRegistrationService;
 public class ArtistRegistrationMobile extends MbController {
 
     private ArtistRegistrationService artistRegistrationService;
+    private ArtistRegistrationMobileValidator registrationMobileValidator;
 
     @Autowired
     public void setArtistRegistrationService(ArtistRegistrationService artistRegistrationService) {
         this.artistRegistrationService = artistRegistrationService;
     }
-
-    @PostMapping(value = "musician")
-    public ResponseEntity<MbResponseToMobile> musicianRegistration(@RequestBody RegistrationAtistRequestMobile userRequest) {
-        ArtistRegistrationResponse artistRegistrationResponse;
-        artistRegistrationResponse = artistRegistrationService.artistRegister(userRequest);
-
-        return ResponseEntity.ok(artistRegistrationResponse);
+    @Autowired
+    public void setRegistrationMobileValidator(ArtistRegistrationMobileValidator registrationMobileValidator) {
+        this.registrationMobileValidator = registrationMobileValidator;
     }
 
-
+    @PostMapping(value = "musician")
+    public ResponseEntity<MbResponseToMobile> musicianRegistration(@RequestBody RegistrationArtistRequestMobile userRequest) {
+        ArtistRegistrationResponse artistRegistrationResponse;
+        try {
+            registrationMobileValidator.validate(userRequest);
+            artistRegistrationResponse = artistRegistrationService.artistRegister(userRequest);
+            return ResponseEntity.ok(artistRegistrationResponse);
+        }catch (MbException e){
+            return ResponseEntity.ok(new ArtistRegistrationResponse(e, RsStatus.ERROR));
+        }catch (Exception e) {
+            return ResponseEntity.ok(new ArtistRegistrationResponse(RsStatus.ERROR));
+        }
+    }
 }

@@ -114,6 +114,12 @@ public class User {
     @Column(name = "whatsapp_link", table = WHATSAPP_CONTACT)
     private String whatsappContact;
 
+    @Column(name = "isAllowOfPersonalData")
+    private String isAllowOfPersonalData;
+
+    @Column(name = "isArtistContact")
+    private String isArtistContact;
+
     @OneToOne(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private ActiveEvent activeEvent;
 
@@ -168,6 +174,22 @@ public class User {
         this.recipientTransactions = recipientTransactions;
         this.artistRating = artistRating;
         this.photos = photos;
+    }
+
+    public String getIsAllowOfPersonalData() {
+        return isAllowOfPersonalData;
+    }
+
+    public void setIsAllowOfPersonalData(String isAllowOfPersonalData) {
+        this.isAllowOfPersonalData = isAllowOfPersonalData;
+    }
+
+    public String getIsArtistContact() {
+        return isArtistContact;
+    }
+
+    public void setIsArtistContact(String isArtistContact) {
+        this.isArtistContact = isArtistContact;
     }
 
     public Long getId() {

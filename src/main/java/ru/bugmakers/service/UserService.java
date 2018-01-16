@@ -2,6 +2,7 @@ package ru.bugmakers.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.repository.UserRepo;
 
@@ -18,6 +19,7 @@ public class UserService {
         this.userRepo = userRepo;
     }
 
+    @Transactional
     public User saveUser(User user) {
         return userRepo.saveAndFlush(user);
     }
@@ -26,5 +28,6 @@ public class UserService {
         return userRepo.findByVkAuth_SocialId(socialId);
     }
 
+    public User findUserByEmail(String email) {return userRepo.findUserByEmail(email);}
 
 }

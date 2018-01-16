@@ -15,6 +15,7 @@ public class UserDTO implements Serializable {
 
     private String sessionId;
     private String userType;
+    private String password;
     private String id;
     private String name;
     private String surname;
@@ -42,14 +43,17 @@ public class UserDTO implements Serializable {
     private Integer allDonatedArtists;
     private Boolean isLinkedCard;
     private StatOfPerfomanceDTO statOfPerfomance;
+    private String isAllowOfPersonalData;
+    private String isArtistContact;
 
     public UserDTO() {
 
     }
 
-    private UserDTO(String sessionId, String userType, String id, String name, String surname, String patronimyc, String birthday, String sex, String nickname, String country, String city, String phoneNumber, String email, String creativity, String instrument, String genre, String vk, String tlg, String wapp, Boolean isOrdered, LocalDate regDate, String allEarnedMoney, String allDerivedMoney, Double cityRating, Double countryRating, String currentBalance, Integer allDonatedArtists, Boolean isLinkedCard, StatOfPerfomanceDTO statOfPerfomance) {
+    public UserDTO(String sessionId, String userType, String password, String id, String name, String surname, String patronimyc, String birthday, String sex, String nickname, String country, String city, String phoneNumber, String email, String creativity, String instrument, String genre, String vk, String tlg, String wapp, Boolean isOrdered, LocalDate regDate, String allEarnedMoney, String allDerivedMoney, Double cityRating, Double countryRating, String currentBalance, Integer allDonatedArtists, Boolean isLinkedCard, StatOfPerfomanceDTO statOfPerfomance, String isAllowOfPersonalData, String isArtistContact) {
         this.sessionId = sessionId;
         this.userType = userType;
+        this.password = password;
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -77,6 +81,32 @@ public class UserDTO implements Serializable {
         this.allDonatedArtists = allDonatedArtists;
         this.isLinkedCard = isLinkedCard;
         this.statOfPerfomance = statOfPerfomance;
+        this.isAllowOfPersonalData = isAllowOfPersonalData;
+        this.isArtistContact = isArtistContact;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getIsAllowOfPersonalData() {
+        return isAllowOfPersonalData;
+    }
+
+    public void setIsAllowOfPersonalData(String isAllowOfPersonalData) {
+        this.isAllowOfPersonalData = isAllowOfPersonalData;
+    }
+
+    public String getIsArtistContact() {
+        return isArtistContact;
+    }
+
+    public void setIsArtistContact(String isArtistContact) {
+        this.isArtistContact = isArtistContact;
     }
 
     public String getSessionId() {
@@ -333,6 +363,18 @@ public class UserDTO implements Serializable {
 
     public UserDTO withSurname(String surname) {
         this.surname = surname;
+        return this;
+    }
+    public UserDTO withPassword(String password){
+        this.password = password;
+        return this;
+    }
+    public UserDTO withAllowOfPersonalData(String isAllowOfPersonalData){
+        this.isAllowOfPersonalData = isAllowOfPersonalData;
+        return this;
+    }
+    public UserDTO withArtistContact(String isArtistContact){
+        this.isArtistContact = isArtistContact;
         return this;
     }
 

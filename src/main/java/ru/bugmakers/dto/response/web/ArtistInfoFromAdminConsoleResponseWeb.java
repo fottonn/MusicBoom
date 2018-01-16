@@ -1,7 +1,6 @@
 package ru.bugmakers.dto.response.web;
 
-import ru.bugmakers.dto.Artist;
-import ru.bugmakers.dto.common.ErrorDTO;
+import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.exceptions.MbException;
 
@@ -12,7 +11,7 @@ import java.util.List;
  */
 public class ArtistInfoFromAdminConsoleResponseWeb extends MbResponseToWeb {
 
-    private List<Artist> artists;
+    private List<UserDTO> artists;
 
     public ArtistInfoFromAdminConsoleResponseWeb(MbException e, RsStatus status) {
         super(e, status);
@@ -22,11 +21,11 @@ public class ArtistInfoFromAdminConsoleResponseWeb extends MbResponseToWeb {
         super(status);
     }
 
-    public List<Artist> getArtists() {
+    public List<UserDTO> getArtists() {
         return artists;
     }
 
-    public void setArtists(List<Artist> artists) {
+    public void setArtists(List<UserDTO> artists) {
         this.artists = artists;
     }
 }
