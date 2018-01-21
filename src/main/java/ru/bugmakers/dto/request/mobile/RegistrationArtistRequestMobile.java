@@ -1,7 +1,5 @@
 package ru.bugmakers.dto.request.mobile;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import ru.bugmakers.dto.Photos;
 import ru.bugmakers.dto.common.UserDTO;
 
 /**
@@ -9,23 +7,15 @@ import ru.bugmakers.dto.common.UserDTO;
  */
 
 public class RegistrationArtistRequestMobile {
-    @JsonProperty("User")
-    private UserDTO userDTO;
-    private Photos photos;
 
-    public UserDTO getUserDTO() {
-        return userDTO;
+    private UserDTO user;
+
+    public UserDTO getUser() {
+        return user;
     }
 
-    public void setUserDTO(UserDTO userDTO) {
-        this.userDTO = userDTO;
+    public void setUser(UserDTO user) {
+        this.user = user;
     }
 
-    public Photos getPhotos() {
-        return photos;
-    }
-
-    public void setPhotos(Photos photos) {
-        this.photos = photos;
-    }
 }

@@ -3,28 +3,42 @@ package ru.bugmakers.exceptions;
 /**
  * Created by ivan
  */
-public class MbException extends Exception{
+public class MbException extends Exception {
 
     private String code;
-
     private String title;
-
     private String description;
 
-    public MbException(String code, String title, String description) {
+    private MbException() {
+    }
+
+    private MbException(String code, String title, String description) {
         this.code = code;
         this.title = title;
         this.description = description;
     }
 
-    public MbException(String title, String description) {
+    private MbException(String title, String description) {
         this(null, title, description);
     }
 
-    public MbException(MbError mbError) {
+    private MbException(MbError mbError) {
         this.code = mbError.getCode();
         this.title = mbError.getTitle();
         this.description = mbError.getMessage();
+    }
+
+    public static MbException create(String code, String title, String description) {
+        return new MbException(code, title, description);
+    }
+
+    public static MbException create(String title, String description) {
+        return new MbException(title, description);
+    }
+
+    public static MbException create(MbError mbError) {
+        if (mbError == null) return new MbException();
+        return new MbException(mbError);
     }
 
     public String getCode() {

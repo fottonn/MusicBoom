@@ -51,4 +51,6 @@ public class WebAppInit extends AbstractAnnotationConfigDispatcherServletInitial
     protected Class<?>[] getServletConfigClasses() {
         return new Class[0];
     }
+
+
 }

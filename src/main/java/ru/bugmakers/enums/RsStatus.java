@@ -5,5 +5,6 @@ package ru.bugmakers.enums;
  */
 public enum RsStatus {
     SUCCESS,
-    ERROR
+    ERROR,
+    UNAUTHENTICATED
 }

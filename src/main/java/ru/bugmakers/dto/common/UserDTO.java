@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Created by Ivan
@@ -13,7 +13,6 @@ import java.time.LocalDate;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO implements Serializable {
 
-    private String sessionId;
     private String userType;
     private String password;
     private String id;
@@ -34,7 +33,7 @@ public class UserDTO implements Serializable {
     private String tlg;
     private String wapp;
     private Boolean isOrdered;
-    private LocalDate regDate;
+    private String regDate;
     private String allEarnedMoney;
     private String allDerivedMoney;
     private Double cityRating;
@@ -42,16 +41,16 @@ public class UserDTO implements Serializable {
     private String currentBalance;
     private Integer allDonatedArtists;
     private Boolean isLinkedCard;
-    private StatOfPerfomanceDTO statOfPerfomance;
+    private StatOfPerformanceDTO statOfPerformance;
     private String isAllowOfPersonalData;
     private String isArtistContact;
+    private String avatar;
+    private List<String> photos;
 
     public UserDTO() {
-
     }
 
-    public UserDTO(String sessionId, String userType, String password, String id, String name, String surname, String patronimyc, String birthday, String sex, String nickname, String country, String city, String phoneNumber, String email, String creativity, String instrument, String genre, String vk, String tlg, String wapp, Boolean isOrdered, LocalDate regDate, String allEarnedMoney, String allDerivedMoney, Double cityRating, Double countryRating, String currentBalance, Integer allDonatedArtists, Boolean isLinkedCard, StatOfPerfomanceDTO statOfPerfomance, String isAllowOfPersonalData, String isArtistContact) {
-        this.sessionId = sessionId;
+    public UserDTO(String userType, String password, String id, String name, String surname, String patronimyc, String birthday, String sex, String nickname, String country, String city, String phoneNumber, String email, String creativity, String instrument, String genre, String vk, String tlg, String wapp, Boolean isOrdered, String regDate, String allEarnedMoney, String allDerivedMoney, Double cityRating, Double countryRating, String currentBalance, Integer allDonatedArtists, Boolean isLinkedCard, StatOfPerformanceDTO statOfPerformance, String isAllowOfPersonalData, String isArtistContact, String avatar, List<String> photos) {
         this.userType = userType;
         this.password = password;
         this.id = id;
@@ -80,9 +79,11 @@ public class UserDTO implements Serializable {
         this.currentBalance = currentBalance;
         this.allDonatedArtists = allDonatedArtists;
         this.isLinkedCard = isLinkedCard;
-        this.statOfPerfomance = statOfPerfomance;
+        this.statOfPerformance = statOfPerformance;
         this.isAllowOfPersonalData = isAllowOfPersonalData;
         this.isArtistContact = isArtistContact;
+        this.avatar = avatar;
+        this.photos = photos;
     }
 
     public String getPassword() {
@@ -107,14 +108,6 @@ public class UserDTO implements Serializable {
 
     public void setIsArtistContact(String isArtistContact) {
         this.isArtistContact = isArtistContact;
-    }
-
-    public String getSessionId() {
-        return sessionId;
-    }
-
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
     }
 
     public String getUserType() {
@@ -269,11 +262,11 @@ public class UserDTO implements Serializable {
         isOrdered = ordered;
     }
 
-    public LocalDate getRegDate() {
+    public String getRegDate() {
         return regDate;
     }
 
-    public void setRegDate(LocalDate regDate) {
+    public void setRegDate(String regDate) {
         this.regDate = regDate;
     }
 
@@ -333,17 +326,28 @@ public class UserDTO implements Serializable {
         isLinkedCard = linkedCard;
     }
 
-    public StatOfPerfomanceDTO getStatOfPerfomance() {
-        return statOfPerfomance;
+    public StatOfPerformanceDTO getStatOfPerformance() {
+        return statOfPerformance;
     }
 
-    public void setStatOfPerfomance(StatOfPerfomanceDTO statOfPerfomance) {
-        this.statOfPerfomance = statOfPerfomance;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public UserDTO withSessionId(String sessionId) {
-        this.sessionId = sessionId;
-        return this;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public void setStatOfPerformance(StatOfPerformanceDTO statOfPerformance) {
+        this.statOfPerformance = statOfPerformance;
+    }
+
+    public List<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<String> photos) {
+        this.photos = photos;
     }
 
     public UserDTO withUserType(String userType) {
@@ -365,15 +369,18 @@ public class UserDTO implements Serializable {
         this.surname = surname;
         return this;
     }
-    public UserDTO withPassword(String password){
+
+    public UserDTO withPassword(String password) {
         this.password = password;
         return this;
     }
-    public UserDTO withAllowOfPersonalData(String isAllowOfPersonalData){
+
+    public UserDTO withAllowOfPersonalData(String isAllowOfPersonalData) {
         this.isAllowOfPersonalData = isAllowOfPersonalData;
         return this;
     }
-    public UserDTO withArtistContact(String isArtistContact){
+
+    public UserDTO withArtistContact(String isArtistContact) {
         this.isArtistContact = isArtistContact;
         return this;
     }
@@ -453,7 +460,7 @@ public class UserDTO implements Serializable {
         return this;
     }
 
-    public UserDTO withRegDate(LocalDate regDate) {
+    public UserDTO withRegDate(String regDate) {
         this.regDate = regDate;
         return this;
     }
@@ -493,9 +500,18 @@ public class UserDTO implements Serializable {
         return this;
     }
 
-    public UserDTO withStatOfPerfomance(StatOfPerfomanceDTO statOfPerfomance) {
-        this.statOfPerfomance = statOfPerfomance;
+    public UserDTO withStatOfPerfomance(StatOfPerformanceDTO statOfPerfomance) {
+        this.statOfPerformance = statOfPerfomance;
         return this;
     }
 
+    public UserDTO withAvatar(String avatar) {
+        this.avatar = avatar;
+        return this;
+    }
+
+    public UserDTO withPhotos(List<String> photos) {
+        this.photos = photos;
+        return this;
+    }
 }

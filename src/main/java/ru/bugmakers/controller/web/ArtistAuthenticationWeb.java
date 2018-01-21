@@ -110,7 +110,7 @@ public class ArtistAuthenticationWeb extends MbController {
 
         try {
             if (StringUtils.isBlank(code)) {
-                throw new MbException(MbError.AUE01);
+                throw MbException.create(MbError.AUE01);
             }
 
             //Получаем oauth токен
@@ -138,7 +138,7 @@ public class ArtistAuthenticationWeb extends MbController {
                         vkAccessTokenRs.getUserId(),
                         new OauthToken(vkAccessTokenRs.getAccessToken(), vkAccessTokenRs.getExpiresIn()));
                 vkAuth.setUser(user);
-                user.setRoles(Collections.singletonList(Role.ARTIST));
+                user.setRoles(Role.ARTIST);
                 user.setUserType(UserType.ARTIST);
                 user.setVkAuth(vkAuth);
                 //Записываем, полученный токен в БД
@@ -201,14 +201,13 @@ public class ArtistAuthenticationWeb extends MbController {
                     .withCountry(user.getCountry())
                     .withCity(user.getCity())
                     .withSex(user.getSex() != null ? user.getSex().name() : null)
-                    .withBirthday(user.getBirthDay() != null ? user.getBirthDay().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) : null)
-                    .withSessionId(sessionId);
+                    .withBirthday(user.getBirthDay() != null ? user.getBirthDay().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) : null);
             rs.setUser(userDto);
             return ResponseEntity.ok(rs);
         } catch (MbException e) {
             return ResponseEntity.ok(new MbResponseToWeb(e, RsStatus.ERROR));
         } catch (Exception e) {
-            MbException mbException = new MbException(MbError.UNE01);
+            MbException mbException = MbException.create(MbError.UNE01);
             mbException.setDescription(e.getMessage());
             return ResponseEntity.ok(new MbResponseToWeb(mbException, RsStatus.ERROR));
         }
@@ -219,7 +218,7 @@ public class ArtistAuthenticationWeb extends MbController {
     @GetMapping(value = "/callback/vk", params = {"error", "error_description"})
     public ResponseEntity<MbResponseToWeb> vkCallbackError(@RequestParam("error") String error,
                                                            @RequestParam("error_description") String description) {
-        MbException mbException = new MbException(MbError.AUE01);
+        MbException mbException = MbException.create(MbError.AUE01);
         mbException.setDescription(String.format("%s (%s)", error, description));
         return ResponseEntity.ok(new MbResponseToWeb(mbException, RsStatus.ERROR));
     }

@@ -1,8 +1,8 @@
 package ru.bugmakers.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.bugmakers.dto.request.mobile.RegistrationArtistRequestMobile;
 import org.springframework.stereotype.Service;
+import ru.bugmakers.dto.request.mobile.RegistrationArtistRequestMobile;
 import ru.bugmakers.dto.response.mobile.ArtistRegistrationResponse;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.exceptions.MbError;
@@ -23,6 +23,7 @@ public class ArtistRegistrationService {
     public void setUserDtoToEntitiesConverter(UserDtoToEntitiesConverter userDtoToEntitiesConverter) {
         this.userDtoToEntitiesConverter = userDtoToEntitiesConverter;
     }
+
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
@@ -34,23 +35,22 @@ public class ArtistRegistrationService {
     }
 
     public ArtistRegistrationResponse artistRegister(RegistrationArtistRequestMobile userRequest) throws MbException {
-        ArtistRegistrationResponse artistRegistrationResponse = null;
-        String email = userRequest.getUserDTO().getEmail();
+        ArtistRegistrationResponse artistRegistrationResponse;
+        String email = userRequest.getUser().getEmail();
         User userByEmail = userService.findUserByEmail(email);
         if (userByEmail != null) {
-            throw new MbException(MbError.RGE02);
-        }else {
+            throw MbException.create(MbError.RGE02);
+        } else {
             User convert = userDtoToEntitiesConverter.convert(userRequest);
             User resultUser = userService.saveUser(convert);
             if (resultUser != null) {
-                ArtistRegistrationResponse registrationResponse = registrationResponseConverter.convert(userRequest.getUserDTO());
-                if (registrationResponse == null) {
-                    throw new MbException(MbError.RGE04);
+                artistRegistrationResponse = registrationResponseConverter.convert(userRequest.getUser());
+                if (artistRegistrationResponse == null) {
+                    throw MbException.create(MbError.RGE04);
                 }
-            }else {
-                throw new MbException(MbError.RGE03);
+            } else {
+                throw MbException.create(MbError.RGE03);
             }
-
             return artistRegistrationResponse;
         }
     }

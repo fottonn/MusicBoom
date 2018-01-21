@@ -7,9 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.Role;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Ivan
@@ -24,7 +22,7 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        final List<Role> roles = user.getRoles();
+        final Set<Role> roles = user != null ? user.getRoles() : null;
         final List<GrantedAuthority> authorities = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(roles)) {
             roles.forEach(role -> {
@@ -34,33 +32,37 @@ public class UserPrincipal implements UserDetails {
         return authorities;
     }
 
+    public User getUser() {
+        return user;
+    }
+
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return user != null ? user.getPassword() : null;
     }
 
     @Override
     public String getUsername() {
-        return user.getLogin();
+        return user != null ? user.getLogin() : null;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        throw new UnsupportedOperationException();
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        throw new UnsupportedOperationException();
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        throw new UnsupportedOperationException();
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return user.isEnabled();
+        return user == null || user.isEnabled();
     }
 }

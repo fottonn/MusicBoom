@@ -12,7 +12,7 @@ public class ArtistRegistrationMobileValidator implements MbValidator {
     @Override
     public void validate(Object target) throws MbException {
         if (target == null) {
-            throw new MbException(MbError.RGE01);
+            throw MbException.create(MbError.RGE01);
         }
     }
 }

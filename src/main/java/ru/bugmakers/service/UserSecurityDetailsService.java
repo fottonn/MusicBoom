@@ -3,12 +3,16 @@ package ru.bugmakers.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.bugmakers.config.principal.UserPrincipal;
 import ru.bugmakers.entity.User;
+import ru.bugmakers.exceptions.MbAuthenticationException;
+import ru.bugmakers.exceptions.MbError;
+import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.repository.UserRepo;
 
 /**
@@ -26,11 +30,8 @@ public class UserSecurityDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws AuthenticationException {
         User user = userRepo.findByLoginIgnoreCase(username);
-        if (user == null) {
-            throw new AuthenticationServiceException("Пользователь не найден");
-        }
         return new UserPrincipal(user);
     }
 }

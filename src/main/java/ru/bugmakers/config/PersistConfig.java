@@ -15,6 +15,7 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManagerFactory;
 import java.beans.PropertyVetoException;
@@ -24,7 +25,8 @@ import java.util.Properties;
  * Created by Ivan
  */
 @Configuration
-@EnableJpaRepositories(basePackages = "ru.bugmakers.repository", entityManagerFactoryRef = "emf")
+@EnableJpaRepositories(basePackages = "ru.bugmakers.repository", entityManagerFactoryRef = "emf", transactionManagerRef = "jpaTransactionManager")
+@EnableTransactionManagement
 public class PersistConfig {
 
     private static final String LOC = "loc";
@@ -116,7 +118,7 @@ public class PersistConfig {
     }
 
     @Bean
-    public JpaTransactionManager transactionManager(EntityManagerFactory emf) {
+    public JpaTransactionManager jpaTransactionManager(EntityManagerFactory emf) {
         return new JpaTransactionManager(emf);
     }
 
