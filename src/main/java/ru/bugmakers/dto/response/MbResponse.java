@@ -14,7 +14,6 @@ import java.io.Serializable;
 public class MbResponse implements Serializable {
 
     private RsStatus status;
-    private String sessionId;
     private ErrorDTO error;
 
     public MbResponse(MbException e, RsStatus status) {
@@ -32,14 +31,6 @@ public class MbResponse implements Serializable {
 
     public void setStatus(RsStatus status) {
         this.status = status;
-    }
-
-    public String getSessionId() {
-        return sessionId;
-    }
-
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
     }
 
     public ErrorDTO getError() {

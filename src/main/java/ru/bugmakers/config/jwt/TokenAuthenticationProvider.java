@@ -2,35 +2,28 @@ package ru.bugmakers.config.jwt;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.impl.DefaultClaims;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 
 /**
  * Created by Ivan
  */
-@Service
-public class TokenAuthenticationManager implements AuthenticationManager, TokenData {
+public class TokenAuthenticationProvider implements AuthenticationProvider, TokenData {
 
     private UserDetailsService userDetailsService;
 
-    @Autowired
-    @Qualifier("userSecurityDetailService")
-    public void setUserDetailsService(UserDetailsService userDetailsService) {
+    public TokenAuthenticationProvider(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-
         try {
             if (authentication instanceof TokenAuthentication) {
                 return processAuthentication((TokenAuthentication) authentication);
@@ -43,6 +36,12 @@ public class TokenAuthenticationManager implements AuthenticationManager, TokenD
         } catch (Exception e) {
             throw new AuthenticationServiceException("Ошибка аутентификации", e);
         }
+
+    }
+
+    @Override
+    public boolean supports(Class<?> authentication) {
+        return TokenAuthentication.class.isAssignableFrom(authentication);
     }
 
     private TokenAuthentication processAuthentication(TokenAuthentication authentication) {
@@ -69,4 +68,5 @@ public class TokenAuthenticationManager implements AuthenticationManager, TokenD
         }
 
     }
+
 }
