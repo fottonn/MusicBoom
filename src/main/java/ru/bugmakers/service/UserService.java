@@ -30,4 +30,6 @@ public class UserService {
 
     public User findUserByEmail(String email) {return userRepo.findUserByEmail(email);}
 
+    @Transactional
+    public User updateUser(User user) {return userRepo.saveAndFlush(user);}
 }

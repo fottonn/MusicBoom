@@ -7,6 +7,10 @@ import ru.bugmakers.dto.request.SessionDataRequest;
  */
 public class ArtistEditRequestMobile extends SessionDataRequest {
     /**
+     * email
+     */
+    private String email;
+    /**
      * Имя
      */
     private String name;
@@ -129,5 +133,13 @@ public class ArtistEditRequestMobile extends SessionDataRequest {
 
     public void setWhatsapp(String whatsapp) {
         this.whatsapp = whatsapp;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
