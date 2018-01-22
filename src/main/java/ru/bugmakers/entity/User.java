@@ -12,8 +12,10 @@ import ru.bugmakers.enums.UserType;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.GregorianCalendar;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static ru.bugmakers.entity.EntityConstants.*;
 
@@ -77,9 +79,10 @@ public class User {
     private Sex sex;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "roles_id"))
+    @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     @Enumerated(EnumType.STRING)
-    private List<Role> roles;
+    @Column(name = "role")
+    private Set<Role> roles;
 
     @Column(name = "login", table = USER_LOGIN)
     private String login;
@@ -135,15 +138,19 @@ public class User {
     @OneToOne(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private ArtistRating artistRating;
 
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private List<UserPhoto> photos;
+    @ElementCollection
+    @CollectionTable(name = "photos", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+    @Column(name = "photo")
+    private List<String> photos;
+
+    @Column(name = "avatar")
+    private String avatar;
 
     public User() {
     }
 
 
-    public User(String name, String surName, String patronymic, LocalDate birthDay, String country, String city, String nickname, LocalDateTime registrationDate, String publicName, String email, UserType userType, String phone, Sex sex, List<Role> roles, String login, String password, boolean enabled, VkAuth vkAuth, FbAuth fbAuth, GoogleAuth googleAuth, ArtistInfo artistInfo, String vkContact, String tlgContact, String whatsappContact, ActiveEvent activeEvent, List<Event> events, List<Transaction> senderTransactions, List<Transaction> recipientTransactions, ArtistRating artistRating, List<UserPhoto> photos) {
+    public User(String name, String surName, String patronymic, LocalDate birthDay, String country, String city, String nickname, LocalDateTime registrationDate, String publicName, String email, UserType userType, String phone, Sex sex, Set<Role> roles, String login, String password, boolean enabled, VkAuth vkAuth, FbAuth fbAuth, GoogleAuth googleAuth, ArtistInfo artistInfo, String vkContact, String tlgContact, String whatsappContact, ActiveEvent activeEvent, List<Event> events, List<Transaction> senderTransactions, List<Transaction> recipientTransactions, ArtistRating artistRating, List<String> photos, String avatar) {
         this.name = name;
         this.surName = surName;
         this.patronymic = patronymic;
@@ -174,6 +181,7 @@ public class User {
         this.recipientTransactions = recipientTransactions;
         this.artistRating = artistRating;
         this.photos = photos;
+        this.avatar = avatar;
     }
 
     public String getIsAllowOfPersonalData() {
@@ -304,12 +312,16 @@ public class User {
         this.sex = sex;
     }
 
-    public List<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public void setRoles(Role... roles) {
+        this.roles = roles != null ? new HashSet<>(Arrays.asList(roles)) : null;
     }
 
     public String getLogin() {
@@ -432,12 +444,20 @@ public class User {
         this.artistRating = artistRating;
     }
 
-    public List<UserPhoto> getPhotos() {
+    public List<String> getPhotos() {
         return photos;
     }
 
-    public void setPhotos(List<UserPhoto> photos) {
+    public void setPhotos(List<String> photos) {
         this.photos = photos;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public User withName(String name) {
@@ -505,7 +525,7 @@ public class User {
         return this;
     }
 
-    public User withRoles(List<Role> roles) {
+    public User withRoles(Set<Role> roles) {
         this.roles = roles;
         return this;
     }
@@ -585,8 +605,13 @@ public class User {
         return this;
     }
 
-    public User withPhotos(List<UserPhoto> photos) {
+    public User withPhotos(List<String> photos) {
         this.photos = photos;
+        return this;
+    }
+
+    public User withAvatar(String avatar) {
+        this.avatar = avatar;
         return this;
     }
 }

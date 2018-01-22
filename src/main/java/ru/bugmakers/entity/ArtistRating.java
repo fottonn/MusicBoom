@@ -14,10 +14,10 @@ public class ArtistRating {
     private Long id;
 
     @Column(name = "city_rating")
-    private String cityRatng;
+    private Double cityRatng;
 
     @Column(name = "country_rating")
-    private String countryRating;
+    private Double countryRating;
 
     @OneToOne
     @JoinColumn(name = "user_id")
@@ -31,19 +31,19 @@ public class ArtistRating {
         this.id = id;
     }
 
-    public String getCityRatng() {
+    public Double getCityRatng() {
         return cityRatng;
     }
 
-    public void setCityRatng(String cityRatng) {
+    public void setCityRatng(Double cityRatng) {
         this.cityRatng = cityRatng;
     }
 
-    public String getCountryRating() {
+    public Double getCountryRating() {
         return countryRating;
     }
 
-    public void setCountryRating(String countryRating) {
+    public void setCountryRating(Double countryRating) {
         this.countryRating = countryRating;
     }
 

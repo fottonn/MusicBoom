@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -15,13 +15,16 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import ru.bugmakers.config.jwt.TokenAuthenticationManager;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
+import ru.bugmakers.config.filter.JsonAuthenticationFilter;
+import ru.bugmakers.config.jwt.FailureTokenAuthenticationEntryPoint;
+import ru.bugmakers.config.jwt.TokenAuthenticationProvider;
 import ru.bugmakers.config.jwt.filter.TokenAuthenticationCheckFilter;
 import ru.bugmakers.config.jwt.filter.TokenAuthenticationIncludeFilter;
 
-import static ru.bugmakers.enums.Role.ADMIN;
-import static ru.bugmakers.enums.Role.ARTIST;
+import java.util.Arrays;
+
+import static ru.bugmakers.enums.Role.*;
 
 /**
  * Created by Ivan
@@ -37,13 +40,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.userDetailsService = userDetailsService;
     }
 
-    @Autowired
-    public void configAuthentication(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(authenticationProvider());
-    }
-
+    //====================providers
     @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
+    public DaoAuthenticationProvider jsonAuthenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
@@ -51,89 +50,131 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    public TokenAuthenticationProvider tokenAuthenticationProvider() {
+        return new TokenAuthenticationProvider(userDetailsService);
+    }
+
+    //====================entry_points
+    @Bean
+    public FailureTokenAuthenticationEntryPoint failureTokenAuthenticationEntryPoint() {
+        return new FailureTokenAuthenticationEntryPoint();
+    }
+
+    //====================encoders
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    //====================authentication_managers
+    @Bean
+    public ProviderManager providerManager() {
+        return new ProviderManager(Arrays.asList(
+                jsonAuthenticationProvider(),
+                tokenAuthenticationProvider()
+        ));
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.debug(true);
+    }
+
     @Configuration
     @Order(1)
-    public static class InternalApiConfig extends WebSecurityConfigurerAdapter {
+    public static class InternalWebApiConfig extends WebSecurityConfigurerAdapter {
 
-        private UserDetailsService userDetailsService;
-        private TokenAuthenticationManager tokenAuthenticationManager;
+        private ProviderManager providerManager;
+        private FailureTokenAuthenticationEntryPoint failureTokenAuthenticationEntryPoint;
 
         @Autowired
-        public void setUserDetailsService(UserDetailsService userDetailsService) {
-            this.userDetailsService = userDetailsService;
+        public void setProviderManager(ProviderManager providerManager) {
+            this.providerManager = providerManager;
         }
 
         @Autowired
-        public void setTokenAuthenticationManager(TokenAuthenticationManager tokenAuthenticationManager) {
-            this.tokenAuthenticationManager = tokenAuthenticationManager;
+        public void setFailureTokenAuthenticationEntryPoint(FailureTokenAuthenticationEntryPoint failureTokenAuthenticationEntryPoint) {
+            this.failureTokenAuthenticationEntryPoint = failureTokenAuthenticationEntryPoint;
         }
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            //TODO
+
+            final String[] URLS = {
+                    "/webapi/admin/**",
+                    "/webapi/artist/**",
+                    "/webapi/operator/**",
+                    "/mapi/artist/**",
+                    "/mapi/listener/**",
+                    "/mapi/registereduser/**"
+            };
+
 
             http
                     .csrf().disable()
                     .requestMatchers()
-                    .antMatchers("/mapi/**", "/webapi/**")
+                    .antMatchers(URLS)
                     .and()
                     .authorizeRequests()
-                    .antMatchers("/admin/**").hasRole(ADMIN.name())
+                    .antMatchers("/webapi/admin/**").hasRole(ADMIN.name())
+                    .antMatchers("/webapi/artist/**").hasRole(ARTIST.name())
+                    .antMatchers("/webapi/operator/**").hasRole(OPERATOR.name())
                     .antMatchers("/mapi/artist/**").hasRole(ARTIST.name())
-                    .anyRequest().permitAll()
-                    .and()
-                    .formLogin()
-                    .usernameParameter("id")
-                    .passwordParameter("hash_password")
-                    .loginPage("/")
-                    .loginProcessingUrl("/authentication/web") //адрес, по которому отправляются пароль и логин
-                    .failureForwardUrl("/login/error")
-                    .defaultSuccessUrl("/login/success")
-                    .permitAll()
-                    .and()
-                    .logout()
-                    .logoutUrl("/")
-                    .invalidateHttpSession(true)
-                    .logoutSuccessUrl("/")
+                    .antMatchers("/mapi/listener/**").hasRole(LISTENER.name())
+                    .antMatchers("/mapi/registereduser/**").hasAnyRole(ARTIST.name(), LISTENER.name())
                     .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
-                    .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                    .addFilterAfter(tokenAuthenticationFilter(), SecurityContextPersistenceFilter.class)
+                    .exceptionHandling()
+                    .authenticationEntryPoint(failureTokenAuthenticationEntryPoint)
+            ;
         }
 
         @Bean
         public TokenAuthenticationCheckFilter tokenAuthenticationFilter() {
-            TokenAuthenticationCheckFilter tokenAuthenticationCheckFilter = new TokenAuthenticationCheckFilter();
-            tokenAuthenticationManager.setUserDetailsService(userDetailsService);
-            tokenAuthenticationCheckFilter.setAuthenticationManager(tokenAuthenticationManager);
-            return tokenAuthenticationCheckFilter;
+            return new TokenAuthenticationCheckFilter(providerManager);
         }
 
     }
 
     @Configuration
     @Order(2)
-    public static class ExternalApiConfig extends WebSecurityConfigurerAdapter {
+    public static class JsonAuthenticationApiConfig extends WebSecurityConfigurerAdapter {
+
+        private ProviderManager providerManager;
+
+        @Autowired
+        public void setProviderManager(ProviderManager providerManager) {
+            this.providerManager = providerManager;
+        }
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
 
+            final String[] URLS = {
+                    "/authentication"
+            };
+
             http
                     .csrf().disable()
                     .requestMatchers()
-                    .antMatchers("/authentication/**", "/registration/**")
+                    .antMatchers(URLS)
                     .and()
                     .authorizeRequests()
                     .anyRequest().permitAll()
                     .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
-                    .addFilterBefore(tokenAuthenticationIncludeFilter(), UsernamePasswordAuthenticationFilter.class);
+                    .addFilterAfter(tokenAuthenticationIncludeFilter(), SecurityContextPersistenceFilter.class)
+                    .addFilterAfter(jsonAuthenticationFilter(), TokenAuthenticationIncludeFilter.class)
+            ;
 
+        }
+
+        @Bean
+        public JsonAuthenticationFilter jsonAuthenticationFilter() {
+            return new JsonAuthenticationFilter(providerManager);
         }
 
         @Bean

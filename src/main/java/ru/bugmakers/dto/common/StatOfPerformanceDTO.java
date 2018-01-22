@@ -1,29 +1,33 @@
-package ru.bugmakers.dto;
+package ru.bugmakers.dto.common;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonRootName;
 
 /**
- * Created by Ayrat on 15.12.2017.
+ * Created by Ivan
  */
-public class StatOfPerformance implements Serializable {
-    private String allPerfromances;
+@JsonRootName("statOfPerformance")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class StatOfPerformanceDTO {
+
+    private String allPerformances;
     private String hoursOfMonth;
     private String moneyOfMonth;
     private String averagePerformanceTime;
 
-public StatOfPerformance(String allPerfromances, String hoursOfMonth, String moneyOfMonth, String averagePerformanceTime) {
-        this.allPerfromances = allPerfromances;
+    public StatOfPerformanceDTO(String allPerformances, String hoursOfMonth, String moneyOfMonth, String averagePerformanceTime) {
+        this.allPerformances = allPerformances;
         this.hoursOfMonth = hoursOfMonth;
         this.moneyOfMonth = moneyOfMonth;
         this.averagePerformanceTime = averagePerformanceTime;
     }
 
-    public String getAllPerfromances() {
-        return allPerfromances;
+    public String getAllPerformances() {
+        return allPerformances;
     }
 
-    public void setAllPerfromances(String allPerfromances) {
-        this.allPerfromances = allPerfromances;
+    public void setAllPerformances(String allPerformances) {
+        this.allPerformances = allPerformances;
     }
 
     public String getHoursOfMonth() {
@@ -49,4 +53,5 @@ public StatOfPerformance(String allPerfromances, String hoursOfMonth, String mon
     public void setAveragePerformanceTime(String averagePerformanceTime) {
         this.averagePerformanceTime = averagePerformanceTime;
     }
+
 }

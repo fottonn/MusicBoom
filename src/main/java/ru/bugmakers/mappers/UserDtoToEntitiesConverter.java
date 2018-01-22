@@ -9,32 +9,30 @@ import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.Role;
 import ru.bugmakers.enums.Sex;
 import ru.bugmakers.enums.UserType;
-import ru.bugmakers.exceptions.MbException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Ayrat on 27.12.2017.
  */
 @Component
 public class UserDtoToEntitiesConverter {
-    public PasswordEncoder passwordEncoder;
 
-    public static final String D_M_YYYY = "d.M.yyyy";
-    final DateTimeFormatter formatter  = DateTimeFormatter.ofPattern(D_M_YYYY);
+    private PasswordEncoder passwordEncoder;
+    private static final String D_M_YYYY = "d.M.yyyy";
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(D_M_YYYY);
 
-     @Autowired
+    @Autowired
     public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 
     public User convert(RegistrationArtistRequestMobile userRequest) {
         User user = new User();
-        UserDTO userDTO = userRequest.getUserDTO();
+        UserDTO userDTO = userRequest.getUser();
         user.setCity(userDTO.getCity());
         user.setName(userDTO.getName());
         user.setSurName(userDTO.getSurname());
@@ -51,9 +49,7 @@ public class UserDtoToEntitiesConverter {
         user.setPublicName(userDTO.getNickname());
         user.setUserType(UserType.ARTIST);
         user.setSex(Sex.NONE);
-        user.setRoles(new ArrayList<Role>() {{
-            add(Role.ARTIST);
-        }});
+        user.setRoles(Role.ARTIST);
         user.setVkContact(userDTO.getVk());
         user.setTlgContact(userDTO.getTlg());
         user.setWhatsappContact(userDTO.getWapp());
