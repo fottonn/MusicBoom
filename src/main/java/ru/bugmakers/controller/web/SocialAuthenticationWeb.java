@@ -39,23 +39,24 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
-import java.util.Collections;
 
 /**
- * Created by Ayrat on 05.12.2017.
+ * Created by Ivan
  */
-//TODO это не точно, нужно узнать как это делается, используя ВК и прочие сети
 @RestController
-@RequestMapping("/webapi/authentication/")
-public class ArtistAuthenticationWeb extends MbController {
+@RequestMapping("/authentication/webapi")
+public class SocialAuthenticationWeb extends MbController {
 
-    private static final String VK_REDIRECT_URI = "http://mboom.com/webapi/authentication/callback/vk";
+    private static final String VK_REDIRECT_DOMAIN = "http://mboom.com"; //TODO
+    private static final String VK_REDIRECT_PATH = "/authentication/webapi/callback/vk";
+    private static final String VK_REDIRECT_URI = VK_REDIRECT_DOMAIN + VK_REDIRECT_PATH;
     private static final String VK_CLIENT_ID = "6320864"; //TODO
     private static final String VK_CLIENT_SECRET = "7G5TlMXg3Gb1cOUJ7Usz"; //TODO
     private static final String HTTPS = "https";
     private static final String VK_OAUTH_HOST = "oauth.vk.com";
     private static final String VK_API_HOST = "api.vk.com";
     private static final String VK_API_VERSION = "5.69";
+
     private static final String VK_CODE_RQ =
             new HttpUrl.Builder()
                     .scheme(HTTPS)
@@ -73,6 +74,14 @@ public class ArtistAuthenticationWeb extends MbController {
                     .addQueryParameter("response_type", "code")
                     //версия API vk.com
                     .addQueryParameter("v", VK_API_VERSION)
+                    .toString();
+
+    private static final String FB_CODE_RQ =
+            new HttpUrl.Builder()
+                    .toString();
+
+    private static final String GOOGLE_CODE_RQ =
+            new HttpUrl.Builder()
                     .toString();
 
     private RestTemplate restTemplate;
@@ -94,15 +103,19 @@ public class ArtistAuthenticationWeb extends MbController {
         this.vkAccessTokenValidator = vkAccessTokenValidator;
     }
 
-    @GetMapping
-    public ResponseEntity<MbResponseToWeb> artistWebAuthentication(@RequestParam("id") String id,
-                                                                   @RequestParam("hash_password") String passwordHash) {
-        return ResponseEntity.ok(null);
+    @GetMapping(value = "vk")
+    public ModelAndView vkWebAuthentication() {
+        return new ModelAndView(redirectTo(VK_CODE_RQ));
     }
 
-    @GetMapping(value = "vk")
-    public ModelAndView artistWebAuthVk() {
-        return new ModelAndView(redirectTo(VK_CODE_RQ));
+    @GetMapping(value = "fb")
+    public ModelAndView fbWebAuthentication() {
+        return new ModelAndView(redirectTo(FB_CODE_RQ));
+    }
+
+    @GetMapping(value = "google")
+    public ModelAndView googleAuthenticationWeb() {
+        return new ModelAndView(redirectTo(GOOGLE_CODE_RQ));
     }
 
     @GetMapping(value = "/callback/vk", params = {"code"})
@@ -131,7 +144,7 @@ public class ArtistAuthenticationWeb extends MbController {
 
             User user = userService.findUserByVkSocialId(vkAccessTokenRs.getUserId());
             //Если пользователь впервые аутентифицируется через сервис VK
-            if (user == null) {
+            if (user == null || !user.isRegistered()) {
 
                 user = new User();
                 VkAuth vkAuth = new VkAuth(
@@ -176,7 +189,7 @@ public class ArtistAuthenticationWeb extends MbController {
                                 .parseDefaulting(ChronoField.YEAR, 1900L)
                                 .toFormatter();
                     } else if (bdate.matches("\\d{1,2}\\.\\d{1,2}.\\d{4}")) {
-                            formatter = DateTimeFormatter.ofPattern("d.M.yyyy");
+                        formatter = DateTimeFormatter.ofPattern("d.M.yyyy");
                     }
                     if (formatter != null) {
                         user.setBirthDay(LocalDate.parse(userInfo.getBdate(), formatter));
@@ -221,16 +234,6 @@ public class ArtistAuthenticationWeb extends MbController {
         MbException mbException = MbException.create(MbError.AUE01);
         mbException.setDescription(String.format("%s (%s)", error, description));
         return ResponseEntity.ok(new MbResponseToWeb(mbException, RsStatus.ERROR));
-    }
-
-    @GetMapping(value = "facebook")
-    public ResponseEntity<MbResponseToWeb> artistWebAuthFacebook() {
-        return ResponseEntity.ok(null);
-    }
-
-    @GetMapping(value = "google")
-    public ResponseEntity<MbResponseToWeb> artistWebAuthGoogle() {
-        return ResponseEntity.ok(null);
     }
 
     private String redirectTo(String url) {

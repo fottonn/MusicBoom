@@ -77,7 +77,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.debug(true);
+        final String[] URLS = {
+                "/authentication/webapi/vk",
+                "/athentication/webapi/fb",
+                "/authentication/webapi/google"
+        };
+        web
+                .debug(true)
+                .ignoring().antMatchers(URLS)
+        ;
     }
 
     @Configuration
