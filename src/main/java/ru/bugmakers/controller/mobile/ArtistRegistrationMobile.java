@@ -14,9 +14,6 @@ import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.service.ArtistRegistrationService;
 import ru.bugmakers.validator.ArtistRegistrationMobileValidator;
-import ru.bugmakers.validator.MbValidator;
-
-import java.security.spec.ECField;
 
 /**
  * Регистрация музыканта

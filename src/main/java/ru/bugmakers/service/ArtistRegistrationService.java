@@ -2,26 +2,27 @@ package ru.bugmakers.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.dto.request.mobile.RegistrationArtistRequestMobile;
 import ru.bugmakers.dto.response.mobile.ArtistRegistrationResponse;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
-import ru.bugmakers.mappers.UAMToArtistRegistrationResponseConverter;
-import ru.bugmakers.mappers.UserDtoToEntitiesConverter;
+import ru.bugmakers.mappers.converters.UserDTOToArtistRegistrationResponseConverter;
+import ru.bugmakers.mappers.converters.UserDto2UserConverter;
 
 /**
  * Created by Ayrat on 26.12.2017.
  */
 @Service
 public class ArtistRegistrationService {
-    private UserDtoToEntitiesConverter userDtoToEntitiesConverter;
+    private UserDto2UserConverter userDto2UserConverter;
     private UserService userService;
-    private UAMToArtistRegistrationResponseConverter registrationResponseConverter;
+    private UserDTOToArtistRegistrationResponseConverter registrationResponseConverter;
 
     @Autowired
-    public void setUserDtoToEntitiesConverter(UserDtoToEntitiesConverter userDtoToEntitiesConverter) {
-        this.userDtoToEntitiesConverter = userDtoToEntitiesConverter;
+    public void setUserDto2UserConverter(UserDto2UserConverter userDto2UserConverter) {
+        this.userDto2UserConverter = userDto2UserConverter;
     }
 
     @Autowired
@@ -30,7 +31,7 @@ public class ArtistRegistrationService {
     }
 
     @Autowired
-    public void setRegistrationResponseConverter(UAMToArtistRegistrationResponseConverter registrationResponseConverter) {
+    public void setRegistrationResponseConverter(UserDTOToArtistRegistrationResponseConverter registrationResponseConverter) {
         this.registrationResponseConverter = registrationResponseConverter;
     }
 
@@ -41,7 +42,8 @@ public class ArtistRegistrationService {
         if (userByEmail != null) {
             throw MbException.create(MbError.RGE02);
         } else {
-            User convert = userDtoToEntitiesConverter.convert(userRequest);
+            UserDTO userDTO = userRequest.getUser();
+            User convert = userDto2UserConverter.convert(userDTO);
             User resultUser = userService.saveUser(convert);
             if (resultUser != null) {
                 artistRegistrationResponse = registrationResponseConverter.convert(userRequest.getUser());

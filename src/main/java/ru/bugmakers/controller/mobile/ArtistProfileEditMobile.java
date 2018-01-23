@@ -14,6 +14,8 @@ import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.service.ArtistProfileEditServiceMobile;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Профиль юзера музыкантаа
  * Created by Ayrat on 21.11.2017.
@@ -43,11 +45,12 @@ public class ArtistProfileEditMobile extends MbController {
     }
 
         @GetMapping(value = "/avatar.change")
-        public ResponseEntity<MbResponseToMobile> changeArtistAvatar (@RequestParam("session_id") String sessionId,
-                @RequestParam("id") String id,
-                @RequestParam("image") MultipartFile file){
-
+        public ResponseEntity<MbResponseToMobile> changeArtistAvatar (HttpServletRequest req, @RequestParam("id") String id,
+                                                                      @RequestParam("image") MultipartFile file){
             ArtistEditingResponseMobile artistEditingResponseMobile = null;
+            artistProfileEditServiceMobile.artistAvatarChange
+            req.getServletContext().getRealPath("/WEB-INF/static/img/");
+
             return ResponseEntity.ok(artistEditingResponseMobile);
         }
 

@@ -1,4 +1,4 @@
-package ru.bugmakers.mappers;
+package ru.bugmakers.mappers.converters;
 
 /**
  * Created by Ivan

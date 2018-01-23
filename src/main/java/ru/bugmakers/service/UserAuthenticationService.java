@@ -7,7 +7,7 @@ import ru.bugmakers.dto.response.AuthenticationResponse;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.enums.UserType;
-import ru.bugmakers.mappers.User2UserDtoConverter;
+import ru.bugmakers.mappers.converters.User2UserDtoConverter;
 import ru.bugmakers.repository.UserRepo;
 
 import java.util.Optional;
