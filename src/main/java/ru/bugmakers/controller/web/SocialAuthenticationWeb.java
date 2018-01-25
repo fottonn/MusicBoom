@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.servlet.ModelAndView;
 import ru.bugmakers.config.principal.UserPrincipal;
 import ru.bugmakers.controller.MbController;
@@ -25,13 +24,13 @@ import ru.bugmakers.dto.social.VkUserInfoRs;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.entity.auth.OauthToken;
 import ru.bugmakers.entity.auth.VkAuth;
-import ru.bugmakers.enums.Role;
 import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.enums.Sex;
-import ru.bugmakers.enums.UserType;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
+import ru.bugmakers.mappers.User2UserDtoConverter;
 import ru.bugmakers.service.UserService;
+import ru.bugmakers.utils.DateTimeFormatters;
 import ru.bugmakers.validator.VkAccessTokenValidator;
 
 import java.net.URI;
@@ -39,23 +38,24 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
-import java.util.Collections;
 
 /**
- * Created by Ayrat on 05.12.2017.
+ * Created by Ivan
  */
-//TODO это не точно, нужно узнать как это делается, используя ВК и прочие сети
 @RestController
-@RequestMapping("/webapi/authentication/")
-public class ArtistAuthenticationWeb extends MbController {
+@RequestMapping("/authentication/webapi")
+public class SocialAuthenticationWeb extends MbController implements DateTimeFormatters {
 
-    private static final String VK_REDIRECT_URI = "http://mboom.com/webapi/authentication/callback/vk";
+    private static final String VK_REDIRECT_DOMAIN = "http://mboom.com"; //TODO
+    private static final String VK_REDIRECT_PATH = "/authentication/webapi/callback/vk";
+    private static final String VK_REDIRECT_URI = VK_REDIRECT_DOMAIN + VK_REDIRECT_PATH;
     private static final String VK_CLIENT_ID = "6320864"; //TODO
     private static final String VK_CLIENT_SECRET = "7G5TlMXg3Gb1cOUJ7Usz"; //TODO
     private static final String HTTPS = "https";
     private static final String VK_OAUTH_HOST = "oauth.vk.com";
     private static final String VK_API_HOST = "api.vk.com";
     private static final String VK_API_VERSION = "5.69";
+
     private static final String VK_CODE_RQ =
             new HttpUrl.Builder()
                     .scheme(HTTPS)
@@ -75,9 +75,18 @@ public class ArtistAuthenticationWeb extends MbController {
                     .addQueryParameter("v", VK_API_VERSION)
                     .toString();
 
+    private static final String FB_CODE_RQ =
+            new HttpUrl.Builder()
+                    .toString();
+
+    private static final String GOOGLE_CODE_RQ =
+            new HttpUrl.Builder()
+                    .toString();
+
     private RestTemplate restTemplate;
     private UserService userService;
     private VkAccessTokenValidator vkAccessTokenValidator;
+    private User2UserDtoConverter user2UserDtoConverter;
 
     @Autowired
     public void setRestTemplate(RestTemplate restTemplate) {
@@ -94,15 +103,24 @@ public class ArtistAuthenticationWeb extends MbController {
         this.vkAccessTokenValidator = vkAccessTokenValidator;
     }
 
-    @GetMapping
-    public ResponseEntity<MbResponseToWeb> artistWebAuthentication(@RequestParam("id") String id,
-                                                                   @RequestParam("hash_password") String passwordHash) {
-        return ResponseEntity.ok(null);
+    @Autowired
+    public void setUser2UserDtoConverter(User2UserDtoConverter user2UserDtoConverter) {
+        this.user2UserDtoConverter = user2UserDtoConverter;
     }
 
     @GetMapping(value = "vk")
-    public ModelAndView artistWebAuthVk() {
+    public ModelAndView vkWebAuthentication() {
         return new ModelAndView(redirectTo(VK_CODE_RQ));
+    }
+
+    @GetMapping(value = "fb")
+    public ModelAndView fbWebAuthentication() {
+        return new ModelAndView(redirectTo(FB_CODE_RQ));
+    }
+
+    @GetMapping(value = "google")
+    public ModelAndView googleAuthenticationWeb() {
+        return new ModelAndView(redirectTo(GOOGLE_CODE_RQ));
     }
 
     @GetMapping(value = "/callback/vk", params = {"code"})
@@ -131,15 +149,12 @@ public class ArtistAuthenticationWeb extends MbController {
 
             User user = userService.findUserByVkSocialId(vkAccessTokenRs.getUserId());
             //Если пользователь впервые аутентифицируется через сервис VK
-            if (user == null) {
-
+            if (user == null || !user.isRegistered()) {
                 user = new User();
                 VkAuth vkAuth = new VkAuth(
                         vkAccessTokenRs.getUserId(),
                         new OauthToken(vkAccessTokenRs.getAccessToken(), vkAccessTokenRs.getExpiresIn()));
                 vkAuth.setUser(user);
-                user.setRoles(Role.ARTIST);
-                user.setUserType(UserType.ARTIST);
                 user.setVkAuth(vkAuth);
                 //Записываем, полученный токен в БД
                 user = userService.saveUser(user);
@@ -158,50 +173,43 @@ public class ArtistAuthenticationWeb extends MbController {
                                 .addQueryParameter("v", VK_API_VERSION)
                                 .build().uri();
                 final VkUserInfoRs vkUserInfoRs = restTemplate.getForObject(vkGetUserInfoUrl, VkUserInfoRs.class);
-                VkUserInfo userInfo = vkUserInfoRs.getVkUserInfo();
-                user.withName(userInfo.getFirstName())
-                        .withSurName(userInfo.getLastName())
-                        .withEmail(vkAccessTokenRs.getEmail())
-                        .withCountry(userInfo.getVkCountryDTO() != null ? userInfo.getVkCountryDTO().getTitle() : null)
-                        .withCity(userInfo.getVkCityDTO() != null ? userInfo.getVkCityDTO().getTitle() : null)
-                        .withVkContact(String.format("http://vk.com/id%s", vkAccessTokenRs.getUserId()));
-                String vkSex = userInfo.getSex();
-                user.setSex(vkSex == null || vkSex.equals("0") ? null : vkSex.equals("1") ? Sex.FEMALE : Sex.MALE);
-                String bdate = userInfo.getBdate();
-                if (StringUtils.isNotBlank(bdate)) {
-                    DateTimeFormatter formatter = null;
-                    if (bdate.matches("\\d{1,2}\\.\\d{1,2}")) {
-                        formatter = new DateTimeFormatterBuilder()
-                                .appendPattern("d.M")
-                                .parseDefaulting(ChronoField.YEAR, 1900L)
-                                .toFormatter();
-                    } else if (bdate.matches("\\d{1,2}\\.\\d{1,2}.\\d{4}")) {
-                            formatter = DateTimeFormatter.ofPattern("d.M.yyyy");
-                    }
-                    if (formatter != null) {
-                        user.setBirthDay(LocalDate.parse(userInfo.getBdate(), formatter));
+                if (vkUserInfoRs != null) {
+                    VkUserInfo userInfo = vkUserInfoRs.getVkUserInfo();
+                    user.withName(userInfo.getFirstName())
+                            .withSurName(userInfo.getLastName())
+                            .withEmail(vkAccessTokenRs.getEmail())
+                            .withCountry(userInfo.getVkCountryDTO() != null ? userInfo.getVkCountryDTO().getTitle() : null)
+                            .withCity(userInfo.getVkCityDTO() != null ? userInfo.getVkCityDTO().getTitle() : null)
+                            .withVkContact(String.format("http://vk.com/id%s", vkAccessTokenRs.getUserId()));
+                    String vkSex = userInfo.getSex();
+                    user.setSex(vkSex == null || vkSex.equals("0") ? null : vkSex.equals("1") ? Sex.FEMALE : Sex.MALE);
+                    String bdate = userInfo.getBdate();
+                    if (StringUtils.isNotBlank(bdate)) {
+                        DateTimeFormatter formatter = null;
+                        if (bdate.matches("\\d{1,2}\\.\\d{1,2}")) {
+                            formatter = new DateTimeFormatterBuilder()
+                                    .appendPattern("d.M")
+                                    .parseDefaulting(ChronoField.YEAR, 1900L)
+                                    .toFormatter();
+                        } else if (bdate.matches("\\d{1,2}\\.\\d{1,2}.\\d{4}")) {
+                            formatter = DATE_FORMATTER;
+                        }
+                        if (formatter != null) {
+                            user.setBirthDay(LocalDate.parse(userInfo.getBdate(), formatter));
+                        }
                     }
                 }
+            } else {
+                //Устанавливаем SecurityContext
+                UserPrincipal userPrincipal = new UserPrincipal(user);
+                Authentication auth = new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
+                SecurityContextHolder.clearContext();
+                SecurityContextHolder.getContext().setAuthentication(auth);
             }
 
-            //Устанавливаем SecurityContext
-            UserPrincipal userPrincipal = new UserPrincipal(user);
-            Authentication auth = new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
-            SecurityContextHolder.clearContext();
-            SecurityContextHolder.getContext().setAuthentication(auth);
-            //Получаем ID сессии
-            String sessionId = RequestContextHolder.getRequestAttributes().getSessionId();
             //Маппим прикладной объект User на транспортный объект
             ArtistAuthenticationResponseWeb rs = new ArtistAuthenticationResponseWeb(RsStatus.SUCCESS);
-            //TODO реализовать маппер
-            UserDTO userDto = new UserDTO()
-                    .withName(user.getName())
-                    .withSurname(user.getSurName())
-                    .withEmail(user.getEmail())
-                    .withCountry(user.getCountry())
-                    .withCity(user.getCity())
-                    .withSex(user.getSex() != null ? user.getSex().name() : null)
-                    .withBirthday(user.getBirthDay() != null ? user.getBirthDay().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) : null);
+            UserDTO userDto = user2UserDtoConverter.convert(user);
             rs.setUser(userDto);
             return ResponseEntity.ok(rs);
         } catch (MbException e) {
@@ -211,26 +219,13 @@ public class ArtistAuthenticationWeb extends MbController {
             mbException.setDescription(e.getMessage());
             return ResponseEntity.ok(new MbResponseToWeb(mbException, RsStatus.ERROR));
         }
-
     }
 
     //Для случая, если вместо кода пришла ошибка
     @GetMapping(value = "/callback/vk", params = {"error", "error_description"})
     public ResponseEntity<MbResponseToWeb> vkCallbackError(@RequestParam("error") String error,
                                                            @RequestParam("error_description") String description) {
-        MbException mbException = MbException.create(MbError.AUE01);
-        mbException.setDescription(String.format("%s (%s)", error, description));
-        return ResponseEntity.ok(new MbResponseToWeb(mbException, RsStatus.ERROR));
-    }
-
-    @GetMapping(value = "facebook")
-    public ResponseEntity<MbResponseToWeb> artistWebAuthFacebook() {
-        return ResponseEntity.ok(null);
-    }
-
-    @GetMapping(value = "google")
-    public ResponseEntity<MbResponseToWeb> artistWebAuthGoogle() {
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(new MbResponseToWeb(MbException.create(MbError.AUE01), RsStatus.ERROR));
     }
 
     private String redirectTo(String url) {

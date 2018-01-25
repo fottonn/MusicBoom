@@ -35,6 +35,9 @@ public class User {
     @GeneratedValue
     private Long id;
 
+    @Column(name = "registered")
+    private boolean registered = false;
+
     @Column(name = "name")
     private String name;
 
@@ -150,7 +153,8 @@ public class User {
     }
 
 
-    public User(String name, String surName, String patronymic, LocalDate birthDay, String country, String city, String nickname, LocalDateTime registrationDate, String publicName, String email, UserType userType, String phone, Sex sex, Set<Role> roles, String login, String password, boolean enabled, VkAuth vkAuth, FbAuth fbAuth, GoogleAuth googleAuth, ArtistInfo artistInfo, String vkContact, String tlgContact, String whatsappContact, ActiveEvent activeEvent, List<Event> events, List<Transaction> senderTransactions, List<Transaction> recipientTransactions, ArtistRating artistRating, List<String> photos, String avatar) {
+    public User(boolean registered, String name, String surName, String patronymic, LocalDate birthDay, String country, String city, String nickname, LocalDateTime registrationDate, String publicName, String email, UserType userType, String phone, Sex sex, Set<Role> roles, String login, String password, boolean enabled, VkAuth vkAuth, FbAuth fbAuth, GoogleAuth googleAuth, ArtistInfo artistInfo, String vkContact, String tlgContact, String whatsappContact, ActiveEvent activeEvent, List<Event> events, List<Transaction> senderTransactions, List<Transaction> recipientTransactions, ArtistRating artistRating, List<String> photos, String avatar) {
+        this.registered = registered;
         this.name = name;
         this.surName = surName;
         this.patronymic = patronymic;
@@ -184,28 +188,20 @@ public class User {
         this.avatar = avatar;
     }
 
-    public String getIsAllowOfPersonalData() {
-        return isAllowOfPersonalData;
-    }
-
-    public void setIsAllowOfPersonalData(String isAllowOfPersonalData) {
-        this.isAllowOfPersonalData = isAllowOfPersonalData;
-    }
-
-    public String getIsArtistContact() {
-        return isArtistContact;
-    }
-
-    public void setIsArtistContact(String isArtistContact) {
-        this.isArtistContact = isArtistContact;
-    }
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public boolean isRegistered() {
+        return registered;
+    }
+
+    public void setRegistered(boolean registered) {
+        this.registered = registered;
     }
 
     public String getName() {
@@ -458,6 +454,27 @@ public class User {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getIsAllowOfPersonalData() {
+        return isAllowOfPersonalData;
+    }
+
+    public void setIsAllowOfPersonalData(String isAllowOfPersonalData) {
+        this.isAllowOfPersonalData = isAllowOfPersonalData;
+    }
+
+    public String getIsArtistContact() {
+        return isArtistContact;
+    }
+
+    public void setIsArtistContact(String isArtistContact) {
+        this.isArtistContact = isArtistContact;
+    }
+
+    public User withRegistered(boolean registered) {
+        this.registered = registered;
+        return this;
     }
 
     public User withName(String name) {

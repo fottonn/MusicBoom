@@ -77,7 +77,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.debug(true);
+        final String[] URLS = {
+                "/authentication/webapi/vk",
+                "/athentication/webapi/fb",
+                "/authentication/webapi/google"
+        };
+        web
+                .debug(true)
+                .ignoring().antMatchers(URLS)
+        ;
     }
 
     @Configuration
@@ -186,6 +194,50 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Configuration
     @Order(3)
+    public static class SocialAuthenticationApiConfig extends WebSecurityConfigurerAdapter {
+
+        private ProviderManager providerManager;
+
+        @Autowired
+        public void setProviderManager(ProviderManager providerManager) {
+            this.providerManager = providerManager;
+        }
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+
+            final String[] URLS = {
+                    "/authentication/webapi/callback/vk",
+                    "/registration/webapi/artist"
+            };
+
+            http
+                    .csrf().disable()
+                    .requestMatchers()
+                    .antMatchers(URLS)
+                    .and()
+                    .authorizeRequests()
+                    .anyRequest().permitAll()
+                    .and()
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .and()
+                    .addFilterAfter(tokenAuthenticationIncludeFilter(), SecurityContextPersistenceFilter.class)
+            ;
+        }
+
+        @Bean
+        public JsonAuthenticationFilter jsonAuthenticationFilter() {
+            return new JsonAuthenticationFilter(providerManager);
+        }
+
+        @Bean
+        public TokenAuthenticationIncludeFilter tokenAuthenticationIncludeFilter() {
+            return new TokenAuthenticationIncludeFilter();
+        }
+    }
+
+    @Configuration
+    @Order(4)
     public static class PublicApiConfig extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
