@@ -11,10 +11,12 @@ import ru.bugmakers.dto.response.mobile.ArtistEditingResponseMobile;
 import ru.bugmakers.dto.response.mobile.ArtistRegistrationResponse;
 import ru.bugmakers.dto.response.mobile.MbResponseToMobile;
 import ru.bugmakers.enums.RsStatus;
+import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.service.ArtistProfileEditServiceMobile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 /**
  * Профиль юзера музыкантаа
@@ -44,86 +46,93 @@ public class ArtistProfileEditMobile extends MbController {
         }
     }
 
-        @GetMapping(value = "/avatar.change")
-        public ResponseEntity<MbResponseToMobile> changeArtistAvatar (HttpServletRequest req, @RequestParam("id") String id,
-                                                                      @RequestParam("image") MultipartFile file){
-            ArtistEditingResponseMobile artistEditingResponseMobile = null;
-            artistProfileEditServiceMobile.artistAvatarChange
-            req.getServletContext().getRealPath("/WEB-INF/static/img/");
-
-            return ResponseEntity.ok(artistEditingResponseMobile);
+    @GetMapping(value = "/avatar.change")
+    public ResponseEntity<MbResponseToMobile> changeArtistAvatar(HttpServletRequest req, @RequestParam("id") String id,
+                                                                 @RequestParam("image") MultipartFile file) {
+        try {
+            artistProfileEditServiceMobile.artistAvatarChange(id, file, req);
+        } catch (MbException e) {
+            return ResponseEntity.ok(new ArtistRegistrationResponse(e, RsStatus.ERROR));
+        } catch (IOException e) {
+            return ResponseEntity.ok(new ArtistRegistrationResponse(MbException.create(MbError.UE01), RsStatus.ERROR));
+        } catch (Exception e) {
+            return ResponseEntity.ok(new ArtistRegistrationResponse(RsStatus.ERROR));
         }
-
-        @GetMapping(value = "/phone.change")
-        public ResponseEntity<MbResponseToMobile> changeArtistPhone (@RequestParam("session_id") String sessionId,
-                @RequestParam("id") String id,
-                @RequestParam("hash_phone_number") String phoneNumber){
-
-            ArtistEditingResponseMobile artistEditingResponseMobile = null;
-            return ResponseEntity.ok(artistEditingResponseMobile);
-        }
-
-        @GetMapping(value = "/password.change")
-        public ResponseEntity<MbResponseToMobile> changeArtistPassword (@RequestParam("session_id") String sessionId,
-                @RequestParam("id") String id,
-                @RequestParam("hash_password") String password){
-
-            ArtistEditingResponseMobile artistEditingResponseMobile = null;
-            return ResponseEntity.ok(artistEditingResponseMobile);
-        }
-
-        @GetMapping(value = "/creativity.change")
-        public ResponseEntity<MbResponseToMobile> changeArtistCreativity (@RequestParam("session_id") String sessionId,
-                @RequestParam("id") String id,
-                @RequestParam("hash_password") String creativity){
-
-            ArtistEditingResponseMobile artistEditingResponseMobile = null;
-            return ResponseEntity.ok(artistEditingResponseMobile);
-        }
-
-        @GetMapping(value = "/instrument.change")
-        public ResponseEntity<MbResponseToMobile> changeArtistInstrument (@RequestParam("session_id") String sessionId,
-                @RequestParam("id") String id,
-                @RequestParam("hash_password") String instrument){
-
-            ArtistEditingResponseMobile artistEditingResponseMobile = null;
-            return ResponseEntity.ok(artistEditingResponseMobile);
-        }
-
-        @GetMapping(value = "/genre.change")
-        public ResponseEntity<MbResponseToMobile> changeArtistGenre (@RequestParam("session_id") String sessionId,
-                @RequestParam("id") String id,
-                @RequestParam("hash_password") String genre){
-
-            ArtistEditingResponseMobile artistEditingResponseMobile = null;
-            return ResponseEntity.ok(artistEditingResponseMobile);
-        }
-
-        @GetMapping(value = "/setOrderable.change")
-        public ResponseEntity<MbResponseToMobile> changeArtistSetOrderable (@RequestParam("session_id") String
-        sessionId,
-                @RequestParam("id") String id,
-                @RequestParam("hash_password") Boolean setOrderable){
-
-            ArtistEditingResponseMobile artistEditingResponseMobile = null;
-            return ResponseEntity.ok(artistEditingResponseMobile);
-        }
-
-        @GetMapping(value = "/artist.deletePhotos")
-        public ResponseEntity<MbResponseToMobile> artistDeletePhotos (@RequestParam("session_id") String sessionId,
-                @RequestParam("id") String id,
-                @RequestParam("photo_id") String photoId){
-
-            ArtistEditingResponseMobile artistEditingResponseMobile = null;
-            return ResponseEntity.ok(artistEditingResponseMobile);
-        }
-
-        //TODO Узнать как принимать массив фоток
-        @PostMapping(value = "/artist.uploadPhotos")
-        public ResponseEntity<MbResponseToMobile> artistUploadPhotos (@RequestBody UploadPhotosRequestMobile
-        uploadPhotosRequestMobile){
-
-            ArtistEditingResponseMobile artistEditingResponseMobile = null;
-            return ResponseEntity.ok(artistEditingResponseMobile);
-        }
+        return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
     }
+
+    @GetMapping(value = "/phone.change")
+    public ResponseEntity<MbResponseToMobile> changeArtistPhone(@RequestParam("id") String id,
+                                                                @RequestParam("hash_phone_number") String phoneNumber) {
+        try {
+            artistProfileEditServiceMobile.artistPhoneChange(id, phoneNumber);
+        } catch (MbException e) {
+            return ResponseEntity.ok(new ArtistRegistrationResponse(e, RsStatus.ERROR));
+        }
+        return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
+    }
+
+    @GetMapping(value = "/password.change")
+    public ResponseEntity<MbResponseToMobile> changeArtistPassword(@RequestParam("session_id") String sessionId,
+                                                                   @RequestParam("id") String id,
+                                                                   @RequestParam("hash_password") String password) {
+
+        ArtistEditingResponseMobile artistEditingResponseMobile = null;
+        return ResponseEntity.ok(artistEditingResponseMobile);
+    }
+
+    @GetMapping(value = "/creativity.change")
+    public ResponseEntity<MbResponseToMobile> changeArtistCreativity(@RequestParam("session_id") String sessionId,
+                                                                     @RequestParam("id") String id,
+                                                                     @RequestParam("hash_password") String creativity) {
+
+        ArtistEditingResponseMobile artistEditingResponseMobile = null;
+        return ResponseEntity.ok(artistEditingResponseMobile);
+    }
+
+    @GetMapping(value = "/instrument.change")
+    public ResponseEntity<MbResponseToMobile> changeArtistInstrument(@RequestParam("session_id") String sessionId,
+                                                                     @RequestParam("id") String id,
+                                                                     @RequestParam("hash_password") String instrument) {
+
+        ArtistEditingResponseMobile artistEditingResponseMobile = null;
+        return ResponseEntity.ok(artistEditingResponseMobile);
+    }
+
+    @GetMapping(value = "/genre.change")
+    public ResponseEntity<MbResponseToMobile> changeArtistGenre(@RequestParam("session_id") String sessionId,
+                                                                @RequestParam("id") String id,
+                                                                @RequestParam("hash_password") String genre) {
+
+        ArtistEditingResponseMobile artistEditingResponseMobile = null;
+        return ResponseEntity.ok(artistEditingResponseMobile);
+    }
+
+    @GetMapping(value = "/setOrderable.change")
+    public ResponseEntity<MbResponseToMobile> changeArtistSetOrderable(@RequestParam("session_id") String
+                                                                               sessionId,
+                                                                       @RequestParam("id") String id,
+                                                                       @RequestParam("hash_password") Boolean setOrderable) {
+
+        ArtistEditingResponseMobile artistEditingResponseMobile = null;
+        return ResponseEntity.ok(artistEditingResponseMobile);
+    }
+
+    @GetMapping(value = "/artist.deletePhotos")
+    public ResponseEntity<MbResponseToMobile> artistDeletePhotos(@RequestParam("session_id") String sessionId,
+                                                                 @RequestParam("id") String id,
+                                                                 @RequestParam("photo_id") String photoId) {
+
+        ArtistEditingResponseMobile artistEditingResponseMobile = null;
+        return ResponseEntity.ok(artistEditingResponseMobile);
+    }
+
+    //TODO Узнать как принимать массив фоток
+    @PostMapping(value = "/artist.uploadPhotos")
+    public ResponseEntity<MbResponseToMobile> artistUploadPhotos(@RequestBody UploadPhotosRequestMobile
+                                                                         uploadPhotosRequestMobile) {
+
+        ArtistEditingResponseMobile artistEditingResponseMobile = null;
+        return ResponseEntity.ok(artistEditingResponseMobile);
+    }
+}

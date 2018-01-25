@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.repository.UserRepo;
 
+import java.util.Optional;
+
 /**
  * Created by Ivan
  */
@@ -38,4 +40,7 @@ public class UserService {
 
     @Transactional
     public User updateUser(User user) {return userRepo.saveAndFlush(user);}
+
+    public Optional<User> findUserById(String id) { return userRepo.findById(Long.valueOf(id));
+    }
 }
