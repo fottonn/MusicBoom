@@ -28,6 +28,10 @@ public class UserService {
         return userRepo.findByVkAuth_SocialId(socialId);
     }
 
+    public User findUserByFbSocialId(String socialId) {
+        return userRepo.findByFbAuth_SocialId(socialId);
+    }
+
     public User findUserByEmail(String email) {
         return userRepo.findByEmail(email);
     }
