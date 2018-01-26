@@ -18,10 +18,9 @@ import ru.bugmakers.controller.MbController;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.dto.response.web.ArtistAuthenticationResponseWeb;
 import ru.bugmakers.dto.response.web.MbResponseToWeb;
-import ru.bugmakers.dto.social.VkAccessTokenRs;
-import ru.bugmakers.dto.social.VkUserInfo;
-import ru.bugmakers.dto.social.VkUserInfoRs;
+import ru.bugmakers.dto.social.*;
 import ru.bugmakers.entity.User;
+import ru.bugmakers.entity.auth.FbAuth;
 import ru.bugmakers.entity.auth.OauthToken;
 import ru.bugmakers.entity.auth.VkAuth;
 import ru.bugmakers.enums.RsStatus;
@@ -31,6 +30,8 @@ import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.mappers.User2UserDtoConverter;
 import ru.bugmakers.service.UserService;
 import ru.bugmakers.utils.DateTimeFormatters;
+import ru.bugmakers.validator.FbAccessTokenValidator;
+import ru.bugmakers.validator.FbUserIdValidator;
 import ru.bugmakers.validator.VkAccessTokenValidator;
 
 import java.net.URI;
@@ -46,15 +47,23 @@ import java.time.temporal.ChronoField;
 @RequestMapping("/authentication/webapi")
 public class SocialAuthenticationWeb extends MbController implements DateTimeFormatters {
 
-    private static final String VK_REDIRECT_DOMAIN = "http://mboom.com"; //TODO
+    private static final String REDIRECT_DOMAIN = "http://mboom.com"; //TODO
     private static final String VK_REDIRECT_PATH = "/authentication/webapi/callback/vk";
-    private static final String VK_REDIRECT_URI = VK_REDIRECT_DOMAIN + VK_REDIRECT_PATH;
+    private static final String FB_REDIRECT_PATH = "/authentication/webapi/callback/fb";
+    private static final String VK_REDIRECT_URI = REDIRECT_DOMAIN + VK_REDIRECT_PATH;
+    private static final String FB_REDIRECT_URI = REDIRECT_DOMAIN + FB_REDIRECT_PATH;
     private static final String VK_CLIENT_ID = "6320864"; //TODO
+    private static final String FB_CLIENT_ID = "6320864"; //TODO
     private static final String VK_CLIENT_SECRET = "7G5TlMXg3Gb1cOUJ7Usz"; //TODO
+    private static final String FB_CLIENT_SECRET = "7G5TlMXg3Gb1cOUJ7Usz"; //TODO
     private static final String HTTPS = "https";
     private static final String VK_OAUTH_HOST = "oauth.vk.com";
+    private static final String FB_OAUTH_HOST = "www.facebook.com";
     private static final String VK_API_HOST = "api.vk.com";
     private static final String VK_API_VERSION = "5.69";
+    private static final String FB_API_VERSION = "v2.11";
+    private static final String SOCIAL_CSRF_TOKEN = "";
+    private static final String FB_GRAF_HOST = "graph.facebook.com";
 
     private static final String VK_CODE_RQ =
             new HttpUrl.Builder()
@@ -73,10 +82,27 @@ public class SocialAuthenticationWeb extends MbController implements DateTimeFor
                     .addQueryParameter("response_type", "code")
                     //версия API vk.com
                     .addQueryParameter("v", VK_API_VERSION)
+                    //этот параметр будет передан в ответе в неизменном виде
+                    .addQueryParameter("state", SOCIAL_CSRF_TOKEN)
                     .toString();
 
     private static final String FB_CODE_RQ =
             new HttpUrl.Builder()
+                    .scheme(HTTPS)
+                    .host(FB_OAUTH_HOST)
+                    .addPathSegment(FB_API_VERSION)
+                    .addPathSegment("dialog")
+                    .addPathSegment("oauth")
+                    //clientId в facebook.com
+                    .addQueryParameter("client_id", FB_CLIENT_ID)
+                    //адрес, на который будет передан код
+                    .addQueryParameter("redirect_uri", FB_REDIRECT_URI)
+                    //этот параметр будет передан в ответе в неизменном виде
+                    .addQueryParameter("state", SOCIAL_CSRF_TOKEN)
+                    //запрос доступа к email
+                    .addQueryParameter("scope", "email")
+                    //тип ответа от facebook.com
+                    .addQueryParameter("response_type", "code")
                     .toString();
 
     private static final String GOOGLE_CODE_RQ =
@@ -86,6 +112,8 @@ public class SocialAuthenticationWeb extends MbController implements DateTimeFor
     private RestTemplate restTemplate;
     private UserService userService;
     private VkAccessTokenValidator vkAccessTokenValidator;
+    private FbAccessTokenValidator fbAccessTokenValidator;
+    private FbUserIdValidator fbUserIdValidator;
     private User2UserDtoConverter user2UserDtoConverter;
 
     @Autowired
@@ -101,6 +129,16 @@ public class SocialAuthenticationWeb extends MbController implements DateTimeFor
     @Autowired
     public void setVkAccessTokenValidator(VkAccessTokenValidator vkAccessTokenValidator) {
         this.vkAccessTokenValidator = vkAccessTokenValidator;
+    }
+
+    @Autowired
+    public void setFbAccessTokenValidator(FbAccessTokenValidator fbAccessTokenValidator) {
+        this.fbAccessTokenValidator = fbAccessTokenValidator;
+    }
+
+    @Autowired
+    public void setFbUserIdValidator(FbUserIdValidator fbUserIdValidator) {
+        this.fbUserIdValidator = fbUserIdValidator;
     }
 
     @Autowired
@@ -200,6 +238,9 @@ public class SocialAuthenticationWeb extends MbController implements DateTimeFor
                     }
                 }
             } else {
+                user.getVkAuth().getOauthToken().setToken(vkAccessTokenRs.getAccessToken());
+                user.getVkAuth().getOauthToken().setExpireTime(vkAccessTokenRs.getExpiresIn());
+                user = userService.saveUser(user);
                 //Устанавливаем SecurityContext
                 UserPrincipal userPrincipal = new UserPrincipal(user);
                 Authentication auth = new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
@@ -223,10 +264,96 @@ public class SocialAuthenticationWeb extends MbController implements DateTimeFor
 
     //Для случая, если вместо кода пришла ошибка
     @GetMapping(value = "/callback/vk", params = {"error", "error_description"})
-    public ResponseEntity<MbResponseToWeb> vkCallbackError(@RequestParam("error") String error,
-                                                           @RequestParam("error_description") String description) {
+    public ResponseEntity<MbResponseToWeb> vkCallbackError() {
         return ResponseEntity.ok(new MbResponseToWeb(MbException.create(MbError.AUE01), RsStatus.ERROR));
     }
+
+    @GetMapping(value = "/callback/fb", params = {"code", "state"})
+    public ResponseEntity<MbResponseToWeb> fbCallbackCode(@RequestParam("code") String code, @RequestParam("state") String state) {
+        try {
+            if (StringUtils.isBlank(code)) {
+                throw MbException.create(MbError.AUE09);
+            }
+
+            //Получаем oauth токен
+            final URI fbGetTokenUrl =
+                    new HttpUrl.Builder()
+                            .scheme(HTTPS)
+                            .host(FB_GRAF_HOST)
+                            .addPathSegment(FB_API_VERSION)
+                            .addPathSegment("oauth")
+                            .addPathSegment("access_token")
+                            .addQueryParameter("client_id", FB_CLIENT_ID)
+                            .addQueryParameter("client_secret", FB_CLIENT_SECRET)
+                            .addQueryParameter("redirect_uri", FB_REDIRECT_URI)
+                            .addQueryParameter("code", code)
+                            .build().uri();
+            final FbAccessTokenRs fbAccessTokenRs = restTemplate.getForObject(fbGetTokenUrl, FbAccessTokenRs.class);
+
+            //Валидируем ответ на запрос токена
+            fbAccessTokenValidator.validate(fbAccessTokenRs);
+
+            //Получаем дополнительные сведения о пользователе
+            final URI fbGetUserInfoUrl =
+                    new HttpUrl.Builder()
+                            .scheme(HTTPS)
+                            .host(FB_GRAF_HOST)
+                            .addPathSegment("me")
+                            .addQueryParameter("access_token", fbAccessTokenRs.getAccessToken())
+                            .addQueryParameter("fields", "id, first_name, last_name, email")
+                            .build().uri();
+            final FbUserInfoRs fbUserInfoRs = restTemplate.getForObject(fbGetUserInfoUrl, FbUserInfoRs.class);
+
+            //Валидируем ответ на запрос Id пользователя в facebook.com
+            fbUserIdValidator.validate(fbUserInfoRs);
+
+            User user = userService.findUserByFbSocialId(fbUserInfoRs.getId());
+            //Если пользователь впервые аутентифицируется через сервис facebook.com
+            if (user == null || !user.isRegistered()) {
+                user = new User();
+                FbAuth fbAuth = new FbAuth(
+                        fbUserInfoRs.getId(),
+                        new OauthToken(fbAccessTokenRs.getAccessToken(), fbAccessTokenRs.getExpiresIn()));
+                fbAuth.setUser(user);
+                user.setFbAuth(fbAuth);
+                //Записываем, полученный токен в БД
+                user = userService.saveUser(user);
+
+                user
+                        .withName(fbUserInfoRs.getFirstName())
+                        .withSurName(fbUserInfoRs.getLastName())
+                        .withEmail(fbUserInfoRs.getEmail());
+            } else {
+                user.getFbAuth().getOauthToken().setToken(fbAccessTokenRs.getAccessToken());
+                user.getFbAuth().getOauthToken().setExpireTime(fbAccessTokenRs.getExpiresIn());
+                user = userService.saveUser(user);
+                //Устанавливаем SecurityContext
+                UserPrincipal userPrincipal = new UserPrincipal(user);
+                Authentication auth = new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
+                SecurityContextHolder.clearContext();
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
+
+            //Маппим прикладной объект User на транспортный объект
+            ArtistAuthenticationResponseWeb rs = new ArtistAuthenticationResponseWeb(RsStatus.SUCCESS);
+            UserDTO userDto = user2UserDtoConverter.convert(user);
+            rs.setUser(userDto);
+            return ResponseEntity.ok(rs);
+        } catch (MbException e) {
+            return ResponseEntity.ok(new MbResponseToWeb(e, RsStatus.ERROR));
+        } catch (Exception e) {
+            MbException mbException = MbException.create(MbError.UNE01);
+            mbException.setDescription(e.getMessage());
+            return ResponseEntity.ok(new MbResponseToWeb(mbException, RsStatus.ERROR));
+        }
+    }
+
+    //Для случая, если вместо кода пришла ошибка
+    @GetMapping(value = "/callback/fb", params = {"error", "error_description", "error_reason"})
+    public ResponseEntity<MbResponseToWeb> fbCallbackError() {
+        return ResponseEntity.ok(new MbResponseToWeb(MbException.create(MbError.AUE01), RsStatus.ERROR));
+    }
+
 
     private String redirectTo(String url) {
         return "redirect:" + url;

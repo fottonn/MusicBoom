@@ -1,6 +1,5 @@
 package ru.bugmakers.entity.auth;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import ru.bugmakers.entity.User;
 
 import javax.persistence.*;
