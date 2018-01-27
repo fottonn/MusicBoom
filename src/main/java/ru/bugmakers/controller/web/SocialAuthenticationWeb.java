@@ -453,6 +453,12 @@ public class SocialAuthenticationWeb extends MbController implements DateTimeFor
         }
     }
 
+    //Для случая, если вместо кода пришла ошибка
+    @GetMapping(value = "/callback/google", params = {"error"})
+    public ResponseEntity<MbResponseToWeb> googleCallbackError() {
+        return ResponseEntity.ok(new MbResponseToWeb(MbException.create(MbError.AUE01), RsStatus.ERROR));
+    }
+
 
     private String redirectTo(String url) {
         return "redirect:" + url;
