@@ -32,6 +32,10 @@ public class UserService {
         return userRepo.findByFbAuth_SocialId(socialId);
     }
 
+    public User findUserByGoogleSocialId(String socialId) {
+        return userRepo.findByGoogleAuth_SocialId(socialId);
+    }
+
     public User findUserByEmail(String email) {
         return userRepo.findByEmail(email);
     }
