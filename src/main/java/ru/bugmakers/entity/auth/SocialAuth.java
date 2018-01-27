@@ -18,10 +18,6 @@ public abstract class SocialAuth {
     @Column(name = "social_id")
     private String socialId;
 
-    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
-    @JoinColumn(name = "oauth_token")
-    private OauthToken oauthToken;
-
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -29,15 +25,8 @@ public abstract class SocialAuth {
     public SocialAuth() {
     }
 
-    public SocialAuth(String socialId, OauthToken oauthToken) {
+    public SocialAuth(String socialId) {
         this.socialId = socialId;
-        this.oauthToken = oauthToken;
-    }
-
-    public SocialAuth(String socialId, OauthToken oauthToken, User user) {
-        this.socialId = socialId;
-        this.oauthToken = oauthToken;
-        this.user = user;
     }
 
     public Long getId() {
@@ -54,14 +43,6 @@ public abstract class SocialAuth {
 
     public void setSocialId(String socialId) {
         this.socialId = socialId;
-    }
-
-    public OauthToken getOauthToken() {
-        return oauthToken;
-    }
-
-    public void setOauthToken(OauthToken oauthToken) {
-        this.oauthToken = oauthToken;
     }
 
     public User getUser() {

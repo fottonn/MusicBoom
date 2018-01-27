@@ -9,4 +9,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "google_auth")
 public class GoogleAuth extends SocialAuth{
+    public GoogleAuth() {
+    }
+
+    public GoogleAuth(String socialId) {
+        super(socialId);
+    }
 }
