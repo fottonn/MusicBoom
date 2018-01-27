@@ -76,7 +76,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         final String[] URLS = {
                 "/authentication/webapi/vk",
                 "/athentication/webapi/fb",
@@ -207,7 +207,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         protected void configure(HttpSecurity http) throws Exception {
 
             final String[] URLS = {
-                    "/authentication/webapi/callback/vk",
+                    "/authentication/webapi/vk/callback",
+                    "/authentication/webapi/fb/callback",
+                    "/authentication/webapi/google/callback",
                     "/registration/webapi/artist"
             };
 
