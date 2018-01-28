@@ -4,16 +4,12 @@ import okhttp3.HttpUrl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
-import ru.bugmakers.config.principal.UserPrincipal;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.dto.response.web.ArtistAuthenticationResponseWeb;
 import ru.bugmakers.dto.response.web.MbResponseToWeb;
@@ -28,6 +24,7 @@ import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.mappers.User2UserDtoConverter;
 import ru.bugmakers.service.UserService;
+import ru.bugmakers.utils.SecurityContextUtils;
 import ru.bugmakers.validator.VkAccessTokenValidator;
 
 import java.net.URI;
@@ -170,10 +167,7 @@ public class VkAuthenticationWeb extends SocialAuthenticationWeb {
                 }
             } else {
                 //Устанавливаем SecurityContext
-                UserPrincipal userPrincipal = new UserPrincipal(user);
-                Authentication auth = new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
-                SecurityContextHolder.clearContext();
-                SecurityContextHolder.getContext().setAuthentication(auth);
+                SecurityContextUtils.setAuthentication(user);
             }
 
             //Маппим прикладной объект User на транспортный объект

@@ -17,4 +17,8 @@ public interface UserRepo extends JpaRepository<User, Long> {
     User findByGoogleAuth_SocialId(String socialId);
 
     User findByEmail(String email);
+
+    boolean existsByEmail(String email);
+
+    boolean existsByLogin(String login);
 }
