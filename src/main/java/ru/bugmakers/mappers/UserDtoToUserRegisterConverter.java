@@ -27,6 +27,7 @@ public class UserDtoToUserRegisterConverter implements MbConverter<UserDTO, User
     @Override
     public User convert(UserDTO source) {
         return new User()
+                .withRegistered(true)
                 .withName(source.getName())
                 .withSurName(source.getSurname())
                 .withEmail(source.getEmail())

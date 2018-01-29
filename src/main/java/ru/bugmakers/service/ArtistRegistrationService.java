@@ -48,7 +48,6 @@ public class ArtistRegistrationService {
             User convert = userDtoToUserRegisterConverter.convert(userDtoRq);
             convert.setUserType(UserType.ARTIST);
             convert.setRoles(Role.ARTIST);
-            convert.setRegistered(true);
             User user = userService.saveUser(convert);
             userDtoRs = user2UserDtoConverter.convert(user);
             //аутентифицируем пользователя
@@ -86,6 +85,7 @@ public class ArtistRegistrationService {
 
         //TODO наполнить entity данными из userDtoRq
 
+        user.setRegistered(true);
         user = userService.saveUser(user);
         //аутентифицируем пользователя
         SecurityContextUtils.setAuthentication(user);
