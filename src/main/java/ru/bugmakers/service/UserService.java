@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.repository.UserRepo;
 
+import java.util.Optional;
+
 /**
  * Created by Ivan
  */
@@ -44,4 +46,19 @@ public class UserService {
         return userRepo.findByLoginIgnoreCase(login);
     }
 
+    public User findUserById(Long id) {
+        return userRepo.findById(id).orElse(null);
+    }
+
+    public boolean isExistsById(Long id) {
+        return userRepo.existsById(id);
+    }
+
+    public boolean isExistsByEmail(String email) {
+        return userRepo.existsByEmail(email);
+    }
+
+    public boolean isExistsByLogin(String login) {
+        return userRepo.existsByLogin(login);
+    }
 }
