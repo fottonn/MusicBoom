@@ -48,6 +48,7 @@ public class ArtistRegistrationService {
             User convert = userDtoToUserRegisterConverter.convert(userDtoRq);
             convert.setUserType(UserType.ARTIST);
             convert.setRoles(Role.ARTIST);
+            convert.setRegistered(true);
             User user = userService.saveUser(convert);
             userDtoRs = user2UserDtoConverter.convert(user);
             //аутентифицируем пользователя
