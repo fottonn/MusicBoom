@@ -5,8 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.bugmakers.controller.MbController;
+import ru.bugmakers.dto.common.UserDTO;
+import ru.bugmakers.dto.request.MultipartFileDto;
 import ru.bugmakers.dto.request.mobile.ArtistEditRequestMobile;
-import ru.bugmakers.dto.request.mobile.UploadPhotosRequestMobile;
 import ru.bugmakers.dto.response.mobile.ArtistEditingResponseMobile;
 import ru.bugmakers.dto.response.mobile.ArtistRegistrationResponse;
 import ru.bugmakers.dto.response.mobile.MbResponseToMobile;
@@ -17,6 +18,7 @@ import ru.bugmakers.service.ArtistProfileEditServiceMobile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Профиль юзера музыкантаа
@@ -36,7 +38,8 @@ public class ArtistProfileEditMobile extends MbController {
     @PostMapping(value = "/artist.personal")
     public ResponseEntity<MbResponseToMobile> artistEditing(@RequestBody ArtistEditRequestMobile artistEditRequestMobile) {
         try {
-            Boolean isSuccess = artistProfileEditServiceMobile.artistProfileEdit(artistEditRequestMobile);
+            UserDTO userDTO = artistEditRequestMobile.getUserDTO();
+            Boolean isSuccess = artistProfileEditServiceMobile.artistProfileEdit(userDTO);
             return isSuccess.equals(Boolean.TRUE) ? ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS)) :
                     ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.ERROR));
         } catch (MbException e) {
@@ -47,10 +50,10 @@ public class ArtistProfileEditMobile extends MbController {
     }
 
     @GetMapping(value = "/avatar.change")
-    public ResponseEntity<MbResponseToMobile> changeArtistAvatar(HttpServletRequest req, @RequestParam("id") String id,
+    public ResponseEntity<MbResponseToMobile> changeArtistAvatar(@RequestParam("id") String id,
                                                                  @RequestParam("image") MultipartFile file) {
         try {
-            artistProfileEditServiceMobile.artistAvatarChange(id, file, req);
+            artistProfileEditServiceMobile.artistAvatarChange(id, file);
         } catch (MbException e) {
             return ResponseEntity.ok(new ArtistRegistrationResponse(e, RsStatus.ERROR));
         } catch (IOException e) {
@@ -73,66 +76,84 @@ public class ArtistProfileEditMobile extends MbController {
     }
 
     @GetMapping(value = "/password.change")
-    public ResponseEntity<MbResponseToMobile> changeArtistPassword(@RequestParam("session_id") String sessionId,
-                                                                   @RequestParam("id") String id,
+    public ResponseEntity<MbResponseToMobile> changeArtistPassword(@RequestParam("id") String id,
                                                                    @RequestParam("hash_password") String password) {
-
-        ArtistEditingResponseMobile artistEditingResponseMobile = null;
-        return ResponseEntity.ok(artistEditingResponseMobile);
+        try {
+            artistProfileEditServiceMobile.artistPasswordChange(id, password);
+        } catch (MbException e) {
+            return ResponseEntity.ok(new ArtistRegistrationResponse(e, RsStatus.ERROR));
+        }
+        return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
     }
 
     @GetMapping(value = "/creativity.change")
-    public ResponseEntity<MbResponseToMobile> changeArtistCreativity(@RequestParam("session_id") String sessionId,
-                                                                     @RequestParam("id") String id,
-                                                                     @RequestParam("hash_password") String creativity) {
-
-        ArtistEditingResponseMobile artistEditingResponseMobile = null;
-        return ResponseEntity.ok(artistEditingResponseMobile);
+    public ResponseEntity<MbResponseToMobile> changeArtistCreativity(@RequestParam("id") String id,
+                                                                     @RequestParam("creativity") String creativity) {
+        try {
+            artistProfileEditServiceMobile.artistCreativityChange(id, creativity);
+        } catch (MbException e) {
+            return ResponseEntity.ok(new ArtistRegistrationResponse(e, RsStatus.ERROR));
+        }
+        return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
     }
 
     @GetMapping(value = "/instrument.change")
-    public ResponseEntity<MbResponseToMobile> changeArtistInstrument(@RequestParam("session_id") String sessionId,
-                                                                     @RequestParam("id") String id,
-                                                                     @RequestParam("hash_password") String instrument) {
-
-        ArtistEditingResponseMobile artistEditingResponseMobile = null;
-        return ResponseEntity.ok(artistEditingResponseMobile);
+    public ResponseEntity<MbResponseToMobile> changeArtistInstrument(@RequestParam("id") String id,
+                                                                     @RequestParam("instrument") String instrument) {
+        try {
+            artistProfileEditServiceMobile.artistInstrumentChange(id, instrument);
+        } catch (MbException e) {
+            return ResponseEntity.ok(new ArtistRegistrationResponse(e, RsStatus.ERROR));
+        }
+        return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
     }
 
     @GetMapping(value = "/genre.change")
-    public ResponseEntity<MbResponseToMobile> changeArtistGenre(@RequestParam("session_id") String sessionId,
-                                                                @RequestParam("id") String id,
-                                                                @RequestParam("hash_password") String genre) {
-
-        ArtistEditingResponseMobile artistEditingResponseMobile = null;
-        return ResponseEntity.ok(artistEditingResponseMobile);
+    public ResponseEntity<MbResponseToMobile> changeArtistGenre(@RequestParam("id") String id,
+                                                                @RequestParam("genre") String genre) {
+        try {
+            artistProfileEditServiceMobile.artistGenreChange(id, genre);
+        } catch (MbException e) {
+            return ResponseEntity.ok(new ArtistRegistrationResponse(e, RsStatus.ERROR));
+        }
+        return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
     }
 
     @GetMapping(value = "/setOrderable.change")
-    public ResponseEntity<MbResponseToMobile> changeArtistSetOrderable(@RequestParam("session_id") String
-                                                                               sessionId,
-                                                                       @RequestParam("id") String id,
-                                                                       @RequestParam("hash_password") Boolean setOrderable) {
+    public ResponseEntity<MbResponseToMobile> changeArtistSetOrderable(@RequestParam("id") String id,
+                                                                       @RequestParam("set_orderable") Boolean setOrderable) {
+        try {
+            artistProfileEditServiceMobile.artistSetOrderableChange(id, setOrderable);
+        } catch (MbException e) {
+            return ResponseEntity.ok(new ArtistRegistrationResponse(e, RsStatus.ERROR));
+        }
+        return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
 
-        ArtistEditingResponseMobile artistEditingResponseMobile = null;
-        return ResponseEntity.ok(artistEditingResponseMobile);
     }
 
     @GetMapping(value = "/artist.deletePhotos")
-    public ResponseEntity<MbResponseToMobile> artistDeletePhotos(@RequestParam("session_id") String sessionId,
-                                                                 @RequestParam("id") String id,
-                                                                 @RequestParam("photo_id") String photoId) {
+    public ResponseEntity<MbResponseToMobile> artistDeletePhotos(@RequestParam("id") String id,
+                                                                 @RequestParam("photos_id") List<String> photosId) {
+        try {
+            artistProfileEditServiceMobile.artistDeletePhotos(id, photosId);
+        } catch (MbException e) {
+            return ResponseEntity.ok(new ArtistRegistrationResponse(e, RsStatus.ERROR));
+        }
+        return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
 
-        ArtistEditingResponseMobile artistEditingResponseMobile = null;
-        return ResponseEntity.ok(artistEditingResponseMobile);
     }
 
     //TODO Узнать как принимать массив фоток
     @PostMapping(value = "/artist.uploadPhotos")
-    public ResponseEntity<MbResponseToMobile> artistUploadPhotos(@RequestBody UploadPhotosRequestMobile
-                                                                         uploadPhotosRequestMobile) {
-
-        ArtistEditingResponseMobile artistEditingResponseMobile = null;
-        return ResponseEntity.ok(artistEditingResponseMobile);
+    public ResponseEntity<MbResponseToMobile> artistUploadPhotos(@RequestParam("id") String id,
+                                                                 @ModelAttribute("upload_files") MultipartFileDto uploadFiles) {
+        try {
+            artistProfileEditServiceMobile.artistUploadPhotos(id, uploadFiles);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (MbException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
     }
 }

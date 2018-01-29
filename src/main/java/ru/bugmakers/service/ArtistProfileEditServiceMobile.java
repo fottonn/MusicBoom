@@ -1,11 +1,15 @@
 package ru.bugmakers.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.bugmakers.dto.common.UserDTO;
+import ru.bugmakers.dto.request.MultipartFileDto;
 import ru.bugmakers.dto.request.mobile.ArtistEditRequestMobile;
+import ru.bugmakers.entity.ArtistInfo;
 import ru.bugmakers.entity.User;
+import ru.bugmakers.enums.Genre;
 import ru.bugmakers.enums.UserType;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
@@ -13,6 +17,7 @@ import ru.bugmakers.mappers.enrichers.UserDTO2UserEnricher;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,16 +25,29 @@ import java.util.Optional;
  */
 @Service
 public class ArtistProfileEditServiceMobile {
-
-    @Autowired
+    private PasswordEncoder passwordEncoder;
     private UserService userService;
-    @Autowired
     private UserDTO2UserEnricher userDTO2UserEnricher;
-    @Autowired
     private SaveImagesService saveImagesService;
 
-    public Boolean artistProfileEdit(ArtistEditRequestMobile artistEditingResponseMobile) throws MbException {
-        UserDTO userDTO = artistEditingResponseMobile.getUserDTO();
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+    @Autowired
+    public void setUserDTO2UserEnricher(UserDTO2UserEnricher userDTO2UserEnricher) {
+        this.userDTO2UserEnricher = userDTO2UserEnricher;
+    }
+    @Autowired
+    public void setSaveImagesService(SaveImagesService saveImagesService) {
+        this.saveImagesService = saveImagesService;
+    }
+
+    public Boolean artistProfileEdit(UserDTO userDTO) throws MbException {
         User user = userService.findUserByEmail(userDTO.getEmail());
         if (user != null) {
             if (user.getUserType().equals(UserType.LISTENER)) {
@@ -47,10 +65,11 @@ public class ArtistProfileEditServiceMobile {
         return Boolean.TRUE;
     }
 
-    public Boolean artistAvatarChange(String id, MultipartFile file, HttpServletRequest req) throws MbException, IOException {
+    public Boolean artistAvatarChange(String id, MultipartFile file) throws MbException, IOException {
         String fileName;
         User user = isUserExist(id);
-        fileName = saveImagesService.saveFile(file, req.getServletContext().getRealPath("/WEB-INF/static/img/"));
+        //TODO переделать путь сохранения файлов
+        fileName = saveImagesService.saveFile(file, "/WEB-INF/static/img/");
         if (fileName != null) {
             user.setAvatar(fileName);
             User savedUser = userService.updateUser(user);
@@ -71,6 +90,83 @@ public class ArtistProfileEditServiceMobile {
             throw MbException.create(MbError.APE03);
         }
         return Boolean.TRUE;
+    }
+
+    public Boolean artistPasswordChange(String id, String password) throws MbException {
+        User user = isUserExist(id);
+        user.setPassword(passwordEncoder.encode(password));
+        User savedUser = userService.updateUser(user);
+        if (savedUser == null) {
+            throw MbException.create(MbError.APE03);
+        }
+        return Boolean.TRUE;
+    }
+
+    public Boolean artistCreativityChange(String id, String creativity) throws MbException {
+        User user = isUserExist(id);
+        ArtistInfo artistInfo = user.getArtistInfo();
+        artistInfo.setCreativity(creativity);
+        user.setArtistInfo(artistInfo);
+        User savedUser = userService.updateUser(user);
+        if (savedUser == null) {
+            throw MbException.create(MbError.APE03);
+        }
+        return Boolean.TRUE;
+    }
+
+    public Boolean artistInstrumentChange(String id, String instrument) throws MbException {
+        User user = isUserExist(id);
+        ArtistInfo artistInfo = user.getArtistInfo();
+        artistInfo.setInstrument(instrument);
+        user.setArtistInfo(artistInfo);
+        User savedUser = userService.updateUser(user);
+        if (savedUser == null) {
+            throw MbException.create(MbError.APE03);
+        }
+        return Boolean.TRUE;
+    }
+
+    public Boolean artistGenreChange(String id, String genre) throws MbException {
+        User user = isUserExist(id);
+        ArtistInfo artistInfo = user.getArtistInfo();
+        artistInfo.setGenre(Genre.valueOf(genre));
+        user.setArtistInfo(artistInfo);
+        User savedUser = userService.updateUser(user);
+        if (savedUser == null) {
+            throw MbException.create(MbError.APE03);
+        }
+        return Boolean.TRUE;
+    }
+
+    public Boolean artistSetOrderableChange(String id, Boolean setOrderable) throws MbException {
+        User user = isUserExist(id);
+        ArtistInfo artistInfo = user.getArtistInfo();
+        artistInfo.setOrdered(setOrderable);
+        user.setArtistInfo(artistInfo);
+        User savedUser = userService.updateUser(user);
+        if (savedUser == null) {
+            throw MbException.create(MbError.APE03);
+        }
+        return Boolean.TRUE;
+    }
+
+    public Boolean artistUploadPhotos(String id, MultipartFileDto uploadFiles) throws IOException, MbException {
+        String savedFile;
+        User user = isUserExist(id);
+        for (MultipartFile multipartFile : uploadFiles.getMultipartFiles()) {
+            savedFile = saveImagesService.saveFile(multipartFile, "/WEB-INF/static/img/");
+            user.getPhotos().add(savedFile);
+        }
+        User savedUser = userService.updateUser(user);
+        if (savedUser == null) {
+            throw MbException.create(MbError.APE03);
+        }
+
+        return Boolean.TRUE;
+    }
+
+    public Boolean artistDeletePhotos(String id, List<String> photosId) throws MbException {
+        return null;
     }
 
     public User isUserExist(String id) throws MbException {

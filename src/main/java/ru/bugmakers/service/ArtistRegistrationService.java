@@ -24,12 +24,10 @@ public class ArtistRegistrationService {
     public void setUserDto2UserConverter(UserDto2UserConverter userDto2UserConverter) {
         this.userDto2UserConverter = userDto2UserConverter;
     }
-
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
-
     @Autowired
     public void setRegistrationResponseConverter(UserDTOToArtistRegistrationResponseConverter registrationResponseConverter) {
         this.registrationResponseConverter = registrationResponseConverter;
