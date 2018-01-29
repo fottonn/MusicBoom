@@ -153,7 +153,7 @@ public class User {
     }
 
 
-    public User(boolean registered, String name, String surName, String patronymic, LocalDate birthDay, String country, String city, String nickname, LocalDateTime registrationDate, String publicName, String email, UserType userType, String phone, Sex sex, Set<Role> roles, String login, String password, boolean enabled, VkAuth vkAuth, FbAuth fbAuth, GoogleAuth googleAuth, ArtistInfo artistInfo, String vkContact, String tlgContact, String whatsappContact, ActiveEvent activeEvent, List<Event> events, List<Transaction> senderTransactions, List<Transaction> recipientTransactions, ArtistRating artistRating, List<String> photos, String avatar) {
+    public User(boolean registered, String name, String surName, String patronymic, LocalDate birthDay, String country, String city, String nickname, LocalDateTime registrationDate, String publicName, String email, UserType userType, String phone, Sex sex, Set<Role> roles, String login, String password, boolean enabled, VkAuth vkAuth, FbAuth fbAuth, GoogleAuth googleAuth, ArtistInfo artistInfo, String vkContact, String tlgContact, String whatsappContact, String isAllowOfPersonalData, String isArtistContact, ActiveEvent activeEvent, List<Event> events, List<Transaction> senderTransactions, List<Transaction> recipientTransactions, ArtistRating artistRating, List<String> photos, String avatar) {
         this.registered = registered;
         this.name = name;
         this.surName = surName;
@@ -179,6 +179,8 @@ public class User {
         this.vkContact = vkContact;
         this.tlgContact = tlgContact;
         this.whatsappContact = whatsappContact;
+        this.isAllowOfPersonalData = isAllowOfPersonalData;
+        this.isArtistContact = isArtistContact;
         this.activeEvent = activeEvent;
         this.events = events;
         this.senderTransactions = senderTransactions;
@@ -594,6 +596,16 @@ public class User {
 
     public User withWhatsappContact(String whatsappContact) {
         this.whatsappContact = whatsappContact;
+        return this;
+    }
+
+    public User withIsAllowOfPersonalData(String isAllowOfPersonalData) {
+        this.isAllowOfPersonalData = isAllowOfPersonalData;
+        return this;
+    }
+
+    public User withIsArtistContact(String isArtistContact) {
+        this.isArtistContact = isArtistContact;
         return this;
     }
 
