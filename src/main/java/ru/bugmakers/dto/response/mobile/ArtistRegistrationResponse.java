@@ -12,10 +12,6 @@ import ru.bugmakers.exceptions.MbException;
 public class ArtistRegistrationResponse extends MbResponseToMobile {
 
     private UserDTO user;
-    private String allEarnedMoney;
-    private String allDerivedMoney;
-    private String currentBalance;
-    private String allDonatedArtists;
 
     public ArtistRegistrationResponse(MbException e, RsStatus status) {
         super(e, status);
@@ -31,39 +27,6 @@ public class ArtistRegistrationResponse extends MbResponseToMobile {
 
     public void setUser(UserDTO user) {
         this.user = user;
-    }
-
-    public String getAllEarnedMoney() {
-        return allEarnedMoney;
-    }
-
-    public void setAllEarnedMoney(String allEarnedMoney) {
-        this.allEarnedMoney = allEarnedMoney;
-    }
-
-    public String getAllDerivedMoney() {
-        return allDerivedMoney;
-    }
-
-    public void setAllDerivedMoney(String allDerivedMoney) {
-        this.allDerivedMoney = allDerivedMoney;
-    }
-
-
-    public String getCurrentBalance() {
-        return currentBalance;
-    }
-
-    public void setCurrentBalance(String currentBalance) {
-        this.currentBalance = currentBalance;
-    }
-
-    public String getAllDonatedArtists() {
-        return allDonatedArtists;
-    }
-
-    public void setAllDonatedArtists(String allDonatedArtists) {
-        this.allDonatedArtists = allDonatedArtists;
     }
 
 }

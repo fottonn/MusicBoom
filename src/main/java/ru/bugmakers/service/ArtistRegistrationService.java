@@ -4,15 +4,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.bugmakers.dto.common.UserDTO;
-import ru.bugmakers.dto.request.mobile.RegistrationArtistRequestMobile;
-import ru.bugmakers.dto.response.mobile.ArtistRegistrationResponse;
 import ru.bugmakers.entity.User;
+import ru.bugmakers.enums.Role;
 import ru.bugmakers.enums.SocialProvider;
+import ru.bugmakers.enums.UserType;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
-import ru.bugmakers.mappers.UAMToArtistRegistrationResponseConverter;
 import ru.bugmakers.mappers.User2UserDtoConverter;
-import ru.bugmakers.mappers.UserDtoToEntitiesConverter;
+import ru.bugmakers.mappers.UserDtoToUserRegisterConverter;
 import ru.bugmakers.utils.SecurityContextUtils;
 
 /**
@@ -20,14 +19,13 @@ import ru.bugmakers.utils.SecurityContextUtils;
  */
 @Service
 public class ArtistRegistrationService {
-    private UserDtoToEntitiesConverter userDtoToEntitiesConverter;
+    private UserDtoToUserRegisterConverter userDtoToUserRegisterConverter;
     private UserService userService;
-    private UAMToArtistRegistrationResponseConverter registrationResponseConverter;
     private User2UserDtoConverter user2UserDtoConverter;
 
     @Autowired
-    public void setUserDtoToEntitiesConverter(UserDtoToEntitiesConverter userDtoToEntitiesConverter) {
-        this.userDtoToEntitiesConverter = userDtoToEntitiesConverter;
+    public void setUserDtoToUserRegisterConverter(UserDtoToUserRegisterConverter userDtoToUserRegisterConverter) {
+        this.userDtoToUserRegisterConverter = userDtoToUserRegisterConverter;
     }
 
     @Autowired
@@ -36,34 +34,26 @@ public class ArtistRegistrationService {
     }
 
     @Autowired
-    public void setRegistrationResponseConverter(UAMToArtistRegistrationResponseConverter registrationResponseConverter) {
-        this.registrationResponseConverter = registrationResponseConverter;
-    }
-
-    @Autowired
     public void setUser2UserDtoConverter(User2UserDtoConverter user2UserDtoConverter) {
         this.user2UserDtoConverter = user2UserDtoConverter;
     }
 
-    public ArtistRegistrationResponse artistRegister(RegistrationArtistRequestMobile userRequest) throws MbException {
-        ArtistRegistrationResponse artistRegistrationResponse;
-        String email = userRequest.getUser().getEmail();
-        User userByEmail = userService.findUserByEmail(email);
-        if (userByEmail != null) {
+    public UserDTO artistRegister(UserDTO userDtoRq) throws MbException {
+        if (userDtoRq == null) return null;
+        UserDTO userDtoRs;
+        String email = userDtoRq.getEmail();
+        if (userService.isExistsByEmail(email)) {
             throw MbException.create(MbError.RGE02);
         } else {
-            User convert = userDtoToEntitiesConverter.convert(userRequest);
-            User resultUser = userService.saveUser(convert);
-            if (resultUser != null) {
-                artistRegistrationResponse = registrationResponseConverter.convert(userRequest.getUser());
-                if (artistRegistrationResponse == null) {
-                    throw MbException.create(MbError.RGE04);
-                }
-            } else {
-                throw MbException.create(MbError.RGE03);
-            }
-            return artistRegistrationResponse;
+            User convert = userDtoToUserRegisterConverter.convert(userDtoRq);
+            convert.setUserType(UserType.ARTIST);
+            convert.setRoles(Role.ARTIST);
+            User user = userService.saveUser(convert);
+            userDtoRs = user2UserDtoConverter.convert(user);
+            //аутентифицируем пользователя
+            SecurityContextUtils.setAuthentication(user);
         }
+        return userDtoRs;
     }
 
     public UserDTO artistSocialRegister(final UserDTO userDtoRq, SocialProvider provider) throws MbException {
@@ -95,11 +85,11 @@ public class ArtistRegistrationService {
 
         //TODO наполнить entity данными из userDtoRq
 
+        user.setRegistered(true);
         user = userService.saveUser(user);
         //аутентифицируем пользователя
         SecurityContextUtils.setAuthentication(user);
         return user2UserDtoConverter.convert(user);
 
     }
-
 }
