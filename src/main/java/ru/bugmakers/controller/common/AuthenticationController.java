@@ -7,11 +7,12 @@ import org.springframework.web.bind.annotation.*;
 import ru.bugmakers.config.principal.UserPrincipal;
 import ru.bugmakers.controller.MbController;
 import ru.bugmakers.controller.common.authentication.Authenticator;
-import ru.bugmakers.controller.common.authentication.AuthenticatorFactory;
+import ru.bugmakers.controller.common.authentication.AuthenticatorCreator;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.dto.response.AuthenticationResponse;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.RsStatus;
+import ru.bugmakers.enums.SocialProvider;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.service.UserAuthenticationService;
@@ -24,11 +25,16 @@ import ru.bugmakers.service.UserAuthenticationService;
 public class AuthenticationController extends MbController {
 
     private UserAuthenticationService userAuthenticationService;
-    private
+    private AuthenticatorCreator authenticatorCreator;
 
     @Autowired
     public void setUserAuthenticationService(UserAuthenticationService userAuthenticationService) {
         this.userAuthenticationService = userAuthenticationService;
+    }
+
+    @Autowired
+    public void setAuthenticatorCreator(AuthenticatorCreator authenticatorCreator) {
+        this.authenticatorCreator = authenticatorCreator;
     }
 
     @PostMapping
@@ -49,9 +55,14 @@ public class AuthenticationController extends MbController {
                                                                      @RequestParam("provider") String provider,
                                                                      @RequestParam("social_id") String id) {
         AuthenticationResponse response;
-        Authenticator authenticator = AuthenticatorFactory.getAuthenticator(provider);
-
         try {
+            SocialProvider socialProvider;
+            try {
+                socialProvider = SocialProvider.valueOf(provider.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw MbException.create(MbError.AUE15);
+            }
+            Authenticator authenticator = authenticatorCreator.getAuthenticator(socialProvider);
             UserDTO user = authenticator.authenticate(token, id);
             response = new AuthenticationResponse(RsStatus.SUCCESS);
             response.setUser(user);
@@ -60,8 +71,6 @@ public class AuthenticationController extends MbController {
         } catch (Exception e) {
             response = new AuthenticationResponse(MbException.create(MbError.AUE07), RsStatus.ERROR);
         }
-
-
         return ResponseEntity.ok(response);
     }
 }

@@ -22,7 +22,7 @@ import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.enums.Sex;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
-import ru.bugmakers.mappers.User2UserDtoConverter;
+import ru.bugmakers.mappers.converters.User2UserDtoConverter;
 import ru.bugmakers.service.UserService;
 import ru.bugmakers.utils.SecurityContextUtils;
 import ru.bugmakers.validator.VkAccessTokenValidator;
