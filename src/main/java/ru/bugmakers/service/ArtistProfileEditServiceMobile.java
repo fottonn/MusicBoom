@@ -161,12 +161,22 @@ public class ArtistProfileEditServiceMobile {
         if (savedUser == null) {
             throw MbException.create(MbError.APE03);
         }
-
         return Boolean.TRUE;
     }
 
     public Boolean artistDeletePhotos(String id, List<String> photosId) throws MbException {
-        return null;
+        User user = isUserExist(id);
+        List<String> photos = user.getPhotos();
+        for (String s : photosId) {
+            if (photos.contains(s)) {
+                photos.remove(s);
+            }
+        }
+        User savedUser = userService.updateUser(user);
+        if (savedUser == null) {
+            throw MbException.create(MbError.APE03);
+        }
+        return Boolean.TRUE;
     }
 
     public User isUserExist(String id) throws MbException {

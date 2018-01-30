@@ -143,17 +143,17 @@ public class ArtistProfileEditMobile extends MbController {
 
     }
 
-    //TODO Узнать как принимать массив фоток
     @PostMapping(value = "/artist.uploadPhotos")
     public ResponseEntity<MbResponseToMobile> artistUploadPhotos(@RequestParam("id") String id,
                                                                  @ModelAttribute("upload_files") MultipartFileDto uploadFiles) {
         try {
             artistProfileEditServiceMobile.artistUploadPhotos(id, uploadFiles);
         } catch (IOException e) {
-            e.printStackTrace();
+            return ResponseEntity.ok(new ArtistRegistrationResponse(MbException.create(MbError.UE01), RsStatus.ERROR));
         } catch (MbException e) {
-            e.printStackTrace();
+            return ResponseEntity.ok(new ArtistRegistrationResponse(e, RsStatus.ERROR));
         }
         return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
     }
 }
+
