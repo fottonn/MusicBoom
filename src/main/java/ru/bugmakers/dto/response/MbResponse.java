@@ -3,6 +3,7 @@ package ru.bugmakers.dto.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import ru.bugmakers.dto.common.ErrorDTO;
 import ru.bugmakers.enums.RsStatus;
+import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
 
 import java.io.Serializable;
@@ -22,7 +23,7 @@ public class MbResponse implements Serializable {
     }
 
     public MbResponse(RsStatus status) {
-        this(null, status);
+        this(MbException.create(MbError.UNE01), status);
     }
 
     public RsStatus getStatus() {

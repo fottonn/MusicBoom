@@ -10,7 +10,7 @@ import ru.bugmakers.enums.SocialProvider;
 import ru.bugmakers.enums.UserType;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
-import ru.bugmakers.mappers.User2UserDtoConverter;
+import ru.bugmakers.mappers.converters.User2UserDtoConverter;
 import ru.bugmakers.mappers.UserDtoToUserRegisterConverter;
 import ru.bugmakers.utils.SecurityContextUtils;
 
