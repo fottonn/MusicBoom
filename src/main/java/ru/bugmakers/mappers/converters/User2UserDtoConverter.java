@@ -1,8 +1,9 @@
-package ru.bugmakers.mappers;
+package ru.bugmakers.mappers.converters;
 
 import org.springframework.stereotype.Component;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.entity.User;
+import ru.bugmakers.mappers.converters.MbConverter;
 import ru.bugmakers.utils.DateTimeFormatters;
 
 import java.util.ArrayList;

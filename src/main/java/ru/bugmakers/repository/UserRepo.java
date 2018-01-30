@@ -3,6 +3,8 @@ package ru.bugmakers.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.bugmakers.entity.User;
 
+import java.util.Optional;
+
 /**
  * Created by Ivan
  */
@@ -21,4 +23,8 @@ public interface UserRepo extends JpaRepository<User, Long> {
     boolean existsByEmail(String email);
 
     boolean existsByLogin(String login);
+    //TODO проверить.
+    User saveAndFlush(User user);
+
+    Optional<User> findById(Long id);
 }

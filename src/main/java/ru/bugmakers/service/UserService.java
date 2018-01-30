@@ -46,6 +46,11 @@ public class UserService {
         return userRepo.findByLoginIgnoreCase(login);
     }
 
+    @Transactional
+    public User updateUser(User user) {return userRepo.saveAndFlush(user);}
+
+    public Optional<User> findUserById(String id) { return userRepo.findById(Long.valueOf(id));
+    }
     public User findUserById(Long id) {
         return userRepo.findById(id).orElse(null);
     }
