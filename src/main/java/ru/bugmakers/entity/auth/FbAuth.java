@@ -8,5 +8,13 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "fb_auth")
-public class FbAuth extends SocialAuth{
+public class FbAuth extends SocialAuth {
+
+    public FbAuth() {
+    }
+
+    public FbAuth(String socialId) {
+        super(socialId);
+    }
+
 }

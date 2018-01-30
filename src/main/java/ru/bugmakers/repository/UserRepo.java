@@ -14,8 +14,15 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
     User findByVkAuth_SocialId(String socialId);
 
+    User findByFbAuth_SocialId(String socialId);
+
+    User findByGoogleAuth_SocialId(String socialId);
+
     User findByEmail(String email);
 
+    boolean existsByEmail(String email);
+
+    boolean existsByLogin(String login);
     //TODO проверить.
     User saveAndFlush(User user);
 

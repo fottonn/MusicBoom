@@ -30,6 +30,14 @@ public class UserService {
         return userRepo.findByVkAuth_SocialId(socialId);
     }
 
+    public User findUserByFbSocialId(String socialId) {
+        return userRepo.findByFbAuth_SocialId(socialId);
+    }
+
+    public User findUserByGoogleSocialId(String socialId) {
+        return userRepo.findByGoogleAuth_SocialId(socialId);
+    }
+
     public User findUserByEmail(String email) {
         return userRepo.findByEmail(email);
     }
@@ -42,5 +50,20 @@ public class UserService {
     public User updateUser(User user) {return userRepo.saveAndFlush(user);}
 
     public Optional<User> findUserById(String id) { return userRepo.findById(Long.valueOf(id));
+    }
+    public User findUserById(Long id) {
+        return userRepo.findById(id).orElse(null);
+    }
+
+    public boolean isExistsById(Long id) {
+        return userRepo.existsById(id);
+    }
+
+    public boolean isExistsByEmail(String email) {
+        return userRepo.existsByEmail(email);
+    }
+
+    public boolean isExistsByLogin(String login) {
+        return userRepo.existsByLogin(login);
     }
 }

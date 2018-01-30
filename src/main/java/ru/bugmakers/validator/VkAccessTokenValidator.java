@@ -14,7 +14,7 @@ public class VkAccessTokenValidator implements MbValidator<VkAccessTokenRs> {
 
     @Override
     public void validate(VkAccessTokenRs target) throws MbException {
-        if (StringUtils.isBlank(target.getAccessToken())) {
+        if (target == null || StringUtils.isBlank(target.getAccessToken())) {
             throw MbException.create(MbError.AUE02);
         } else if (StringUtils.isBlank(target.getUserId())) {
             throw MbException.create(MbError.AUE03);
