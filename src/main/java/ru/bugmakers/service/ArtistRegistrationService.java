@@ -12,6 +12,7 @@ import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.mappers.converters.User2UserDtoConverter;
 import ru.bugmakers.mappers.UserDtoToUserRegisterConverter;
+import ru.bugmakers.mappers.enrichers.UserDTO2UserEnricher;
 import ru.bugmakers.utils.SecurityContextUtils;
 
 /**
@@ -22,6 +23,7 @@ public class ArtistRegistrationService {
     private UserDtoToUserRegisterConverter userDtoToUserRegisterConverter;
     private UserService userService;
     private User2UserDtoConverter user2UserDtoConverter;
+    private UserDTO2UserEnricher userDTO2UserEnricher;
 
     @Autowired
     public void setUserDtoToUserRegisterConverter(UserDtoToUserRegisterConverter userDtoToUserRegisterConverter) {
@@ -36,6 +38,11 @@ public class ArtistRegistrationService {
     @Autowired
     public void setUser2UserDtoConverter(User2UserDtoConverter user2UserDtoConverter) {
         this.user2UserDtoConverter = user2UserDtoConverter;
+    }
+
+    @Autowired
+    public void setUserDTO2UserEnricher(UserDTO2UserEnricher userDTO2UserEnricher) {
+        this.userDTO2UserEnricher = userDTO2UserEnricher;
     }
 
     public UserDTO artistRegister(UserDTO userDtoRq) throws MbException {
@@ -84,13 +91,12 @@ public class ArtistRegistrationService {
             throw MbException.create(MbError.RGE02);
         }
 
-        //TODO наполнить entity данными из userDtoRq
-
+        //заполнение пользователя данными из запроса
+        userDTO2UserEnricher.enrich(userDtoRq, user);
         user.setRegistered(true);
         user = userService.saveUser(user);
         //аутентифицируем пользователя
         SecurityContextUtils.setAuthentication(user);
         return user2UserDtoConverter.convert(user);
-
     }
 }
