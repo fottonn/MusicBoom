@@ -94,7 +94,7 @@ public class User {
     private String password;
 
     @Column(name = "enabled", table = USER_LOGIN)
-    private boolean enabled;
+    private boolean enabled = false;
 
     @JsonIgnore
     @OneToOne(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)

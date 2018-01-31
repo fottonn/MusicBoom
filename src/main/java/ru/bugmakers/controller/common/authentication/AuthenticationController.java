@@ -1,4 +1,4 @@
-package ru.bugmakers.controller.common;
+package ru.bugmakers.controller.common.authentication;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -6,10 +6,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.bugmakers.config.principal.UserPrincipal;
 import ru.bugmakers.controller.MbController;
-import ru.bugmakers.controller.common.authentication.Authenticator;
-import ru.bugmakers.controller.common.authentication.AuthenticatorCreator;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.dto.response.AuthenticationResponse;
+import ru.bugmakers.dto.response.MbResponse;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.enums.SocialProvider;
@@ -38,8 +37,9 @@ public class AuthenticationController extends MbController {
     }
 
     @PostMapping
-    public ResponseEntity<AuthenticationResponse> authenticate(@AuthenticationPrincipal UserPrincipal principal) {
+    public ResponseEntity<MbResponse> authenticate(@AuthenticationPrincipal UserPrincipal principal) {
 
+        //если запрос добрался до этого места, значит аутентификация в JsonFilterAuthentication прошла успешно
         AuthenticationResponse response = null;
 
         if (principal != null) {
@@ -51,9 +51,9 @@ public class AuthenticationController extends MbController {
     }
 
     @GetMapping(params = {"token", "provider", "social_id"})
-    public ResponseEntity<AuthenticationResponse> socialAuthenticate(@RequestParam("token") String token,
-                                                                     @RequestParam("provider") String provider,
-                                                                     @RequestParam("social_id") String id) {
+    public ResponseEntity<MbResponse> socialAuthenticate(@RequestParam("token") String token,
+                                                         @RequestParam("provider") String provider,
+                                                         @RequestParam("social_id") String id) {
         AuthenticationResponse response;
         try {
             SocialProvider socialProvider;
