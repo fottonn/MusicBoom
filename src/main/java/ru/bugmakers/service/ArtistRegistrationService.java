@@ -53,6 +53,7 @@ public class ArtistRegistrationService {
             throw MbException.create(MbError.RGE02);
         } else {
             User convert = userDtoToUserRegisterConverter.convert(userDtoRq);
+            //TODO отправка email
             convert.setUserType(UserType.ARTIST);
             convert.setRoles(Role.ARTIST);
             User user = userService.saveUser(convert);
