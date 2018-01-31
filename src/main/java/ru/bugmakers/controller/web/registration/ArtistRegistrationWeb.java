@@ -38,8 +38,7 @@ public class ArtistRegistrationWeb extends MbController {
         return ResponseEntity.ok(artistRegistrationResponseWeb);
     }
 
-    @PostMapping
-    @RequestMapping("/vk")
+    @PostMapping(value = "/vk")
     public ResponseEntity<MbResponseToWeb> vkArtistRegistration(@RequestBody ArtistRegistrationRequestWeb request) {
         ArtistAuthenticationResponseWeb artistAuthenticationResponseWeb;
         try {
@@ -54,8 +53,7 @@ public class ArtistRegistrationWeb extends MbController {
         return ResponseEntity.ok(artistAuthenticationResponseWeb);
     }
 
-    @PostMapping
-    @RequestMapping("/fb")
+    @PostMapping("/fb")
     public ResponseEntity<MbResponseToWeb> fbArtistRegistration(@RequestBody ArtistRegistrationRequestWeb request) {
         ArtistAuthenticationResponseWeb artistAuthenticationResponseWeb;
         try {
@@ -70,8 +68,7 @@ public class ArtistRegistrationWeb extends MbController {
         return ResponseEntity.ok(artistAuthenticationResponseWeb);
     }
 
-    @PostMapping
-    @RequestMapping("/google")
+    @PostMapping(value = "/google")
     public ResponseEntity<MbResponseToWeb> googleArtistRegistration(@RequestBody ArtistRegistrationRequestWeb request) {
         ArtistAuthenticationResponseWeb artistAuthenticationResponseWeb;
         try {
