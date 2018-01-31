@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.Sex;
+import ru.bugmakers.mappers.converters.MbConverter;
 import ru.bugmakers.utils.DateTimeFormatters;
 
 import java.time.LocalDate;
