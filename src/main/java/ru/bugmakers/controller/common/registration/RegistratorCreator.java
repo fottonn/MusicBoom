@@ -19,11 +19,11 @@ public class RegistratorCreator {
     }
 
     public Registrator getRegistrator() {
-        return this.getRegistrator(null);
+        return context.getBean(MbRegistrator.class);
     }
 
     public Registrator getRegistrator(SocialProvider provider) {
-        Registrator registrator;
+        Registrator registrator = null;
         switch (provider) {
             case VK:
                 registrator = context.getBean(VkRegistrator.class);
@@ -34,8 +34,6 @@ public class RegistratorCreator {
             case GOOGLE:
                 registrator = context.getBean(GoogleRegistrator.class);
                 break;
-            default:
-                registrator = context.getBean(MbRegistrator.class);
         }
         return registrator;
     }

@@ -16,8 +16,8 @@ import java.util.Properties;
 @PropertySource("classpath:email.properties")
 public class EmailConfig {
 
-    public static final String PASSWORD = "password";
-    public static final String USER = "user";
+    private static final String PASSWORD = "password";
+    private static final String USER = "user";
     //TODO добавить конфиги
     @Value("${email.host}")
         private String host;

@@ -44,7 +44,7 @@ public class JsonAuthenticationFilter extends AbstractAuthenticationProcessingFi
             String pathInfo = request.getPathInfo() != null ? request.getPathInfo() : "";
             request.getRequestDispatcher(request.getServletPath() + pathInfo).forward(request, response);
         }));
-        //если аутентификация неуспешная, то редиректим на страницу логина
+        //если аутентификация неуспешная, то отправляем ответ с ошибкой
         setAuthenticationFailureHandler(((request, response, exception) -> {
             ObjectMapper mapper = new ObjectMapper();
             MbException mbException = ((MbAuthenticationException) exception).getMbException();

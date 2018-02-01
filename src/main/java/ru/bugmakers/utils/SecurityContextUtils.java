@@ -15,7 +15,10 @@ import ru.bugmakers.exceptions.MbException;
 public class SecurityContextUtils {
 
     public static void setAuthentication(User user) throws MbException {
-        Assert.notNull(user);
+        //Проверяем необходимые поля для аутентификации
+        Assert.notNull(user, "");
+        Assert.notNull(user.getLogin(), "");
+        Assert.notNull(user.getPhone(), "");
         if (!user.isEnabled()) throw MbException.create(MbError.AUE17);
         if (!user.isRegistered()) throw MbException.create(MbError.AUE18);
         //Устанавливаем SecurityContext

@@ -1,16 +1,23 @@
 package ru.bugmakers.controller.common.registration;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
-import ru.bugmakers.dto.common.UserDTO;
-import ru.bugmakers.enums.UserType;
+import ru.bugmakers.entity.User;
+import ru.bugmakers.exceptions.MbError;
+import ru.bugmakers.exceptions.MbException;
 
 /**
  * Created by Ivan
  */
 @Component
-public class FbRegistrator implements Registrator {
+public class FbRegistrator extends AbstractRegistrator {
+
     @Override
-    public UserDTO register(UserType userType, UserDTO user) {
-        return null;
+    public User checkUserBySocial(Long id) throws MbException {
+        User user = getUserService().findUserById(id);
+        if (user == null || user.getFbAuth() == null || StringUtils.isBlank(user.getFbAuth().getSocialId())) {
+            throw MbException.create(MbError.RGE06);
+        }
+        return user;
     }
 }
