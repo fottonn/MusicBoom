@@ -55,6 +55,10 @@ public class UserService {
         return userRepo.findById(id).orElse(null);
     }
 
+    public User findUserByPhone(String phone) {
+        return userRepo.findByPhone(phone);
+    }
+
     public boolean isExistsById(Long id) {
         return userRepo.existsById(id);
     }
@@ -65,5 +69,9 @@ public class UserService {
 
     public boolean isExistsByLogin(String login) {
         return userRepo.existsByLogin(login);
+    }
+
+    public boolean isExistsByPhone(String phone) {
+        return userRepo.existsByPhone(phone);
     }
 }

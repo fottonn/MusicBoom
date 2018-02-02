@@ -18,12 +18,23 @@ public class MbResponse implements Serializable {
     private ErrorDTO error;
 
     public MbResponse(MbException e, RsStatus status) {
+        if (e == null && status == RsStatus.ERROR) {
+            e = MbException.create(MbError.UNE01);
+        }
+
+        if (status == null) {
+            status = RsStatus.ERROR;
+        }
         this.error = e != null ? new ErrorDTO(e.getMessage()) : null;
         this.status = status;
     }
 
     public MbResponse(RsStatus status) {
-        this(MbException.create(MbError.UNE01), status);
+        this(null, status);
+    }
+
+    public MbResponse(MbException e) {
+        this(e, null);
     }
 
     public RsStatus getStatus() {

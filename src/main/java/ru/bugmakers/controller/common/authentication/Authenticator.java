@@ -8,6 +8,19 @@ import ru.bugmakers.exceptions.MbException;
  */
 public interface Authenticator {
 
+    //common
+    String HTTPS = "https";
+
+    //vk
+    String VK_API_HOST = "api.vk.com";
+    String VK_API_VERSION = "5.69";
+
+    //facebook
+    String FB_GRAF_HOST = "graph.facebook.com";
+
+    //google
+    String GOOGLE_API_HOST = "www.googleapis.com";
+
     UserDTO authenticate(String token, String id) throws MbException;
 
 }

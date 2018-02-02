@@ -79,7 +79,7 @@ public class User {
 
     @Column(name = "sex")
     @Enumerated(EnumType.STRING)
-    private Sex sex;
+    private Sex sex = Sex.NONE;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
@@ -94,7 +94,7 @@ public class User {
     private String password;
 
     @Column(name = "enabled", table = USER_LOGIN)
-    private boolean enabled;
+    private boolean enabled = true;
 
     @JsonIgnore
     @OneToOne(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
