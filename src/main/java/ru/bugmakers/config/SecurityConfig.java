@@ -81,7 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         final String[] URLS = {
         };
         web
-                .debug(true)
+//                .debug(true)
                 .ignoring().antMatchers(URLS)
         ;
     }
@@ -234,7 +234,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             http
                     .csrf().disable()
-                    .authorizeRequests().anyRequest().permitAll();
+                    .authorizeRequests().anyRequest().permitAll()
+                    .and()
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            ;
 
         }
     }
