@@ -152,44 +152,6 @@ public class User {
     public User() {
     }
 
-
-    public User(boolean registered, String name, String surName, String patronymic, LocalDate birthDay, String country, String city, String nickname, LocalDateTime registrationDate, String publicName, String email, UserType userType, String phone, Sex sex, Set<Role> roles, String login, String password, boolean enabled, VkAuth vkAuth, FbAuth fbAuth, GoogleAuth googleAuth, ArtistInfo artistInfo, String vkContact, String tlgContact, String whatsappContact, String isAllowOfPersonalData, String isArtistContact, ActiveEvent activeEvent, List<Event> events, List<Transaction> senderTransactions, List<Transaction> recipientTransactions, ArtistRating artistRating, List<String> photos, String avatar) {
-        this.registered = registered;
-        this.name = name;
-        this.surName = surName;
-        this.patronymic = patronymic;
-        this.birthDay = birthDay;
-        this.country = country;
-        this.city = city;
-        this.nickname = nickname;
-        this.registrationDate = registrationDate;
-        this.publicName = publicName;
-        this.email = email;
-        this.userType = userType;
-        this.phone = phone;
-        this.sex = sex;
-        this.roles = roles;
-        this.login = login;
-        this.password = password;
-        this.enabled = enabled;
-        this.vkAuth = vkAuth;
-        this.fbAuth = fbAuth;
-        this.googleAuth = googleAuth;
-        this.artistInfo = artistInfo;
-        this.vkContact = vkContact;
-        this.tlgContact = tlgContact;
-        this.whatsappContact = whatsappContact;
-        this.isAllowOfPersonalData = isAllowOfPersonalData;
-        this.isArtistContact = isArtistContact;
-        this.activeEvent = activeEvent;
-        this.events = events;
-        this.senderTransactions = senderTransactions;
-        this.recipientTransactions = recipientTransactions;
-        this.artistRating = artistRating;
-        this.photos = photos;
-        this.avatar = avatar;
-    }
-
     public Long getId() {
         return id;
     }

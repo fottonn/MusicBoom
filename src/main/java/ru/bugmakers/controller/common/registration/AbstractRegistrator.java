@@ -51,7 +51,9 @@ public abstract class AbstractRegistrator implements Registrator {
     @Override
     public UserDTO register(UserType userType, UserDTO userDto) throws MbException {
 
-        User user = checkUserBySocial(Long.valueOf(userDto.getId()));
+        String id = userDto.getId();
+
+        User user = checkUserBySocial(id != null ? Long.valueOf(id) : null);
 
         //проверяем наличие телефона пользователя среди зарегистрированных
         if (userService.isExistsByPhone(userDto.getPhoneNumber()) || userService.isExistsByLogin(userDto.getPhoneNumber())) {

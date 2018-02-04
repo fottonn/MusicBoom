@@ -1,6 +1,7 @@
 package ru.bugmakers.controller.common.registration;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.exceptions.MbError;
@@ -10,6 +11,7 @@ import ru.bugmakers.exceptions.MbException;
  * Created by Ivan
  */
 @Component
+@Qualifier("googleRegistrator")
 public class GoogleRegistrator extends AbstractRegistrator {
 
     @Override
