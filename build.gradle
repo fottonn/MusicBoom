@@ -32,5 +32,9 @@ dependencies {
     compile ('org.springframework.boot:spring-boot-starter-mail:1.4.3.RELEASE') {
         exclude module: 'spring-boot-starter-logging'
     }
+    compile 'ch.qos.logback:logback-classic:1.2.3'
+
+    testCompile 'io.rest-assured:rest-assured:3.0.6'
+    testCompile 'org.testng:testng:6.13.1'
 
 }

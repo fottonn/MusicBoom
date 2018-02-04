@@ -20,7 +20,7 @@ import ru.bugmakers.validator.common.RegistrationRequestValidator;
  */
 @RestController
 @RequestMapping("/registration")
-public class RegistrationController extends MbController {
+public class    RegistrationController extends MbController {
 
     private RegistrationRequestValidator registrationRequestValidator;
     private RegistratorCreator registratorCreator;
