@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.springframework.stereotype.Component;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
 
@@ -14,6 +15,7 @@ import javax.mail.internet.MimeMessage;
 /**
  * Created by Ayrat on 30.01.2018.
  */
+@Component
 public class SendEmail {
     //TODO захардкодить email
     public static final String FROMEMAIL = "bm@musboom.ru";
@@ -24,7 +26,7 @@ public class SendEmail {
         this.javaMailSender = javaMailSender;
     }
 
-    public void sendEmail(String email, String text) throws MbException {
+    public Boolean sendEmail(String email, String text) throws MbException {
         MimeMessagePreparator preparator = new MimeMessagePreparator() {
             @Override
             public void prepare(MimeMessage mimeMessage) throws Exception {
@@ -38,5 +40,6 @@ public class SendEmail {
         }catch (MailException e){
             throw MbException.create(MbError.SEE01);
         }
+        return Boolean.TRUE;
     }
 }

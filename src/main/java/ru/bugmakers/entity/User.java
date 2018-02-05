@@ -141,6 +141,9 @@ public class User {
     @OneToOne(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private ArtistRating artistRating;
 
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
+    private ConfirmEmail confirmEmail;
+
     @ElementCollection
     @CollectionTable(name = "photos", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     @Column(name = "photo")
@@ -188,6 +191,14 @@ public class User {
         this.artistRating = artistRating;
         this.photos = photos;
         this.avatar = avatar;
+    }
+
+    public ConfirmEmail getConfirmEmail() {
+        return confirmEmail;
+    }
+
+    public void setConfirmEmail(ConfirmEmail confirmEmail) {
+        this.confirmEmail = confirmEmail;
     }
 
     public Long getId() {

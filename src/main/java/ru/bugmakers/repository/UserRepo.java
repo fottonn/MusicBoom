@@ -23,8 +23,6 @@ public interface UserRepo extends JpaRepository<User, Long> {
     boolean existsByEmail(String email);
 
     boolean existsByLogin(String login);
-    //TODO проверить.
-    User saveAndFlush(User user);
 
     Optional<User> findById(Long id);
 }
