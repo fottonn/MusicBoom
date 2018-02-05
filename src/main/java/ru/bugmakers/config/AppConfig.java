@@ -18,7 +18,7 @@ import java.util.List;
  */
 @Configuration
 @ComponentScan(value = "ru.bugmakers", excludeFilters = @Filter(Configuration.class))
-@Import({SecurityConfig.class, PersistConfig.class})
+@Import({SecurityConfig.class, PersistConfig.class, EmailConfig.class, LocalPersistConfig.class})
 @EnableWebMvc
 public class AppConfig implements WebMvcConfigurer {
 

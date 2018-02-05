@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -78,12 +79,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         final String[] URLS = {
-                "/authentication/webapi/vk",
-                "/athentication/webapi/fb",
-                "/authentication/webapi/google"
         };
         web
-                .debug(true)
+//                .debug(true)
                 .ignoring().antMatchers(URLS)
         ;
     }
@@ -124,12 +122,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(URLS)
                     .and()
                     .authorizeRequests()
-                    .antMatchers("/webapi/admin/**").hasRole(ADMIN.name())
-                    .antMatchers("/webapi/artist/**").hasRole(ARTIST.name())
-                    .antMatchers("/webapi/operator/**").hasRole(OPERATOR.name())
-                    .antMatchers("/mapi/artist/**").hasRole(ARTIST.name())
-                    .antMatchers("/mapi/listener/**").hasRole(LISTENER.name())
-                    .antMatchers("/mapi/registereduser/**").hasAnyRole(ARTIST.name(), LISTENER.name())
+                    .antMatchers("/webapi/admin/**").hasAuthority(ADMIN.name())
+                    .antMatchers("/webapi/artist/**").hasAuthority(ARTIST.name())
+                    .antMatchers("/webapi/operator/**").hasAuthority(OPERATOR.name())
+                    .antMatchers("/mapi/artist/**").hasAuthority(ARTIST.name())
+                    .antMatchers("/mapi/listener/**").hasAuthority(LISTENER.name())
+                    .antMatchers("/mapi/registereduser/**").hasAnyAuthority(ARTIST.name(), LISTENER.name())
                     .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
@@ -160,14 +158,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
 
-            final String[] URLS = {
-                    "/authentication"
-            };
-
             http
                     .csrf().disable()
                     .requestMatchers()
-                    .antMatchers(URLS)
+                    .antMatchers(HttpMethod.POST, "/authentication")
                     .and()
                     .authorizeRequests()
                     .anyRequest().permitAll()
@@ -206,17 +200,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
 
-            final String[] URLS = {
-                    "/authentication/webapi/vk/callback",
-                    "/authentication/webapi/fb/callback",
-                    "/authentication/webapi/google/callback",
-                    "/registration/webapi/artist"
-            };
-
             http
                     .csrf().disable()
                     .requestMatchers()
-                    .antMatchers(URLS)
+                    .antMatchers(HttpMethod.GET, "/authentication")
+                    .antMatchers(HttpMethod.POST, "/registration")
                     .and()
                     .authorizeRequests()
                     .anyRequest().permitAll()
@@ -246,7 +234,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             http
                     .csrf().disable()
-                    .authorizeRequests().anyRequest().permitAll();
+                    .authorizeRequests().anyRequest().permitAll()
+                    .and()
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            ;
 
         }
     }

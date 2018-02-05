@@ -4,7 +4,6 @@ import okhttp3.HttpUrl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import ru.bugmakers.controller.web.authentication.SocialAuthenticationConstants;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.dto.social.VkUserInfoRs;
 import ru.bugmakers.entity.User;
@@ -21,7 +20,7 @@ import java.net.URI;
  * Created by Ivan
  */
 @Component
-public class VkAuthenticator implements Authenticator, SocialAuthenticationConstants {
+public class VkAuthenticator implements Authenticator {
 
     private RestTemplate restTemplate;
     private UserService userService;

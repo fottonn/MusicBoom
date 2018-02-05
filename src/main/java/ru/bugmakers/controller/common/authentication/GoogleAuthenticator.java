@@ -4,7 +4,6 @@ import okhttp3.HttpUrl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import ru.bugmakers.controller.web.authentication.SocialAuthenticationConstants;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.dto.social.GoogleUserInfoRs;
 import ru.bugmakers.entity.User;
@@ -21,7 +20,7 @@ import java.net.URI;
  * Created by Ivan
  */
 @Component
-public class GoogleAuthenticator implements Authenticator, SocialAuthenticationConstants {
+public class GoogleAuthenticator implements Authenticator {
 
     private RestTemplate restTemplate;
     private User2UserDtoConverter user2UserDtoConverter;

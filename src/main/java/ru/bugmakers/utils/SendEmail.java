@@ -10,7 +10,6 @@ import ru.bugmakers.exceptions.MbException;
 
 import javax.mail.Message;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 /**
  * Created by Ayrat on 30.01.2018.
@@ -18,7 +17,7 @@ import javax.mail.internet.MimeMessage;
 @Component
 public class SendEmail {
     //TODO захардкодить email
-    public static final String FROMEMAIL = "bm@musboom.ru";
+    private static final String FROM_EMAIL = "bm@musboom.ru";
     private JavaMailSender javaMailSender;
 
     @Autowired
@@ -37,7 +36,7 @@ public class SendEmail {
         };
         try {
             this.javaMailSender.send(preparator);
-        }catch (MailException e){
+        } catch (MailException e) {
             throw MbException.create(MbError.SEE01);
         }
         return Boolean.TRUE;

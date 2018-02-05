@@ -1,9 +1,9 @@
 package ru.bugmakers.mappers.converters;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.entity.User;
-import ru.bugmakers.mappers.converters.MbConverter;
 import ru.bugmakers.utils.DateTimeFormatters;
 
 import java.util.ArrayList;
@@ -49,7 +49,7 @@ public class User2UserDtoConverter implements MbConverter<User, UserDTO>, DateTi
                 .withAllowOfPersonalData(source.getIsAllowOfPersonalData())
                 .withArtistContact(source.getIsArtistContact())
                 .withAvatar(source.getAvatar())
-                .withPhotos(new ArrayList<>(source.getPhotos()));
+                .withPhotos(CollectionUtils.isNotEmpty(source.getPhotos()) ? new ArrayList<>(source.getPhotos()) : null);
     }
 
 }
