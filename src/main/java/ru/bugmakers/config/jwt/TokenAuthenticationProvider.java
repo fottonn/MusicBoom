@@ -2,12 +2,15 @@ package ru.bugmakers.config.jwt;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.impl.DefaultClaims;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import ru.bugmakers.config.principal.UserPrincipal;
+import ru.bugmakers.localpers.WhiteTokenService;
 
 import java.time.Instant;
 
@@ -17,9 +20,15 @@ import java.time.Instant;
 public class TokenAuthenticationProvider implements AuthenticationProvider, TokenData {
 
     private UserDetailsService userDetailsService;
+    private WhiteTokenService whiteTokenService;
 
     public TokenAuthenticationProvider(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
+    }
+
+    @Autowired
+    public void setWhiteTokenService(WhiteTokenService whiteTokenService) {
+        this.whiteTokenService = whiteTokenService;
     }
 
     @Override
@@ -56,16 +65,21 @@ public class TokenAuthenticationProvider implements AuthenticationProvider, Toke
 
         //проверяем время жизни токена
         Instant expirationInstant = claims.getExpiration().toInstant();
-        if (expirationInstant.isAfter(Instant.now())) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(claims.get(USERNAME, String.class));
-            if (userDetails.isEnabled()) {
-                return new TokenAuthentication(authentication.getToken(), userDetails.getAuthorities(), true, userDetails);
-            } else {
-                throw new AuthenticationServiceException("Пользователь заблокирован");
-            }
-        } else {
+        if (expirationInstant.isBefore(Instant.now())) {
             throw new AuthenticationServiceException("Время жизни токена истекло");
         }
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(claims.get(USERNAME, String.class));
+        //Проверяем не заблокирован ли пользователь
+        if (!userDetails.isEnabled()) {
+            throw new AuthenticationServiceException("Пользователь заблокирован");
+        }
+        //Проверяем токен в белом списке
+        Long userId = ((UserPrincipal) userDetails).getUser().getId();
+        if (!token.equals(whiteTokenService.findWhiteTokenByUserId(userId))) {
+            throw new AuthenticationServiceException("Токена нет в белом списке");
+        }
+        return new TokenAuthentication(authentication.getToken(), userDetails.getAuthorities(), true, userDetails);
 
     }
 

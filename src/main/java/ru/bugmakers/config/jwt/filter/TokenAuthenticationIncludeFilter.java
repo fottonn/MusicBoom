@@ -3,14 +3,18 @@ package ru.bugmakers.config.jwt.filter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
 import ru.bugmakers.config.jwt.TokenData;
 import ru.bugmakers.config.jwt.TokenGenerator;
+import ru.bugmakers.config.principal.UserPrincipal;
 import ru.bugmakers.enums.Role;
 import ru.bugmakers.enums.RsStatus;
+import ru.bugmakers.localpers.WhiteToken;
+import ru.bugmakers.localpers.WhiteTokenService;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -26,6 +30,13 @@ import java.util.Collection;
  * Добавляет токен в ответ, если пользователь авторизовался
  */
 public class TokenAuthenticationIncludeFilter extends GenericFilterBean implements TokenData {
+
+    private WhiteTokenService whiteTokenService;
+
+    @Autowired
+    public void setWhiteTokenService(WhiteTokenService whiteTokenService) {
+        this.whiteTokenService = whiteTokenService;
+    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -45,6 +56,7 @@ public class TokenAuthenticationIncludeFilter extends GenericFilterBean implemen
                 final String token = TokenGenerator.generate(authentication.getName());
                 ((ObjectNode) rootNode).put(TOKEN_NAME, token);
                 resultContent = rootNode.toString();
+                whiteTokenService.saveWhiteToken(new WhiteToken(((UserPrincipal) authentication.getPrincipal()).getUser().getId(), token));
             } else {
                 resultContent = responseContent;
             }
