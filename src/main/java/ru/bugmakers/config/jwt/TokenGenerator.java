@@ -25,8 +25,8 @@ public class TokenGenerator implements TokenData {
         claims.put(USERNAME, username);
         claims.put(TOKEN_CREATE_DATE, tokenCreateTime.toEpochMilli());
         JwtBuilder jwtBuilder = Jwts.builder();
-        jwtBuilder.setExpiration(Date.from(tokenCreateTime.plusSeconds(TOKEN_LIFE_TIME)));
         jwtBuilder.setClaims(claims);
+        jwtBuilder.setExpiration(Date.from(tokenCreateTime.plusSeconds(TOKEN_LIFE_TIME)));
         return jwtBuilder.signWith(SignatureAlgorithm.HS512, TOKEN_KEY).compact();
     }
 }

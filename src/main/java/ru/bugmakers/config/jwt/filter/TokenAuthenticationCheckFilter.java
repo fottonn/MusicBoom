@@ -3,6 +3,8 @@ package ru.bugmakers.config.jwt.filter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.collections4.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -28,6 +30,8 @@ import java.util.Collection;
  * Created by Ivan
  */
 public class TokenAuthenticationCheckFilter extends GenericFilterBean implements TokenData {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TokenAuthenticationCheckFilter.class);
 
     private AuthenticationManager authenticationManager;
 
@@ -71,7 +75,8 @@ public class TokenAuthenticationCheckFilter extends GenericFilterBean implements
             if (token != null) {
                 authentication = authenticationManager.authenticate(new TokenAuthentication(token.asText()));
             }
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
         }
 
         if (authentication == null) {

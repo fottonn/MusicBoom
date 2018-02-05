@@ -4,7 +4,6 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
@@ -13,7 +12,6 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.beans.PropertyVetoException;
 
@@ -21,44 +19,43 @@ import java.beans.PropertyVetoException;
  * Created by Ivan
  */
 @Configuration
-@PropertySource("classpath:db.properties")
+@PropertySource("classpath:db_loc.properties")
 @EnableJpaRepositories(
-        basePackages = "ru.bugmakers.repository",
-        entityManagerFactoryRef = "emf",
-        transactionManagerRef = "jpaTransactionManager")
-@EnableTransactionManagement
-public class PersistConfig {
+        basePackages = "ru.bugmakers.localpers",
+        entityManagerFactoryRef = "localEmf",
+        transactionManagerRef = "jpaLocalTransactionManager")
+public class LocalPersistConfig {
 
-    @Value("${db.url}")
+    @Value("${loc.db.url}")
     private String dbUrl;
-    @Value("${db.username}")
+    @Value("${loc.db.username}")
     private String dbUserName;
-    @Value("${db.password}")
+    @Value("${loc.db.password}")
     private String dbPassword;
-    @Value("${db.driver}")
+    @Value("${loc.db.driver}")
     private String dbDriver;
-    @Value("${db.dialect}")
+    @Value("${loc.db.dialect}")
     private String dbDialect;
-    @Value("${db.pool.initial}")
+    @Value("${loc.db.pool.initial}")
     private Integer dbPoolInitial;
-    @Value("${db.pool.min}")
+    @Value("${loc.db.pool.min}")
     private Integer dbPoolMin;
-    @Value("${db.pool.max}")
+    @Value("${loc.db.pool.max}")
     private Integer dbPoolMax;
-    @Value("${db.dbms}")
+    @Value("${loc.db.dbms}")
     private String dbms;
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean emf() throws PropertyVetoException {
+    public LocalContainerEntityManagerFactoryBean localEmf() throws PropertyVetoException {
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
-        emf.setDataSource(dataSource());
-        emf.setJpaVendorAdapter(jpaVendorAdapter());
-        emf.setPackagesToScan("ru.bugmakers.entity");
+        emf.setDataSource(localDataSource());
+        emf.setJpaVendorAdapter(jpaLocalVendorAdapter());
+        emf.setPackagesToScan("ru.bugmakers.localpers");
         return emf;
     }
 
     @Bean(destroyMethod = "close")
-    public ComboPooledDataSource dataSource() throws PropertyVetoException {
+    public ComboPooledDataSource localDataSource() throws PropertyVetoException {
         ComboPooledDataSource dataSource = new ComboPooledDataSource();
         dataSource.setDriverClass(dbDriver);
         dataSource.setJdbcUrl(dbUrl);
@@ -71,7 +68,7 @@ public class PersistConfig {
     }
 
     @Bean
-    public HibernateJpaVendorAdapter jpaVendorAdapter() {
+    public HibernateJpaVendorAdapter jpaLocalVendorAdapter() {
         HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
         jpaVendorAdapter.setShowSql(true);
         jpaVendorAdapter.setDatabase(Database.valueOf(dbms));
@@ -81,21 +78,17 @@ public class PersistConfig {
     }
 
     @Bean
-    @Primary
-    public JpaTransactionManager jpaTransactionManager() throws PropertyVetoException {
-        return new JpaTransactionManager(emf().getObject());
-    }
-
-    @Bean
     public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
         return new PersistenceExceptionTranslationPostProcessor();
     }
 
     @Bean
-    public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
+    public static PropertySourcesPlaceholderConfigurer propertyConfigInDevLocal() {
         return new PropertySourcesPlaceholderConfigurer();
     }
 
+    @Bean
+    public JpaTransactionManager jpaLocalTransactionManager() throws PropertyVetoException {
+        return new JpaTransactionManager(localEmf().getObject());
+    }
 }
-
-

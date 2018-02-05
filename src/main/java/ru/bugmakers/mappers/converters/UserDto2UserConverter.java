@@ -8,7 +8,6 @@ import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.Role;
 import ru.bugmakers.enums.Sex;
 import ru.bugmakers.enums.UserType;
-import ru.bugmakers.mappers.converters.MbConverter;
 import ru.bugmakers.utils.DateTimeFormatters;
 
 import java.time.LocalDate;
