@@ -9,8 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
 import ru.bugmakers.config.jwt.TokenData;
-import ru.bugmakers.config.jwt.TokenGenerator;
-import ru.bugmakers.config.principal.UserPrincipal;
+import ru.bugmakers.config.jwt.TokenUtils;
 import ru.bugmakers.enums.Role;
 import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.localpers.WhiteToken;
@@ -53,10 +52,10 @@ public class TokenAuthenticationIncludeFilter extends GenericFilterBean implemen
                 if (tokenNode.isValueNode()) {
                     ((ObjectNode) rootNode).remove(TOKEN_NAME);
                 }
-                final String token = TokenGenerator.generate(authentication.getName());
+                final String token = TokenUtils.generate(authentication);
                 ((ObjectNode) rootNode).put(TOKEN_NAME, token);
                 resultContent = rootNode.toString();
-                whiteTokenService.saveWhiteToken(new WhiteToken(((UserPrincipal) authentication.getPrincipal()).getUser().getId(), token));
+                whiteTokenService.saveWhiteToken(new WhiteToken(TokenUtils.getUserId(token), token));
             } else {
                 resultContent = responseContent;
             }
