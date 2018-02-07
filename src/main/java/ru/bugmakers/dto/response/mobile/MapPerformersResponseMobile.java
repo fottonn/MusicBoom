@@ -9,15 +9,15 @@ import java.util.List;
 /**
  * Created by Ayrat on 13.12.2017.
  */
-public class UpdateMapResponseMobile extends MbResponseToMobile {
+public class MapPerformersResponseMobile extends MbResponseToMobile {
 
     private List<ArtistsLocation> artistsLocations;
 
-    public UpdateMapResponseMobile(MbException e, RsStatus status) {
+    public MapPerformersResponseMobile(MbException e, RsStatus status) {
         super(e, status);
     }
 
-    public UpdateMapResponseMobile(RsStatus status) {
+    public MapPerformersResponseMobile(RsStatus status) {
         super(status);
     }
 

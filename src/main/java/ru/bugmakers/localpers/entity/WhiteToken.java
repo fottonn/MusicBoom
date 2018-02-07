@@ -1,4 +1,4 @@
-package ru.bugmakers.localpers;
+package ru.bugmakers.localpers.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

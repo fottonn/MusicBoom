@@ -1,11 +1,12 @@
-package ru.bugmakers.entity;
+package ru.bugmakers.localpers.entity;
 
 import org.hibernate.annotations.Type;
-import org.hibernate.type.LocalDateTimeType;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.GregorianCalendar;
 
 import static ru.bugmakers.entity.EntityConstants.LOCAL_DATE_TIME_TYPE;
 
@@ -17,8 +18,7 @@ import static ru.bugmakers.entity.EntityConstants.LOCAL_DATE_TIME_TYPE;
 public class ActiveEvent {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    private Long userId;
 
     @Column(name = "lng")
     private String lng;
@@ -34,16 +34,22 @@ public class ActiveEvent {
     @Type(type = LOCAL_DATE_TIME_TYPE)
     private LocalDateTime endTime;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    public Long getId() {
-        return id;
+    public ActiveEvent() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public ActiveEvent(Long userId, String lng, String lat) {
+        this.userId = userId;
+        this.lng = lng;
+        this.lat = lat;
+        this.beginTime = LocalDateTime.now();
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getLng() {
@@ -76,13 +82,5 @@ public class ActiveEvent {
 
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

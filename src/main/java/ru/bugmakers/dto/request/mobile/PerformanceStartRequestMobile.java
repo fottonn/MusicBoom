@@ -3,9 +3,9 @@ package ru.bugmakers.dto.request.mobile;
 import ru.bugmakers.dto.request.SessionDataRequest;
 
 /**
- * Created by Ayrat on 24.11.2017.
+ * Created by Ivan
  */
-public class PerformanceStartValidationRequestMobile extends SessionDataRequest {
+public class PerformanceStartRequestMobile extends SessionDataRequest {
 
     private String longitude;
     private String latitude;

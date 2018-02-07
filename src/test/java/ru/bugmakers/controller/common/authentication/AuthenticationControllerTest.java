@@ -19,7 +19,7 @@ public class AuthenticationControllerTest {
     @Test
     public void testAuthenticate() throws Exception {
         AuthDTO rq = new AuthDTO();
-        rq.setLogin("+79600571600");
+        rq.setLogin("+79612345678");
         rq.setPassword("password");
         ResponseBody rs = given().contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(rq)
@@ -31,8 +31,8 @@ public class AuthenticationControllerTest {
     @Test
     public void testArtistInfo() throws Exception {
         ResponseBody rs = given().contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(new rsDto("eyJhbGciOiJIUzUxMiJ9.eyJUT0tFTl9DUkVBVEVfREFURSI6MTUxNzg0NTUxNDA0MywiVVNFUk5BTUUiOiIrNzk2MDA1NzE2MDAiLCJleHAiOjE1MTgwMTgzMTR9.tjFSP-dvFxzh06w39tN1C6k9WvjWYsJN-5k21NKQKSFamYXY02TPxCJaGC7QsZNhZKGAe4M6yG-wX56A5eIVRQ"))
-                .when().post("/webapi/artist/info?artistId=35").getBody();
+                .body(new rsDto("eyJhbGciOiJIUzUxMiJ9.eyJUT0tFTl9DUkVBVEVfREFURSI6MTUxNzk0MTE2Mzk3MiwiVVNFUk5BTUUiOiIrNzk2MTIzNDU2NzgiLCJVU0VSX0lEIjozNiwiZXhwIjoxNTE4MTEzOTYzfQ.0VAoKc1yOzJk8pu3B-KQilGaTnxilYEOP9OcvRvRAZB2-wzekbK4F79RsXVhdbfEL6vqWVE4PeOp-LH5z-tpMA"))
+                .when().post("/webapi/artist/info?artistId=36").getBody();
 
         LOGGER.debug(rs.prettyPrint());
     }

@@ -16,7 +16,6 @@ import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.service.ArtistProfileEditServiceMobile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 
@@ -57,7 +56,7 @@ public class ArtistProfileEditMobile extends MbController {
         } catch (MbException e) {
             return ResponseEntity.ok(new ArtistRegistrationResponse(e, RsStatus.ERROR));
         } catch (IOException e) {
-            return ResponseEntity.ok(new ArtistRegistrationResponse(MbException.create(MbError.UE01), RsStatus.ERROR));
+            return ResponseEntity.ok(new ArtistRegistrationResponse(MbException.create(MbError.CME01), RsStatus.ERROR));
         } catch (Exception e) {
             return ResponseEntity.ok(new ArtistRegistrationResponse(RsStatus.ERROR));
         }
@@ -149,7 +148,7 @@ public class ArtistProfileEditMobile extends MbController {
         try {
             artistProfileEditServiceMobile.artistUploadPhotos(id, uploadFiles);
         } catch (IOException e) {
-            return ResponseEntity.ok(new ArtistRegistrationResponse(MbException.create(MbError.UE01), RsStatus.ERROR));
+            return ResponseEntity.ok(new ArtistRegistrationResponse(MbException.create(MbError.CME01), RsStatus.ERROR));
         } catch (MbException e) {
             return ResponseEntity.ok(new ArtistRegistrationResponse(e, RsStatus.ERROR));
         }

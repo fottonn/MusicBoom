@@ -5,7 +5,8 @@ import ru.bugmakers.dto.request.SessionDataRequest;
 /**
  * Created by Ayrat on 24.11.2017.
  */
-public class UpdateMapRequestArtistOrListenerMobile extends SessionDataRequest {
+public class MapPerformersRequest extends SessionDataRequest {
+
     private String radius;
 
     public String getRadius() {

@@ -12,10 +12,7 @@ import ru.bugmakers.enums.UserType;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static ru.bugmakers.entity.EntityConstants.*;
 
@@ -125,9 +122,6 @@ public class User {
 
     @Column(name = "isArtistContact")
     private String isArtistContact;
-
-    @OneToOne(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
-    private ActiveEvent activeEvent;
 
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Event> events;
@@ -364,15 +358,8 @@ public class User {
         this.whatsappContact = whatsappContact;
     }
 
-    public ActiveEvent getActiveEvent() {
-        return activeEvent;
-    }
-
-    public void setActiveEvent(ActiveEvent activeEvent) {
-        this.activeEvent = activeEvent;
-    }
-
     public List<Event> getEvents() {
+        if (events == null) events = new ArrayList<>();
         return events;
     }
 
@@ -568,11 +555,6 @@ public class User {
 
     public User withIsArtistContact(String isArtistContact) {
         this.isArtistContact = isArtistContact;
-        return this;
-    }
-
-    public User withActiveEvent(ActiveEvent activeEvent) {
-        this.activeEvent = activeEvent;
         return this;
     }
 
