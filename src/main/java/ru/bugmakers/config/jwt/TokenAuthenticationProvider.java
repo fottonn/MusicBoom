@@ -1,7 +1,5 @@
 package ru.bugmakers.config.jwt;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.impl.DefaultClaims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -56,20 +54,13 @@ public class TokenAuthenticationProvider implements AuthenticationProvider, Toke
     private TokenAuthentication processAuthentication(TokenAuthentication authentication) {
 
         String token = authentication.getToken();
-        DefaultClaims claims;
-        try {
-            claims = (DefaultClaims) Jwts.parser().setSigningKey(TOKEN_KEY).parse(token).getBody();
-        } catch (Exception e) {
-            throw new AuthenticationServiceException("Некорректный токен");
-        }
 
         //проверяем время жизни токена
-        Instant expirationInstant = claims.getExpiration().toInstant();
-        if (expirationInstant.isBefore(Instant.now())) {
+        if (TokenUtils.getExpiration(token).isBefore(Instant.now())) {
             throw new AuthenticationServiceException("Время жизни токена истекло");
         }
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(claims.get(USERNAME, String.class));
+        UserDetails userDetails = userDetailsService.loadUserByUsername(TokenUtils.getUserName(token));
         //Проверяем не заблокирован ли пользователь
         if (!userDetails.isEnabled()) {
             throw new AuthenticationServiceException("Пользователь заблокирован");
