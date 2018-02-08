@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import ru.bugmakers.dto.common.UserDTO;
+import ru.bugmakers.entity.Email;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.Role;
 import ru.bugmakers.enums.Sex;
@@ -31,7 +32,7 @@ public class UserDto2UserConverter implements MbConverter<UserDTO, User>, DateTi
         user.setCity(source.getCity());
         user.setName(source.getName());
         user.setSurName(source.getSurname());
-        user.setEmail(source.getEmail());
+        user.setEmail(new Email(source.getEmail() != null ? source.getEmail() : null));
         user.setLogin(source.getEmail());
         user.setPassword(passwordEncoder.encode(source.getPassword()));
         user.setPatronymic(source.getPatronimyc());

@@ -29,7 +29,7 @@ public class User2UserDtoConverter implements MbConverter<User, UserDTO>, DateTi
                 .withCountry(source.getCountry())
                 .withCity(source.getCity())
                 .withPhoneNumber(source.getPhone())
-                .withEmail(source.getEmail())
+                .withEmail(source.getEmail() != null ? source.getEmail().getValue() : null)
                 .withCreativity(source.getArtistInfo() != null ? source.getArtistInfo().getCreativity() : null)
                 .withInstrument(source.getArtistInfo() != null ? source.getArtistInfo().getInstrument() : null)
                 .withGenre(source.getArtistInfo() != null && source.getArtistInfo().getGenre() != null ? source.getArtistInfo().getGenre().name() : null)

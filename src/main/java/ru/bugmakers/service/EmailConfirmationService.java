@@ -3,7 +3,6 @@ package ru.bugmakers.service;
 import com.fasterxml.uuid.Generators;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.bugmakers.entity.Email;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
@@ -32,6 +31,11 @@ public class EmailConfirmationService {
         this.userService = userService;
     }
 
+    /**
+     * Метод валидации email
+     * @param user - пользователь
+     * @throws MbException
+     */
     public void sendConfirmationEmail(User user) throws MbException {
         UUID generatedValue = Generators.timeBasedGenerator().generate();
         String email = user.getEmail().getValue();
