@@ -2,6 +2,7 @@ package ru.bugmakers.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Type;
+import ru.bugmakers.config.EmailConfig;
 import ru.bugmakers.entity.auth.FbAuth;
 import ru.bugmakers.entity.auth.GoogleAuth;
 import ru.bugmakers.entity.auth.VkAuth;
@@ -67,8 +68,8 @@ public class User {
     @Column(name = "public_name")
     private String publicName;
 
-    @Column(name = "email")
-    private String email;
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
+    private Email email;
 
     @Column(name = "user_type")
     @Enumerated(EnumType.STRING)
@@ -141,9 +142,6 @@ public class User {
     @OneToOne(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private ArtistRating artistRating;
 
-    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
-    private ConfirmEmail confirmEmail;
-
     @ElementCollection
     @CollectionTable(name = "photos", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     @Column(name = "photo")
@@ -155,51 +153,6 @@ public class User {
     public User() {
     }
 
-
-    public User(boolean registered, String name, String surName, String patronymic, LocalDate birthDay, String country, String city, String nickname, LocalDateTime registrationDate, String publicName, String email, UserType userType, String phone, Sex sex, Set<Role> roles, String login, String password, boolean enabled, VkAuth vkAuth, FbAuth fbAuth, GoogleAuth googleAuth, ArtistInfo artistInfo, String vkContact, String tlgContact, String whatsappContact, String isAllowOfPersonalData, String isArtistContact, ActiveEvent activeEvent, List<Event> events, List<Transaction> senderTransactions, List<Transaction> recipientTransactions, ArtistRating artistRating, List<String> photos, String avatar) {
-        this.registered = registered;
-        this.name = name;
-        this.surName = surName;
-        this.patronymic = patronymic;
-        this.birthDay = birthDay;
-        this.country = country;
-        this.city = city;
-        this.nickname = nickname;
-        this.registrationDate = registrationDate;
-        this.publicName = publicName;
-        this.email = email;
-        this.userType = userType;
-        this.phone = phone;
-        this.sex = sex;
-        this.roles = roles;
-        this.login = login;
-        this.password = password;
-        this.enabled = enabled;
-        this.vkAuth = vkAuth;
-        this.fbAuth = fbAuth;
-        this.googleAuth = googleAuth;
-        this.artistInfo = artistInfo;
-        this.vkContact = vkContact;
-        this.tlgContact = tlgContact;
-        this.whatsappContact = whatsappContact;
-        this.isAllowOfPersonalData = isAllowOfPersonalData;
-        this.isArtistContact = isArtistContact;
-        this.activeEvent = activeEvent;
-        this.events = events;
-        this.senderTransactions = senderTransactions;
-        this.recipientTransactions = recipientTransactions;
-        this.artistRating = artistRating;
-        this.photos = photos;
-        this.avatar = avatar;
-    }
-
-    public ConfirmEmail getConfirmEmail() {
-        return confirmEmail;
-    }
-
-    public void setConfirmEmail(ConfirmEmail confirmEmail) {
-        this.confirmEmail = confirmEmail;
-    }
 
     public Long getId() {
         return id;
@@ -289,11 +242,11 @@ public class User {
         this.publicName = publicName;
     }
 
-    public String getEmail() {
+    public Email getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(Email email) {
         this.email = email;
     }
 
@@ -535,7 +488,7 @@ public class User {
         return this;
     }
 
-    public User withEmail(String email) {
+    public User withEmail(Email email) {
         this.email = email;
         return this;
     }

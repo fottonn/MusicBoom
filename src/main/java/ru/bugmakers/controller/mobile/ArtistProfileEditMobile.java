@@ -77,9 +77,10 @@ public class ArtistProfileEditMobile extends MbController {
 
     @GetMapping(value = "/password.change")
     public ResponseEntity<MbResponseToMobile> changeArtistPassword(@RequestParam("id") String id,
-                                                                   @RequestParam("hash_password") String password) {
+                                                                   @RequestParam("old_hash_password") String newPassword,
+                                                                   @RequestParam("new_hash_password") String oldPassword) {
         try {
-            artistProfileEditServiceMobile.artistPasswordChange(id, password);
+            artistProfileEditServiceMobile.artistPasswordChange(id, oldPassword, newPassword);
         } catch (MbException e) {
             return ResponseEntity.ok(new ArtistRegistrationResponse(e, RsStatus.ERROR));
         }
