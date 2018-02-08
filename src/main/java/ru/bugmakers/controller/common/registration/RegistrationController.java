@@ -13,6 +13,7 @@ import ru.bugmakers.enums.SocialProvider;
 import ru.bugmakers.enums.UserType;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
+import ru.bugmakers.service.EmailConfirmationService;
 import ru.bugmakers.validator.common.RegistrationRequestValidator;
 
 /**
@@ -45,9 +46,6 @@ public class    RegistrationController extends MbController {
             UserDTO user = registrator.register(UserType.valueOf(userType.toUpperCase()), registrationRequest.getUser());
             registrationResponse = new RegistrationResponse(RsStatus.SUCCESS);
             registrationResponse.setUser(user);
-            if (user.getEmail() != null) {
-                //TODO отправить емайл
-            }
         } catch (MbException e) {
             registrationResponse = new RegistrationResponse(e);
         } catch (Exception e) {

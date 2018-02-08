@@ -10,6 +10,7 @@ import ru.bugmakers.exceptions.MbException;
 
 import javax.mail.Message;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 /**
  * Created by Ayrat on 30.01.2018.
@@ -25,16 +26,20 @@ public class SendEmail {
         this.javaMailSender = javaMailSender;
     }
 
-    public void sendEmail(String email, String text) throws MbException {
-        MimeMessagePreparator preparator = mimeMessage -> {
-            mimeMessage.setRecipients(Message.RecipientType.TO, email);
-            mimeMessage.setFrom(new InternetAddress(FROM_EMAIL));
-            mimeMessage.setText(text);
+    public Boolean sendEmail(String email, String text) throws MbException {
+        MimeMessagePreparator preparator = new MimeMessagePreparator() {
+            @Override
+            public void prepare(MimeMessage mimeMessage) throws Exception {
+                mimeMessage.setRecipients(Message.RecipientType.TO, email);
+                mimeMessage.setFrom(new InternetAddress(FROM_EMAIL));
+                mimeMessage.setText(text);
+            }
         };
         try {
             this.javaMailSender.send(preparator);
         } catch (MailException e) {
             throw MbException.create(MbError.SEE01);
         }
+        return Boolean.TRUE;
     }
 }
