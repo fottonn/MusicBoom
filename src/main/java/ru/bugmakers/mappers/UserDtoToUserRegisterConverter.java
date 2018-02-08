@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import ru.bugmakers.dto.common.UserDTO;
+import ru.bugmakers.entity.Email;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.mappers.converters.MbConverter;
 import ru.bugmakers.utils.DateTimeFormatters;
@@ -30,7 +31,7 @@ public class UserDtoToUserRegisterConverter implements MbConverter<UserDTO, User
                 .withRegistered(true)
                 .withName(source.getName())
                 .withSurName(source.getSurname())
-                .withEmail(source.getEmail())
+                .withEmail(source.getEmail() != null ? new Email(source.getEmail()) : null)
                 .withPhone(source.getPhoneNumber())
                 .withLogin(source.getPhoneNumber())
                 .withPassword(passwordEncoder.encode(source.getPassword()))
@@ -48,4 +49,5 @@ public class UserDtoToUserRegisterConverter implements MbConverter<UserDTO, User
                 .withIsAllowOfPersonalData(source.getIsAllowOfPersonalData())
                 .withIsArtistContact(source.getIsArtistContact());
     }
+
 }

@@ -15,4 +15,5 @@ public class SessionDataRequest {
         this.sessionId = sessionId;
     }
 
+
 }

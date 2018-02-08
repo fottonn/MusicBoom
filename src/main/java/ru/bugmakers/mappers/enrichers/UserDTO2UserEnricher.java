@@ -2,6 +2,7 @@ package ru.bugmakers.mappers.enrichers;
 
 import org.springframework.stereotype.Component;
 import ru.bugmakers.dto.common.UserDTO;
+import ru.bugmakers.entity.Email;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.Sex;
 
@@ -21,7 +22,10 @@ public class UserDTO2UserEnricher implements MBEnricher<UserDTO, User> {
         target.setCity(Optional.ofNullable(source.getCity()).orElse(target.getCity()));
         target.setName(Optional.ofNullable(source.getName()).orElse(target.getName()));
         target.setSurName(Optional.ofNullable(source.getSurname()).orElse(target.getSurName()));
-        target.setEmail(Optional.ofNullable(source.getEmail()).orElse(target.getEmail()));
+        if (source.getEmail() != null) {
+            if (target.getEmail() == null || !target.getEmail().getValue().equals(source.getEmail()))
+                target.setEmail(new Email(source.getEmail()));
+        }
         target.setPatronymic(Optional.ofNullable(source.getPatronimyc()).orElse(target.getPatronymic()));
         target.setNickname(Optional.ofNullable(source.getNickname()).orElse(target.getNickname()));
         target.setBirthDay(Optional.ofNullable(LocalDate.parse(source.getBirthday(), DATE_FORMATTER)).orElse(target.getBirthDay()));

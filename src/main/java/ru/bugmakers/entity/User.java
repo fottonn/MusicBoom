@@ -2,6 +2,7 @@ package ru.bugmakers.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Type;
+import ru.bugmakers.config.EmailConfig;
 import ru.bugmakers.entity.auth.FbAuth;
 import ru.bugmakers.entity.auth.GoogleAuth;
 import ru.bugmakers.entity.auth.VkAuth;
@@ -64,8 +65,8 @@ public class User {
     @Column(name = "public_name")
     private String publicName;
 
-    @Column(name = "email")
-    private String email;
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
+    private Email email;
 
     @Column(name = "user_type")
     @Enumerated(EnumType.STRING)
@@ -145,6 +146,7 @@ public class User {
 
     public User() {
     }
+
 
     public Long getId() {
         return id;
@@ -234,11 +236,11 @@ public class User {
         this.publicName = publicName;
     }
 
-    public String getEmail() {
+    public Email getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(Email email) {
         this.email = email;
     }
 
@@ -473,7 +475,7 @@ public class User {
         return this;
     }
 
-    public User withEmail(String email) {
+    public User withEmail(Email email) {
         this.email = email;
         return this;
     }
