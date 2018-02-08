@@ -47,6 +47,5 @@ public class EmailConfirmationService {
         } else {
             throw MbException.create(MbError.SEE01);
         }
-
     }
 }

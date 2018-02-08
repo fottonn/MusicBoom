@@ -29,6 +29,7 @@ public class ArtistProfileEditServiceMobile {
     private UserService userService;
     private UserDTO2UserEnricher userDTO2UserEnricher;
     private SaveImagesService saveImagesService;
+    private EmailConfirmationService emailConfirmationService;
 
     @Autowired
     public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
@@ -46,12 +47,19 @@ public class ArtistProfileEditServiceMobile {
     public void setSaveImagesService(SaveImagesService saveImagesService) {
         this.saveImagesService = saveImagesService;
     }
+    @Autowired
+    public void setEmailConfirmationService(EmailConfirmationService emailConfirmationService) {
+        this.emailConfirmationService = emailConfirmationService;
+    }
 
     public Boolean artistProfileEdit(UserDTO userDTO) throws MbException {
         User user = userService.findUserByEmail(userDTO.getEmail());
         if (user != null) {
             if (user.getUserType().equals(UserType.LISTENER)) {
                 userDTO2UserEnricher.enrich(userDTO, user);
+                if (user.getEmail() != null && !user.getEmail().isEnabled()) {
+                      emailConfirmationService.sendConfirmationEmail(user);
+                }
                 User resultUser = userService.updateUser(user);
                 if (resultUser == null) {
                     throw MbException.create(MbError.APE03);
