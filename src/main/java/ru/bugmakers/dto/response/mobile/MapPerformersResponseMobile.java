@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class MapPerformersResponseMobile extends MbResponseToMobile {
 
-    private List<ArtistsLocation> artistsLocations;
+    private List<ArtistsLocation> artists;
 
     public MapPerformersResponseMobile(MbException e, RsStatus status) {
         super(e, status);
@@ -21,11 +21,11 @@ public class MapPerformersResponseMobile extends MbResponseToMobile {
         super(status);
     }
 
-    public List<ArtistsLocation> getArtistsLocations() {
-        return artistsLocations;
+    public List<ArtistsLocation> getArtists() {
+        return artists;
     }
 
-    public void setArtistsLocations(List<ArtistsLocation> artistsLocations) {
-        this.artistsLocations = artistsLocations;
+    public void setArtists(List<ArtistsLocation> artists) {
+        this.artists = artists;
     }
 }

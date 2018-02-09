@@ -1,13 +1,27 @@
 package ru.bugmakers.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Created by Ayrat on 13.12.2017.
  */
 public class ArtistsLocation {
+
+    @JsonProperty("artist_id")
     private String artistId;
-    private String logitude;
-    private String lantitude;
+    private String longitude;
+    private String latitude;
+    @JsonProperty("icon_url")
     private String iconUrl;
+
+    public ArtistsLocation() {
+    }
+
+    public ArtistsLocation(String artistId, String longitude, String latitude) {
+        this.artistId = artistId;
+        this.longitude = longitude;
+        this.latitude = latitude;
+    }
 
     public String getArtistId() {
         return artistId;
@@ -17,20 +31,20 @@ public class ArtistsLocation {
         this.artistId = artistId;
     }
 
-    public String getLogitude() {
-        return logitude;
+    public String getLongitude() {
+        return longitude;
     }
 
-    public void setLogitude(String logitude) {
-        this.logitude = logitude;
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 
-    public String getLantitude() {
-        return lantitude;
+    public String getLatitude() {
+        return latitude;
     }
 
-    public void setLantitude(String lantitude) {
-        this.lantitude = lantitude;
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
     }
 
     public String getIconUrl() {

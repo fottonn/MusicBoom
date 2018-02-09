@@ -67,10 +67,10 @@ public class ArtistDesktopFunctionalMobile extends MbController {
         try {
             ActiveEvent activeEvent = new ActiveEvent(
                     principal.getUser().getId(),
-                    rq.getLongitude(),
-                    rq.getLatitude());
-            activeEvent.setLat(rq.getLatitude());
-            activeEvent.setLng(rq.getLongitude());
+                    Double.valueOf(rq.getLongitude()),
+                    Double.valueOf(rq.getLatitude()));
+            activeEvent.setLat(Double.valueOf(rq.getLatitude()));
+            activeEvent.setLng(Double.valueOf(rq.getLongitude()));
             activeEventService.saveActiveEvent(activeEvent);
             rs = new PerformanceStartResponseMobile(RsStatus.SUCCESS);
         } catch (Exception e) {
@@ -88,8 +88,8 @@ public class ArtistDesktopFunctionalMobile extends MbController {
 
             Long userId = principal.getUser().getId();
             ActiveEvent activeEvent = activeEventService.getActiveEventByUserId(userId);
-            activeEvent.setLng(rq.getLongitude());
-            activeEvent.setLat(rq.getLatitude());
+            activeEvent.setLng(Double.valueOf(rq.getLongitude()));
+            activeEvent.setLat(Double.valueOf(rq.getLatitude()));
             activeEvent = activeEventService.saveActiveEvent(activeEvent);
 
             String currentEarnedMoney = transactionService.getReceivedMoneyForPeriodString(

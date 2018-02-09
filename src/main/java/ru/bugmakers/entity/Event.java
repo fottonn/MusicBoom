@@ -41,10 +41,10 @@ public class Event {
     private String location;
 
     @Column(name = "lng")
-    private String lng;
+    private Double lng;
 
     @Column(name = "lat")
-    private String lat;
+    private Double lat;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -106,19 +106,19 @@ public class Event {
         this.location = location;
     }
 
-    public String getLng() {
+    public Double getLng() {
         return lng;
     }
 
-    public void setLng(String lng) {
+    public void setLng(Double lng) {
         this.lng = lng;
     }
 
-    public String getLat() {
+    public Double getLat() {
         return lat;
     }
 
-    public void setLat(String lat) {
+    public void setLat(Double lat) {
         this.lat = lat;
     }
 

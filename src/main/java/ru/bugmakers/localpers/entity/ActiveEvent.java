@@ -21,10 +21,10 @@ public class ActiveEvent {
     private Long userId;
 
     @Column(name = "lng")
-    private String lng;
+    private Double lng;
 
     @Column(name = "lat")
-    private String lat;
+    private Double lat;
 
     @Column(name = "begin_time")
     @Type(type = LOCAL_DATE_TIME_TYPE)
@@ -37,7 +37,7 @@ public class ActiveEvent {
     public ActiveEvent() {
     }
 
-    public ActiveEvent(Long userId, String lng, String lat) {
+    public ActiveEvent(Long userId, Double lng, Double lat) {
         this.userId = userId;
         this.lng = lng;
         this.lat = lat;
@@ -52,19 +52,19 @@ public class ActiveEvent {
         this.userId = userId;
     }
 
-    public String getLng() {
+    public Double getLng() {
         return lng;
     }
 
-    public void setLng(String lng) {
+    public void setLng(Double lng) {
         this.lng = lng;
     }
 
-    public String getLat() {
+    public Double getLat() {
         return lat;
     }
 
-    public void setLat(String lat) {
+    public void setLat(Double lat) {
         this.lat = lat;
     }
 
