@@ -8,7 +8,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import ru.bugmakers.config.principal.UserPrincipal;
-import ru.bugmakers.localpers.WhiteTokenService;
+import ru.bugmakers.localpers.service.WhiteTokenService;
 
 import java.time.Instant;
 

@@ -12,8 +12,8 @@ import ru.bugmakers.config.jwt.TokenData;
 import ru.bugmakers.config.jwt.TokenUtils;
 import ru.bugmakers.enums.Role;
 import ru.bugmakers.enums.RsStatus;
-import ru.bugmakers.localpers.WhiteToken;
-import ru.bugmakers.localpers.WhiteTokenService;
+import ru.bugmakers.localpers.entity.WhiteToken;
+import ru.bugmakers.localpers.service.WhiteTokenService;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

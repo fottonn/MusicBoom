@@ -5,10 +5,21 @@ import ru.bugmakers.dto.request.SessionDataRequest;
 /**
  * Created by Ayrat on 24.11.2017.
  */
-public class PerformanceStartValidationRequestMobile extends SessionDataRequest {
+public class MapPerformersRequest extends SessionDataRequest {
+
+    private String radius;
 
     private String longitude;
+
     private String latitude;
+
+    public String getRadius() {
+        return radius;
+    }
+
+    public void setRadius(String radius) {
+        this.radius = radius;
+    }
 
     public String getLongitude() {
         return longitude;
