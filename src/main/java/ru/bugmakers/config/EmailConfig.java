@@ -20,31 +20,31 @@ public class EmailConfig {
     private static final String USER = "user";
     //TODO добавить конфиги
     @Value("${email.host}")
-        private String host;
+    private String host;
 
-        @Value("${email.port}")
-        private Integer port;
+    @Value("${email.port}")
+    private Integer port;
 
-        @Bean
-        public JavaMailSender javaMailService() {
-            JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
+    @Bean
+    public JavaMailSender javaMailService() {
+        JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
 
-            javaMailSender.setHost(host);
-            javaMailSender.setPort(port);
+        javaMailSender.setHost(host);
+        javaMailSender.setPort(port);
 
-            javaMailSender.setJavaMailProperties(getMailProperties());
+        javaMailSender.setJavaMailProperties(getMailProperties());
 
-            return javaMailSender;
-        }
+        return javaMailSender;
+    }
 
-        private Properties getMailProperties() {
-            Properties properties = new Properties();
-            properties.setProperty("mail.transport.protocol", "smtp");
-            properties.setProperty("mail.smtp.auth", "false");
-            properties.setProperty("mail.smtp.starttls.enable", "false");
-            properties.setProperty("mail.debug", "false");
-            properties.setProperty("username", USER);
-            properties.setProperty("password", PASSWORD);
-            return properties;
-        }
+    private Properties getMailProperties() {
+        Properties properties = new Properties();
+        properties.setProperty("mail.transport.protocol", "smtp");
+        properties.setProperty("mail.smtp.auth", "false");
+        properties.setProperty("mail.smtp.starttls.enable", "false");
+        properties.setProperty("mail.debug", "false");
+        properties.setProperty("username", USER);
+        properties.setProperty("password", PASSWORD);
+        return properties;
+    }
 }
