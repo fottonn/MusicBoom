@@ -2,7 +2,6 @@ package ru.bugmakers.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Type;
-import ru.bugmakers.config.EmailConfig;
 import ru.bugmakers.entity.auth.FbAuth;
 import ru.bugmakers.entity.auth.GoogleAuth;
 import ru.bugmakers.entity.auth.VkAuth;
@@ -143,6 +142,9 @@ public class User {
 
     @Column(name = "avatar")
     private String avatar;
+
+    @OneToMany(mappedBy = "user")
+    private List<FeedBack> feedBacks;
 
     public User() {
     }
@@ -423,6 +425,14 @@ public class User {
 
     public void setIsArtistContact(String isArtistContact) {
         this.isArtistContact = isArtistContact;
+    }
+
+    public List<FeedBack> getFeedBacks() {
+        return feedBacks;
+    }
+
+    public void setFeedBacks(List<FeedBack> feedBacks) {
+        this.feedBacks = feedBacks;
     }
 
     public User withRegistered(boolean registered) {
