@@ -80,7 +80,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         final String[] URLS = {
-                "/index.jsp"
+                "/index.jsp",
+                "/favicon.ico"
         };
         web
                 .debug(true)
