@@ -1,7 +1,9 @@
 package ru.bugmakers.controller.mobile;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import ru.bugmakers.config.principal.UserPrincipal;
 import ru.bugmakers.controller.MbController;
 import ru.bugmakers.dto.request.mobile.CardInfoRequestMobile;
 import ru.bugmakers.dto.response.mobile.FinanceManagementResponseMobile;
@@ -15,8 +17,9 @@ import ru.bugmakers.dto.response.mobile.MbResponseToMobile;
 public class ArtistFinanceManagementMobile extends MbController {
 
     @PostMapping(value = "card.attach")
-    public ResponseEntity<MbResponseToMobile> cardAttach(@RequestBody CardInfoRequestMobile cardInfoRequestMobile) {
-
+    public ResponseEntity<MbResponseToMobile> cardAttach(@AuthenticationPrincipal UserPrincipal user,
+                                                         @RequestBody CardInfoRequestMobile cardInfoRequestMobile) {
+        String id = user.getUser().getId().toString();
         FinanceManagementResponseMobile financeManagementResponseMobile = null;
         return ResponseEntity.ok(financeManagementResponseMobile);
     }
