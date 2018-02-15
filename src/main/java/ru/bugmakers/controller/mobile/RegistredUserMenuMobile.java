@@ -3,11 +3,13 @@ package ru.bugmakers.controller.mobile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.bugmakers.config.principal.UserPrincipal;
 import ru.bugmakers.controller.MbController;
 import ru.bugmakers.dto.request.mobile.FeedBackRequestMobile;
-import ru.bugmakers.dto.response.mobile.AboutAppResponseMobile;
 import ru.bugmakers.dto.response.mobile.MbResponseToMobile;
 import ru.bugmakers.entity.FeedBack;
 import ru.bugmakers.entity.User;
@@ -50,11 +52,5 @@ public class RegistredUserMenuMobile extends MbController {
         }
 
         return ResponseEntity.ok(rs);
-    }
-
-    @GetMapping(value = "about.app")
-    public ResponseEntity<MbResponseToMobile> aboutApp() {
-        AboutAppResponseMobile aboutAppResponseMobile = null;
-        return ResponseEntity.ok(aboutAppResponseMobile);
     }
 }
