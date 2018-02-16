@@ -44,6 +44,9 @@ public class User {
     @Column(name = "patronymic")
     private String patronymic;
 
+    @Column(name = "about_me")
+    private String aboutMe;
+
     @Column(name = "birthday")
     @Type(type = LOCAL_DATE_TYPE)
     private LocalDate birthDay;
@@ -188,6 +191,14 @@ public class User {
 
     public void setPatronymic(String patronymic) {
         this.patronymic = patronymic;
+    }
+
+    public String getAboutMe() {
+        return aboutMe;
+    }
+
+    public void setAboutMe(String aboutMe) {
+        this.aboutMe = aboutMe;
     }
 
     public LocalDate getBirthDay() {
@@ -452,6 +463,11 @@ public class User {
 
     public User withPatronymic(String patronymic) {
         this.patronymic = patronymic;
+        return this;
+    }
+
+    public User withAboutMe(String aboutMe) {
+        this.aboutMe = aboutMe;
         return this;
     }
 

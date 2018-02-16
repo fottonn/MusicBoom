@@ -32,7 +32,9 @@ public class UserDto2UserConverter implements MbConverter<UserDTO, User>, DateTi
         user.setCity(source.getCity());
         user.setName(source.getName());
         user.setSurName(source.getSurname());
-        user.setEmail(new Email(source.getEmail() != null ? source.getEmail() : null));
+        user.setPatronymic(source.getPatronimyc());
+        user.setAboutMe(source.getAboutMe());
+        user.setEmail(new Email(source.getEmail()));
         user.setLogin(source.getEmail());
         user.setPassword(passwordEncoder.encode(source.getPassword()));
         user.setPatronymic(source.getPatronimyc());

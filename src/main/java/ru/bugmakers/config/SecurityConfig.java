@@ -81,8 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) {
         final String[] URLS = {
                 "/index.jsp",
-                "/test/send",
-                "/test/test1"
+                "/favicon.ico"
         };
         web
                 .debug(true)
