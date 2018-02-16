@@ -80,7 +80,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         final String[] URLS = {
-                "/index.jsp"
+                "/index.jsp",
+                "/test/send",
+                "/test/test1"
         };
         web
                 .debug(true)

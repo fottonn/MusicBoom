@@ -18,8 +18,7 @@ public class EmailConfirmationService {
 
     private SendEmail sendEmail;
     private UserService userService;
-    //TODO Захардкодить домен
-    public static final String DOMAIN = "ourDomain";
+    public static final String DOMAIN = "musboom.ru";
 
     @Autowired
     public void setSendEmail(SendEmail sendEmail) {
