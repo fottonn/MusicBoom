@@ -23,6 +23,7 @@ public class User2UserDtoConverter implements MbConverter<User, UserDTO>, DateTi
                 .withName(source.getName())
                 .withSurname(source.getSurName())
                 .withPatronimyc(source.getPatronymic())
+                .withAboutMe(source.getAboutMe())
                 .withBirthday(source.getBirthDay() != null ? source.getBirthDay().format(DATE_FORMATTER) : null)
                 .withSex(source.getSex() != null ? source.getSex().name() : null)
                 .withNickname(source.getNickname())

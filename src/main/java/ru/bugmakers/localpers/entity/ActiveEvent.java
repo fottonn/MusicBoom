@@ -1,11 +1,12 @@
-package ru.bugmakers.entity;
+package ru.bugmakers.localpers.entity;
 
 import org.hibernate.annotations.Type;
-import org.hibernate.type.LocalDateTimeType;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.GregorianCalendar;
 
 import static ru.bugmakers.entity.EntityConstants.LOCAL_DATE_TIME_TYPE;
 
@@ -17,14 +18,13 @@ import static ru.bugmakers.entity.EntityConstants.LOCAL_DATE_TIME_TYPE;
 public class ActiveEvent {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    private Long userId;
 
     @Column(name = "lng")
-    private String lng;
+    private Double lng;
 
     @Column(name = "lat")
-    private String lat;
+    private Double lat;
 
     @Column(name = "begin_time")
     @Type(type = LOCAL_DATE_TIME_TYPE)
@@ -34,31 +34,37 @@ public class ActiveEvent {
     @Type(type = LOCAL_DATE_TIME_TYPE)
     private LocalDateTime endTime;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    public Long getId() {
-        return id;
+    public ActiveEvent() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public ActiveEvent(Long userId, Double lng, Double lat) {
+        this.userId = userId;
+        this.lng = lng;
+        this.lat = lat;
+        this.beginTime = LocalDateTime.now();
     }
 
-    public String getLng() {
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Double getLng() {
         return lng;
     }
 
-    public void setLng(String lng) {
+    public void setLng(Double lng) {
         this.lng = lng;
     }
 
-    public String getLat() {
+    public Double getLat() {
         return lat;
     }
 
-    public void setLat(String lat) {
+    public void setLat(Double lat) {
         this.lat = lat;
     }
 
@@ -76,13 +82,5 @@ public class ActiveEvent {
 
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

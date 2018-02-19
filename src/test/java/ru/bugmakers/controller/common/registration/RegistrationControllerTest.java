@@ -21,7 +21,7 @@ public class RegistrationControllerTest {
     public void testRegister() {
         RegistrationRequest rq = new RegistrationRequest();
         rq.setUser(new UserDTO()
-                .withPhoneNumber("+79600571600  ")
+                .withPhoneNumber("+79612345678")
                 .withPassword("password")
         );
         ResponseBody rs = given().contentType(MediaType.APPLICATION_JSON_VALUE).body(rq)

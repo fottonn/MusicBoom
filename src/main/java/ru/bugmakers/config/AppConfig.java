@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import ru.bugmakers.config.logout.MbLogoutSuccessHandler;
 
 import java.util.List;
 
@@ -18,13 +19,18 @@ import java.util.List;
  */
 @Configuration
 @ComponentScan(value = "ru.bugmakers", excludeFilters = @Filter(Configuration.class))
-@Import({SecurityConfig.class, PersistConfig.class, EmailConfig.class, LocalPersistConfig.class})
+@Import({SecurityConfig.class, PersistConfig.class, LocalPersistConfig.class})
 @EnableWebMvc
 public class AppConfig implements WebMvcConfigurer {
 
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
+    }
+
+    @Bean
+    public MbLogoutSuccessHandler mbLogoutSuccessHandler() {
+        return new MbLogoutSuccessHandler();
     }
 
     @Override

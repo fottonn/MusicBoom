@@ -59,7 +59,7 @@ public class ArtistProfileEditMobile extends MbController {
         } catch (MbException e) {
             return ResponseEntity.ok(new ArtistRegistrationResponse(e, RsStatus.ERROR));
         } catch (IOException e) {
-            return ResponseEntity.ok(new ArtistRegistrationResponse(MbException.create(MbError.UE01), RsStatus.ERROR));
+            return ResponseEntity.ok(new ArtistRegistrationResponse(MbException.create(MbError.CME01), RsStatus.ERROR));
         } catch (Exception e) {
             return ResponseEntity.ok(new ArtistRegistrationResponse(RsStatus.ERROR));
         }
@@ -160,7 +160,7 @@ public class ArtistProfileEditMobile extends MbController {
             String id = user.getUser().getId().toString();
             artistProfileEditServiceMobile.artistUploadPhotos(id, uploadFiles);
         } catch (IOException e) {
-            return ResponseEntity.ok(new ArtistRegistrationResponse(MbException.create(MbError.UE01), RsStatus.ERROR));
+            return ResponseEntity.ok(new ArtistRegistrationResponse(MbException.create(MbError.CME01), RsStatus.ERROR));
         } catch (MbException e) {
             return ResponseEntity.ok(new ArtistRegistrationResponse(e, RsStatus.ERROR));
         }

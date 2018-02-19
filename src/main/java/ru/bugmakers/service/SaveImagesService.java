@@ -15,7 +15,6 @@ import java.util.UUID;
 public class SaveImagesService {
 
     String saveFile(MultipartFile file, String rootPath) throws IOException {
-
         UUID fileNameUUID = Generators.timeBasedGenerator().generate();
         String originalFileName = file.getOriginalFilename();
         String fileName = fileNameUUID.toString() + originalFileName.substring(originalFileName.lastIndexOf("."));

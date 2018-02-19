@@ -19,6 +19,7 @@ public class UserDTO implements Serializable {
     private String name;
     private String surname;
     private String patronimyc;
+    private String aboutMe;
     private String birthday;
     private String sex;
     private String nickname;
@@ -148,6 +149,14 @@ public class UserDTO implements Serializable {
 
     public void setPatronimyc(String patronimyc) {
         this.patronimyc = patronimyc;
+    }
+
+    public String getAboutMe() {
+        return aboutMe;
+    }
+
+    public void setAboutMe(String aboutMe) {
+        this.aboutMe = aboutMe;
     }
 
     public String getBirthday() {
@@ -387,6 +396,11 @@ public class UserDTO implements Serializable {
 
     public UserDTO withPatronimyc(String patronimyc) {
         this.patronimyc = patronimyc;
+        return this;
+    }
+
+    public UserDTO withAboutMe(String aboutMe) {
+        this.aboutMe = aboutMe;
         return this;
     }
 

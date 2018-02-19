@@ -2,7 +2,6 @@ package ru.bugmakers.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Type;
-import ru.bugmakers.config.EmailConfig;
 import ru.bugmakers.entity.auth.FbAuth;
 import ru.bugmakers.entity.auth.GoogleAuth;
 import ru.bugmakers.entity.auth.VkAuth;
@@ -13,10 +12,7 @@ import ru.bugmakers.enums.UserType;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static ru.bugmakers.entity.EntityConstants.*;
 
@@ -47,6 +43,9 @@ public class User {
 
     @Column(name = "patronymic")
     private String patronymic;
+
+    @Column(name = "about_me")
+    private String aboutMe;
 
     @Column(name = "birthday")
     @Type(type = LOCAL_DATE_TYPE)
@@ -127,9 +126,6 @@ public class User {
     @Column(name = "isArtistContact")
     private String isArtistContact;
 
-    @OneToOne(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
-    private ActiveEvent activeEvent;
-
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Event> events;
 
@@ -149,6 +145,9 @@ public class User {
 
     @Column(name = "avatar")
     private String avatar;
+
+    @OneToMany(mappedBy = "user")
+    private List<FeedBack> feedBacks;
 
     public User() {
     }
@@ -192,6 +191,14 @@ public class User {
 
     public void setPatronymic(String patronymic) {
         this.patronymic = patronymic;
+    }
+
+    public String getAboutMe() {
+        return aboutMe;
+    }
+
+    public void setAboutMe(String aboutMe) {
+        this.aboutMe = aboutMe;
     }
 
     public LocalDate getBirthDay() {
@@ -366,15 +373,8 @@ public class User {
         this.whatsappContact = whatsappContact;
     }
 
-    public ActiveEvent getActiveEvent() {
-        return activeEvent;
-    }
-
-    public void setActiveEvent(ActiveEvent activeEvent) {
-        this.activeEvent = activeEvent;
-    }
-
     public List<Event> getEvents() {
+        if (events == null) events = new ArrayList<>();
         return events;
     }
 
@@ -438,6 +438,14 @@ public class User {
         this.isArtistContact = isArtistContact;
     }
 
+    public List<FeedBack> getFeedBacks() {
+        return feedBacks;
+    }
+
+    public void setFeedBacks(List<FeedBack> feedBacks) {
+        this.feedBacks = feedBacks;
+    }
+
     public User withRegistered(boolean registered) {
         this.registered = registered;
         return this;
@@ -455,6 +463,11 @@ public class User {
 
     public User withPatronymic(String patronymic) {
         this.patronymic = patronymic;
+        return this;
+    }
+
+    public User withAboutMe(String aboutMe) {
+        this.aboutMe = aboutMe;
         return this;
     }
 
@@ -570,11 +583,6 @@ public class User {
 
     public User withIsArtistContact(String isArtistContact) {
         this.isArtistContact = isArtistContact;
-        return this;
-    }
-
-    public User withActiveEvent(ActiveEvent activeEvent) {
-        this.activeEvent = activeEvent;
         return this;
     }
 

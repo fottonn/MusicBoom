@@ -22,6 +22,7 @@ import ru.bugmakers.config.jwt.FailureTokenAuthenticationEntryPoint;
 import ru.bugmakers.config.jwt.TokenAuthenticationProvider;
 import ru.bugmakers.config.jwt.filter.TokenAuthenticationCheckFilter;
 import ru.bugmakers.config.jwt.filter.TokenAuthenticationIncludeFilter;
+import ru.bugmakers.config.logout.MbLogoutSuccessHandler;
 
 import java.util.Arrays;
 
@@ -79,9 +80,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         final String[] URLS = {
+                "/index.jsp",
+                "/favicon.ico"
         };
         web
-//                .debug(true)
+                .debug(true)
                 .ignoring().antMatchers(URLS)
         ;
     }
@@ -92,6 +95,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         private ProviderManager providerManager;
         private FailureTokenAuthenticationEntryPoint failureTokenAuthenticationEntryPoint;
+        private MbLogoutSuccessHandler mbLogoutSuccessHandler;
 
         @Autowired
         public void setProviderManager(ProviderManager providerManager) {
@@ -103,6 +107,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             this.failureTokenAuthenticationEntryPoint = failureTokenAuthenticationEntryPoint;
         }
 
+        @Autowired
+        public void setMbLogoutSuccessHandler(MbLogoutSuccessHandler mbLogoutSuccessHandler) {
+            this.mbLogoutSuccessHandler = mbLogoutSuccessHandler;
+        }
+
         @Override
         protected void configure(HttpSecurity http) throws Exception {
 
@@ -112,12 +121,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     "/webapi/operator/**",
                     "/mapi/artist/**",
                     "/mapi/listener/**",
-                    "/mapi/registereduser/**"
+                    "/mapi/registereduser/**",
+                    "/logout"
             };
 
 
             http
                     .csrf().disable()
+                    .anonymous().disable()
                     .requestMatchers()
                     .antMatchers(URLS)
                     .and()
@@ -128,12 +139,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/mapi/artist/**").hasAuthority(ARTIST.name())
                     .antMatchers("/mapi/listener/**").hasAuthority(LISTENER.name())
                     .antMatchers("/mapi/registereduser/**").hasAnyAuthority(ARTIST.name(), LISTENER.name())
+                    .antMatchers("/logout").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
                     .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
                     .addFilterAfter(tokenAuthenticationFilter(), SecurityContextPersistenceFilter.class)
                     .exceptionHandling()
                     .authenticationEntryPoint(failureTokenAuthenticationEntryPoint)
+                    .and()
+                    .logout().logoutUrl("/logout").logoutSuccessHandler(mbLogoutSuccessHandler)
             ;
         }
 
@@ -160,6 +174,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             http
                     .csrf().disable()
+                    .anonymous().disable()
                     .requestMatchers()
                     .antMatchers(HttpMethod.POST, "/authentication")
                     .and()
@@ -202,6 +217,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             http
                     .csrf().disable()
+                    .anonymous().disable()
                     .requestMatchers()
                     .antMatchers(HttpMethod.GET, "/authentication")
                     .antMatchers(HttpMethod.POST, "/registration")
@@ -234,6 +250,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             http
                     .csrf().disable()
+                    .anonymous().disable()
                     .authorizeRequests().anyRequest().permitAll()
                     .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

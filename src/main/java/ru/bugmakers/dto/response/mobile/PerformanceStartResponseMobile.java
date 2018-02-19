@@ -6,13 +6,13 @@ import ru.bugmakers.exceptions.MbException;
 /**
  * Created by Ayrat on 15.12.2017.
  */
-public class StartPerformanceResponseMobile extends MbResponseToMobile {
+public class PerformanceStartResponseMobile extends MbResponseToMobile {
 
-    public StartPerformanceResponseMobile(MbException e, RsStatus status) {
+    public PerformanceStartResponseMobile(MbException e, RsStatus status) {
         super(e, status);
     }
 
-    public StartPerformanceResponseMobile(RsStatus status) {
+    public PerformanceStartResponseMobile(RsStatus status) {
         super(status);
     }
 }
