@@ -27,10 +27,9 @@ public interface EventRepo extends JpaRepository<Event, Long> {
      * @return дата и время начала первого выступления
      */
     @Query("" +
-            "select e.startDate " +
+            "select min (e.startDate) " +
             "from Event e " +
-            "where e.user.id = :id " +
-            "and e.startDate = min(e.startDate)")
+            "where e.user.id = :id")
     LocalDateTime getFirstStartDate(@Param("id") Long userId);
 
     /**
@@ -40,10 +39,9 @@ public interface EventRepo extends JpaRepository<Event, Long> {
      * @return дата и время окончания последнего выступления
      */
     @Query("" +
-            "select e.endDate " +
+            "select max (e.endDate) " +
             "from Event e " +
-            "where e.user.id = :id " +
-            "and e.endDate = max(e.endDate)")
+            "where e.user.id = :id")
     LocalDateTime getLastEndDate(@Param("id") Long userId);
 
     /**
