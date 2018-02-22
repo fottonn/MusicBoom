@@ -26,6 +26,7 @@ public class UserDto2UserConverter implements MbConverter<UserDTO, User>, DateTi
     public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
+
     @Override
     public User convert(UserDTO source) {
         User user = new User();
@@ -51,8 +52,8 @@ public class UserDto2UserConverter implements MbConverter<UserDTO, User>, DateTi
         user.setVkContact(source.getVk());
         user.setTlgContact(source.getTlg());
         user.setWhatsappContact(source.getWapp());
-        user.setIsAllowOfPersonalData(source.getIsAllowOfPersonalData());
-        user.setIsArtistContact(source.getIsArtistContact());
+        user.setPersonalDataConsent(source.getIsAllowOfPersonalData());
+        user.setContractConsent(source.getIsArtistContact());
         return user;
     }
 }

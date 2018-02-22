@@ -4,6 +4,7 @@ import org.hibernate.annotations.Type;
 import ru.bugmakers.enums.EventType;
 
 import javax.persistence.*;
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 import static ru.bugmakers.entity.EntityConstants.LOCAL_DATE_TIME_TYPE;
@@ -36,6 +37,12 @@ public class Event {
     @Column(name = "end_date")
     @Type(type = LOCAL_DATE_TIME_TYPE)
     private LocalDateTime endDate;
+
+    /**
+     * Длительность выступления в минутах
+     */
+    @Column(name = "event_duration")
+    private Long eventDuration;
 
     @Column(name = "location")
     private String location;
@@ -128,5 +135,15 @@ public class Event {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Long getEventDuration() {
+        return eventDuration;
+    }
+
+    @PreUpdate
+    @PrePersist
+    private void setEventDuration() {
+        this.eventDuration = Duration.between(startDate, endDate).toMinutes();
     }
 }

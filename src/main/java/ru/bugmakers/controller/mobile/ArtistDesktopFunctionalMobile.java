@@ -92,8 +92,8 @@ public class ArtistDesktopFunctionalMobile extends MbController {
             activeEvent.setLat(Double.valueOf(rq.getLatitude()));
             activeEvent = activeEventService.saveActiveEvent(activeEvent);
 
-            String currentEarnedMoney = transactionService.getReceivedMoneyForPeriodString(
-                    principal.getUser(),
+            String currentEarnedMoney = transactionService.getReceivedMoneyForPeriod(
+                    principal.getUser().getId(),
                     activeEvent.getBeginTime(),
                     LocalDateTime.now());
 
@@ -119,8 +119,8 @@ public class ArtistDesktopFunctionalMobile extends MbController {
             user.getEvents().add(event);
             user = userService.saveUser(user);
 
-            String earnedMoney = transactionService.getReceivedMoneyForPeriodString(
-                    user,
+            String earnedMoney = transactionService.getReceivedMoneyForPeriod(
+                    user.getId(),
                     event.getStartDate(),
                     event.getEndDate());
 

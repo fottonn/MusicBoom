@@ -120,20 +120,14 @@ public class User {
     @Column(name = "whatsapp_link", table = WHATSAPP_CONTACT)
     private String whatsappContact;
 
-    @Column(name = "isAllowOfPersonalData")
-    private String isAllowOfPersonalData;
+    @Column(name = "personal_data_consent")
+    private boolean personalDataConsent = false;
 
-    @Column(name = "isArtistContact")
-    private String isArtistContact;
+    @Column(name = "contract_consent")
+    private boolean contractConsent = false;
 
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Event> events;
-
-    @OneToMany(mappedBy = "sender")
-    private List<Transaction> senderTransactions;
-
-    @OneToMany(mappedBy = "recipient")
-    private List<Transaction> recipientTransactions;
 
     @OneToOne(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private ArtistRating artistRating;
@@ -149,9 +143,14 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<FeedBack> feedBacks;
 
+    @Column(name = "linked_card")
+    private boolean linkedCard = false;
+
+    @Column(name = "is_ordered")
+    private boolean ordered = false;
+
     public User() {
     }
-
 
     public Long getId() {
         return id;
@@ -373,6 +372,22 @@ public class User {
         this.whatsappContact = whatsappContact;
     }
 
+    public boolean isPersonalDataConsent() {
+        return personalDataConsent;
+    }
+
+    public void setPersonalDataConsent(boolean personalDataConsent) {
+        this.personalDataConsent = personalDataConsent;
+    }
+
+    public boolean isContractConsent() {
+        return contractConsent;
+    }
+
+    public void setContractConsent(boolean contractConsent) {
+        this.contractConsent = contractConsent;
+    }
+
     public List<Event> getEvents() {
         if (events == null) events = new ArrayList<>();
         return events;
@@ -380,22 +395,6 @@ public class User {
 
     public void setEvents(List<Event> events) {
         this.events = events;
-    }
-
-    public List<Transaction> getSenderTransactions() {
-        return senderTransactions;
-    }
-
-    public void setSenderTransactions(List<Transaction> senderTransactions) {
-        this.senderTransactions = senderTransactions;
-    }
-
-    public List<Transaction> getRecipientTransactions() {
-        return recipientTransactions;
-    }
-
-    public void setRecipientTransactions(List<Transaction> recipientTransactions) {
-        this.recipientTransactions = recipientTransactions;
     }
 
     public ArtistRating getArtistRating() {
@@ -422,28 +421,28 @@ public class User {
         this.avatar = avatar;
     }
 
-    public String getIsAllowOfPersonalData() {
-        return isAllowOfPersonalData;
-    }
-
-    public void setIsAllowOfPersonalData(String isAllowOfPersonalData) {
-        this.isAllowOfPersonalData = isAllowOfPersonalData;
-    }
-
-    public String getIsArtistContact() {
-        return isArtistContact;
-    }
-
-    public void setIsArtistContact(String isArtistContact) {
-        this.isArtistContact = isArtistContact;
-    }
-
     public List<FeedBack> getFeedBacks() {
         return feedBacks;
     }
 
     public void setFeedBacks(List<FeedBack> feedBacks) {
         this.feedBacks = feedBacks;
+    }
+
+    public boolean isLinkedCard() {
+        return linkedCard;
+    }
+
+    public void setLinkedCard(boolean linkedCard) {
+        this.linkedCard = linkedCard;
+    }
+
+    public boolean isOrdered() {
+        return ordered;
+    }
+
+    public void setOrdered(boolean ordered) {
+        this.ordered = ordered;
     }
 
     public User withRegistered(boolean registered) {
@@ -576,28 +575,18 @@ public class User {
         return this;
     }
 
-    public User withIsAllowOfPersonalData(String isAllowOfPersonalData) {
-        this.isAllowOfPersonalData = isAllowOfPersonalData;
+    public User withPersonalDataConsent(boolean personalDataConsent) {
+        this.personalDataConsent = personalDataConsent;
         return this;
     }
 
-    public User withIsArtistContact(String isArtistContact) {
-        this.isArtistContact = isArtistContact;
+    public User withContractConsent(boolean contractConsent) {
+        this.contractConsent = contractConsent;
         return this;
     }
 
     public User withEvents(List<Event> events) {
         this.events = events;
-        return this;
-    }
-
-    public User withSenderTransactions(List<Transaction> senderTransactions) {
-        this.senderTransactions = senderTransactions;
-        return this;
-    }
-
-    public User withRecipientTransactions(List<Transaction> recipientTransactions) {
-        this.recipientTransactions = recipientTransactions;
         return this;
     }
 
@@ -613,6 +602,16 @@ public class User {
 
     public User withAvatar(String avatar) {
         this.avatar = avatar;
+        return this;
+    }
+
+    public User withLinkedCard(boolean linkedCard) {
+        this.linkedCard = linkedCard;
+        return this;
+    }
+
+    public User withOrdered(boolean ordered) {
+        this.ordered = ordered;
         return this;
     }
 }
