@@ -1,9 +1,13 @@
 package ru.bugmakers.mappers.converters;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.bugmakers.dto.common.StatOfPerformanceDTO;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.entity.User;
+import ru.bugmakers.service.EventService;
+import ru.bugmakers.service.TransactionService;
 import ru.bugmakers.utils.DateTimeFormatters;
 
 import java.util.ArrayList;
@@ -13,6 +17,19 @@ import java.util.ArrayList;
  */
 @Component
 public class User2UserDtoConverter implements MbConverter<User, UserDTO>, DateTimeFormatters {
+
+    private TransactionService transactionService;
+    private EventService eventService;
+
+    @Autowired
+    public void setTransactionService(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
+
+    @Autowired
+    public void setEventService(EventService eventService) {
+        this.eventService = eventService;
+    }
 
     @Override
     public UserDTO convert(User source) {
@@ -39,18 +56,27 @@ public class User2UserDtoConverter implements MbConverter<User, UserDTO>, DateTi
                 .withWapp(source.getWhatsappContact())
                 .withIsOrdered(source.getArtistInfo() != null ? source.getArtistInfo().getOrdered() : null)
                 .withRegDate(source.getRegistrationDate() != null ? source.getRegistrationDate().format(DATE_TIME_FORMATTER) : null)
-                //.withAllEarnedMoney()
-                //.withAllDerivedMoney()
+                .withAllEarnedMoney(transactionService.getAllReceivedMoney(source.getId()))
+                .withAllDerivedMoney(transactionService.getAllDerivedMoney(source.getId()))
                 .withCityRating(source.getArtistRating() != null ? source.getArtistRating().getCityRatng() : null)
                 .withCountryRating(source.getArtistRating() != null ? source.getArtistRating().getCountryRating() : null)
-                //.withCurrentBalance()
-                //.withAllDonatedArtists()
-                //.withIsLinkedCard()
-                //.withStatOfPerfomance()
-                .withAllowOfPersonalData(source.getIsAllowOfPersonalData())
-                .withArtistContact(source.getIsArtistContact())
+                .withCurrentBalance(transactionService.getCurrentBalance(source.getId()))
+                .withAllDonatedArtists(transactionService.allDonatedArtistCount(source.getId()))
+                .withIsLinkedCard(source.isLinkedCard())
+                .withStatOfPerformance(getStatOfPerformance(source.getId()))
+                .withAllowOfPersonalData(source.isPersonalDataConsent())
+                .withArtistContact(source.isContractConsent())
                 .withAvatar(source.getAvatar())
                 .withPhotos(CollectionUtils.isNotEmpty(source.getPhotos()) ? new ArrayList<>(source.getPhotos()) : null);
+    }
+
+    private StatOfPerformanceDTO getStatOfPerformance(Long id) {
+        if (id == null) return null;
+        return new StatOfPerformanceDTO(
+                eventService.getAllEvents(id),
+                eventService.getHoursOfMonth(id),
+                eventService.getMoneyOfMonth(id),
+                eventService.getAverageEventTime(id));
     }
 
 }

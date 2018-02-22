@@ -46,8 +46,8 @@ public class UserDtoToUserRegisterConverter implements MbConverter<UserDTO, User
                 .withVkContact(source.getVk())
                 .withTlgContact(source.getTlg())
                 .withWhatsappContact(source.getWapp())
-                .withIsAllowOfPersonalData(source.getIsAllowOfPersonalData())
-                .withIsArtistContact(source.getIsArtistContact());
+                .withPersonalDataConsent(source.getIsAllowOfPersonalData())
+                .withContractConsent(source.getIsArtistContact());
     }
 
 }

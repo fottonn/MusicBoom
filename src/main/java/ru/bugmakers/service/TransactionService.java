@@ -1,17 +1,15 @@
 package ru.bugmakers.service;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.bugmakers.entity.Transaction;
-import ru.bugmakers.entity.User;
+import ru.bugmakers.enums.MoneyBearerKind;
 import ru.bugmakers.repository.TransactionRepo;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.time.LocalDateTime;
-import java.util.List;
+
+import static java.math.BigDecimal.ZERO;
+import static java.util.Optional.ofNullable;
+import static ru.bugmakers.utils.DecimalFormatters.MONEY_FORMATTER;
 
 /**
  * Created by Ivan
@@ -27,36 +25,68 @@ public class TransactionService {
     }
 
     /**
-     * Сумма заработанных артистом денег за период
+     * Сумма зачисленных денег за всё время
      *
-     * @param artist артист
-     * @param start  начало периода
-     * @param end    конец периода
-     * @return сумма полученных денег за период
+     * @param userId идентификатор пользователя
+     * @return сумма полученных пользователем денег за всё время в формате ###.##
      */
-    public BigDecimal getReceivedMoneyForPeriod(User artist, LocalDateTime start, LocalDateTime end) {
-        List<Transaction> receivedTransactions = transactionRepo.findByRecipientAndDateBetween(artist, start, end);
-        BigDecimal receivedMoney = BigDecimal.ZERO;
-        if (CollectionUtils.isNotEmpty(receivedTransactions)) {
-            for (Transaction t : receivedTransactions) {
-                receivedMoney = receivedMoney.add(t.getAmount());
-            }
-        }
-        return receivedMoney;
+    public String getAllReceivedMoney(Long userId) {
+        return MONEY_FORMATTER.format(ofNullable(transactionRepo.getReceivedMoney(userId)).orElse(ZERO));
     }
 
     /**
-     * Сумма заработанных артистом денег за период в String
+     * Сумма выведенных пользователем денег за всё время
      *
-     * @see TransactionService#getReceivedMoneyForPeriod(User, LocalDateTime, LocalDateTime)
-     * @return сумма полученных денег за период в формате "###.##"
+     * @param userId идентификатор пользователя
+     * @return сумма выведенных пользователем денег, включая переведенные на кошельки других пользователей,
+     * за всё время в формате ###.##
      */
-    public String getReceivedMoneyForPeriodString(User artist, LocalDateTime start, LocalDateTime end) {
-        DecimalFormat df = new DecimalFormat();
-        df.setMaximumFractionDigits(2);
-        df.setMinimumFractionDigits(2);
-        df.setRoundingMode(RoundingMode.DOWN);
-        df.setGroupingUsed(false);
-        return df.format(getReceivedMoneyForPeriod(artist, start, end)).replaceAll(",", ".");
+    public String getAllDerivedMoney(Long userId) {
+        return MONEY_FORMATTER.format(ofNullable(transactionRepo.getDerivedMoney(userId)).orElse(ZERO));
+    }
+
+    /**
+     * Текущий баланс пользователя
+     *
+     * @param userId идентификатор пользователя
+     * @return разность между полученными деньгами и выведенными в формате ###.## за всё время
+     */
+    public String getCurrentBalance(Long userId) {
+        return MONEY_FORMATTER.format(ofNullable(transactionRepo.getReceivedMoney(userId)).orElse(ZERO)
+                .subtract(ofNullable(transactionRepo.getDerivedMoney(userId)).orElse(ZERO)));
+    }
+
+    /**
+     * Зачисленные деньги за период
+     *
+     * @param userId идентификатор пользователя
+     * @param start  начало периода
+     * @param finish конец периода
+     * @return полученные деньги за период в формате ###.##
+     */
+    public String getReceivedMoneyForPeriod(Long userId, LocalDateTime start, LocalDateTime finish) {
+        return MONEY_FORMATTER.format(ofNullable(transactionRepo.getReceivedMoneyForPeriod(userId, start, finish)).orElse(ZERO));
+    }
+
+    /**
+     * Выведенные деньги за период
+     *
+     * @param userId идентификатор пользователя
+     * @param start  начало периода
+     * @param finish конец периода
+     * @return выведенные деньги, включая переведенные на кошельки других пользователей, за период в формате ###.##
+     */
+    public String getDerivedMoneyForPeriod(Long userId, LocalDateTime start, LocalDateTime finish) {
+        return MONEY_FORMATTER.format(ofNullable(transactionRepo.getDerivedMoneyForPeriod(userId, start, finish)).orElse(ZERO));
+    }
+
+    /**
+     * Общее количество артистов, которым перечислял денежные средства пользователь
+     *
+     * @param userId идентификатор пользователя
+     * @return количество всех артистов, которым задонатил пользователь
+     */
+    public String allDonatedArtistCount(Long userId) {
+        return String.valueOf(transactionRepo.countDistinctBySenderIdAndRecipientMoneyBearerKind(userId, MoneyBearerKind.WALLET));
     }
 }
