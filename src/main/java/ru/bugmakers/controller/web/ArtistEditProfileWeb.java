@@ -12,16 +12,16 @@ import ru.bugmakers.dto.response.web.*;
  * Created by Ayrat on 27.11.2017.
  */
 @RestController
-@RequestMapping("/webapi/artist/")
+@RequestMapping("/webapi/artist/editing")
 public class ArtistEditProfileWeb extends MbController {
 
-    @PostMapping(value = "editing/artist.personal")
+    @PostMapping(value = "/personal")
     public ResponseEntity<MbResponseToWeb> artistProfileEdit(@RequestBody ArtistEditWebRequestWeb artistProfileEditing) {
         ArtistProfileEditReponseWeb artistProfileEditReponseWeb = null;
         return ResponseEntity.ok(artistProfileEditReponseWeb);
     }
 
-    @GetMapping(value = "editing/avatar.change")
+    @GetMapping(value = "/avatar.change")
     public ResponseEntity<MbResponseToWeb> changeArtistAvatar(@RequestParam("session_id") String sessionId,
                                                               @RequestParam("id") String id,
                                                               @RequestParam("image") MultipartFile file) {
@@ -29,7 +29,7 @@ public class ArtistEditProfileWeb extends MbController {
         return ResponseEntity.ok(artistAvatarEditResponseWeb);
     }
 
-    @GetMapping(value = "editing/phone.change")
+    @GetMapping(value = "/phone.change")
     public ResponseEntity<MbResponseToWeb> changePhoneNumber(@RequestParam("session_id") String sessionId,
                                                              @RequestParam("id") String id,
                                                              @RequestParam("hash_phone_number") String phoneNumber) {
@@ -37,14 +37,14 @@ public class ArtistEditProfileWeb extends MbController {
         return ResponseEntity.ok(artistPhoneEditResponseWeb);
     }
 
-    @GetMapping(value = "editing/password.change")
+    @GetMapping(value = "/password.change")
     public ResponseEntity<MbResponseToWeb> changePassword(@RequestParam("session_id") String sessionId,
                                                           @RequestParam("id") String id) {
         ArtistPasswordEditResponseWeb artistPasswordEditResponseWeb = null;
         return ResponseEntity.ok(artistPasswordEditResponseWeb);
     }
 
-    @GetMapping(value = "editing/video.add")
+    @GetMapping(value = "/video.add")
     public ResponseEntity<MbResponseToWeb> videoAdd(@RequestParam("session_id") String sessionId,
                                                     @RequestParam("id") String id,
                                                     @RequestParam("link") String videoLink) {
@@ -52,13 +52,13 @@ public class ArtistEditProfileWeb extends MbController {
         return ResponseEntity.ok(artistVideoAddResponseWeb);
     }
 
-    @PostMapping(value = "editing/photos.delete")
+    @PostMapping(value = "/photos.delete")
     public ResponseEntity<MbResponseToWeb> deletePhotos(@RequestBody PhotosUploadRequestWeb photosDeleteRequest) {
         ArtistPhotosDeleteResponseWeb artistPhotosDeleteResponseWeb = null;
         return ResponseEntity.ok(artistPhotosDeleteResponseWeb);
     }
 
-    @PostMapping(value = "editing/photos.upload")
+    @PostMapping(value = "/photos.upload")
     public ResponseEntity<MbResponseToWeb> uploadPhotos(@RequestBody PhotosUploadRequestWeb photosUploadRequestWeb) {
         ArtistPhotosUploadResponseWeb artistPhotosUploadResponseWeb = null;
         return ResponseEntity.ok(artistPhotosUploadResponseWeb);

@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import ru.bugmakers.config.logout.MbLogoutSuccessHandler;
@@ -31,6 +33,13 @@ public class AppConfig implements WebMvcConfigurer {
     @Bean
     public MbLogoutSuccessHandler mbLogoutSuccessHandler() {
         return new MbLogoutSuccessHandler();
+    }
+
+    @Bean(name = "multipartResolver")
+    public MultipartResolver multipartResolver() {
+        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
+        resolver.setMaxUploadSizePerFile(5 * 1024 * 1024); //5Mb
+        return resolver;
     }
 
     @Override

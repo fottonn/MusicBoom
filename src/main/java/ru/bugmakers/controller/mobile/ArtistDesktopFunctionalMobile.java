@@ -79,7 +79,7 @@ public class ArtistDesktopFunctionalMobile extends MbController {
         return ResponseEntity.ok(rs);
     }
 
-    @PostMapping(value = "performance.validation")
+    @PostMapping(value = "/performance.validation")
     public ResponseEntity<MbResponseToMobile> validationPerformance(@AuthenticationPrincipal UserPrincipal principal,
                                                                     @RequestBody PerformanceStartValidationRequestMobile rq) {
         ValidatePerformanceResponseMobile rs;
