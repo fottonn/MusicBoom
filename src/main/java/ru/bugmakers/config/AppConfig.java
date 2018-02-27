@@ -1,5 +1,10 @@
 package ru.bugmakers.config;
 
+import org.cfg4j.provider.ConfigurationProvider;
+import org.cfg4j.provider.ConfigurationProviderBuilder;
+import org.cfg4j.source.ConfigurationSource;
+import org.cfg4j.source.context.filesprovider.ConfigFilesProvider;
+import org.cfg4j.source.files.FilesConfigurationSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
@@ -14,6 +19,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import ru.bugmakers.config.logout.MbLogoutSuccessHandler;
 
+import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -40,6 +47,13 @@ public class AppConfig implements WebMvcConfigurer {
         CommonsMultipartResolver resolver = new CommonsMultipartResolver();
         resolver.setMaxUploadSizePerFile(5 * 1024 * 1024); //5Mb
         return resolver;
+    }
+
+    @Bean
+    public ConfigurationProvider appConfigProvider() {
+        ConfigFilesProvider provider = () -> Collections.singletonList(Paths.get("app_config.properties"));
+        ConfigurationSource source = new FilesConfigurationSource(provider);
+        return new ConfigurationProviderBuilder().withConfigurationSource(source).build();
     }
 
     @Override

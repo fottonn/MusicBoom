@@ -135,7 +135,7 @@ public class User {
     @ElementCollection
     @CollectionTable(name = "photos", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     @Column(name = "photo")
-    private List<String> photos;
+    private Set<String> photos;
 
     @Column(name = "avatar")
     private String avatar;
@@ -405,11 +405,11 @@ public class User {
         this.artistRating = artistRating;
     }
 
-    public List<String> getPhotos() {
+    public Set<String> getPhotos() {
         return photos;
     }
 
-    public void setPhotos(List<String> photos) {
+    public void setPhotos(Set<String> photos) {
         this.photos = photos;
     }
 
@@ -595,7 +595,7 @@ public class User {
         return this;
     }
 
-    public User withPhotos(List<String> photos) {
+    public User withPhotos(Set<String> photos) {
         this.photos = photos;
         return this;
     }
