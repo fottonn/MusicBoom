@@ -18,7 +18,7 @@ public class EmailConfirmationService {
 
     private SendEmail sendEmail;
     private UserService userService;
-    public static final String DOMAIN = "musboom.ru";
+    private static final String DOMAIN = "musboom.ru";
 
     @Autowired
     public void setSendEmail(SendEmail sendEmail) {
@@ -32,7 +32,8 @@ public class EmailConfirmationService {
 
     /**
      * Метод валидации email
-     * @param user - пользователь
+     *
+     * @param user пользователь
      * @throws MbException
      */
     public void sendConfirmationEmail(User user) throws MbException {
