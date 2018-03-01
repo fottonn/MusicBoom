@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.dto.request.MultipartFileDto;
-import ru.bugmakers.dto.request.mobile.ArtistEditRequestMobile;
 import ru.bugmakers.entity.ArtistInfo;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.Genre;
@@ -15,7 +14,6 @@ import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.mappers.enrichers.UserDTO2UserEnricher;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -62,13 +60,13 @@ public class ArtistProfileEditServiceMobile {
                 }
                 User resultUser = userService.updateUser(user);
                 if (resultUser == null) {
-                    throw MbException.create(MbError.APE03);
+                    throw MbException.create(MbError.CME04);
                 }
             } else {
                 throw MbException.create(MbError.APE02);
             }
         } else {
-            throw MbException.create(MbError.APE01);
+            throw MbException.create(MbError.CME03);
         }
         return Boolean.TRUE;
     }
@@ -82,7 +80,7 @@ public class ArtistProfileEditServiceMobile {
             user.setAvatar(fileName);
             User savedUser = userService.updateUser(user);
             if (savedUser == null) {
-                throw MbException.create(MbError.APE03);
+                throw MbException.create(MbError.CME04);
             }
         } else {
             throw MbException.create(MbError.APE04);
@@ -95,7 +93,7 @@ public class ArtistProfileEditServiceMobile {
         user.setPhone(phoneNumber);
         User savedUser = userService.updateUser(user);
         if (savedUser == null) {
-            throw MbException.create(MbError.APE03);
+            throw MbException.create(MbError.CME04);
         }
         return Boolean.TRUE;
     }
@@ -106,7 +104,7 @@ public class ArtistProfileEditServiceMobile {
             user.setPassword(passwordEncoder.encode(newPassword));
             User savedUser = userService.updateUser(user);
             if (savedUser == null) {
-                throw MbException.create(MbError.APE03);
+                throw MbException.create(MbError.CME04);
             }
         }else {
             throw MbException.create(MbError.APE05);
@@ -121,7 +119,7 @@ public class ArtistProfileEditServiceMobile {
         user.setArtistInfo(artistInfo);
         User savedUser = userService.updateUser(user);
         if (savedUser == null) {
-            throw MbException.create(MbError.APE03);
+            throw MbException.create(MbError.CME04);
         }
         return Boolean.TRUE;
     }
@@ -133,7 +131,7 @@ public class ArtistProfileEditServiceMobile {
         user.setArtistInfo(artistInfo);
         User savedUser = userService.updateUser(user);
         if (savedUser == null) {
-            throw MbException.create(MbError.APE03);
+            throw MbException.create(MbError.CME04);
         }
         return Boolean.TRUE;
     }
@@ -145,7 +143,7 @@ public class ArtistProfileEditServiceMobile {
         user.setArtistInfo(artistInfo);
         User savedUser = userService.updateUser(user);
         if (savedUser == null) {
-            throw MbException.create(MbError.APE03);
+            throw MbException.create(MbError.CME04);
         }
         return Boolean.TRUE;
     }
@@ -157,7 +155,7 @@ public class ArtistProfileEditServiceMobile {
         user.setArtistInfo(artistInfo);
         User savedUser = userService.updateUser(user);
         if (savedUser == null) {
-            throw MbException.create(MbError.APE03);
+            throw MbException.create(MbError.CME04);
         }
         return Boolean.TRUE;
     }
@@ -171,7 +169,7 @@ public class ArtistProfileEditServiceMobile {
         }
         User savedUser = userService.updateUser(user);
         if (savedUser == null) {
-            throw MbException.create(MbError.APE03);
+            throw MbException.create(MbError.CME04);
         }
         return Boolean.TRUE;
     }
@@ -186,7 +184,7 @@ public class ArtistProfileEditServiceMobile {
         }
         User savedUser = userService.updateUser(user);
         if (savedUser == null) {
-            throw MbException.create(MbError.APE03);
+            throw MbException.create(MbError.CME04);
         }
         return Boolean.TRUE;
     }
@@ -194,7 +192,7 @@ public class ArtistProfileEditServiceMobile {
     public User isUserExist(String id) throws MbException {
         Optional<User> user = userService.findUserById(id);
         if (!user.isPresent()) {
-            throw MbException.create(MbError.APE01);
+            throw MbException.create(MbError.CME03);
         } else {
             return user.get();
         }

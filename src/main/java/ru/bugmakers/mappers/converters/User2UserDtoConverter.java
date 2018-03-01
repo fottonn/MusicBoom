@@ -50,7 +50,17 @@ public class User2UserDtoConverter implements MbConverter<User, UserDTO>, DateTi
                 .withAllowOfPersonalData(source.getIsAllowOfPersonalData())
                 .withArtistContact(source.getIsArtistContact())
                 .withAvatar(source.getAvatar())
+                .withCardNumber(source.getCardNumber() != null ? getMappedCardNumber(source.getCardNumber()) : null)
                 .withPhotos(CollectionUtils.isNotEmpty(source.getPhotos()) ? new ArrayList<>(source.getPhotos()) : null);
+
+    }
+
+    private String getMappedCardNumber(String cardNumber) {
+        char[] chars = cardNumber.toCharArray();
+        for (int i = 4; i < 12; i++) {
+            chars[i] = '*';
+        }
+        return chars.toString();
     }
 
 }

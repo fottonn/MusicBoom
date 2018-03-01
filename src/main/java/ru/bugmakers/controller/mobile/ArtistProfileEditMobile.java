@@ -50,11 +50,11 @@ public class ArtistProfileEditMobile extends MbController {
         }
     }
 
-    @GetMapping(value = "/avatar.change")
-    public ResponseEntity<MbResponseToMobile> changeArtistAvatar(@AuthenticationPrincipal UserPrincipal user,
+    @PostMapping(value = "/avatar.change")
+    public ResponseEntity<MbResponseToMobile> changeArtistAvatar(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                                  @RequestParam("image") MultipartFile file) {
         try {
-            String id = user.getUser().getId().toString();
+            String id = userPrincipal.getUser().getId().toString();
             artistProfileEditServiceMobile.artistAvatarChange(id, file);
         } catch (MbException e) {
             return ResponseEntity.ok(new ArtistRegistrationResponse(e, RsStatus.ERROR));
@@ -66,7 +66,7 @@ public class ArtistProfileEditMobile extends MbController {
         return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
     }
 
-    @GetMapping(value = "/phone.change")
+    @PostMapping(value = "/phone.change")
     public ResponseEntity<MbResponseToMobile> changeArtistPhone(@AuthenticationPrincipal UserPrincipal user,
                                                                 @RequestParam("hash_phone_number") String phoneNumber) {
         try {
@@ -78,7 +78,7 @@ public class ArtistProfileEditMobile extends MbController {
         return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
     }
 
-    @GetMapping(value = "/password.change")
+    @PostMapping(value = "/password.change")
     public ResponseEntity<MbResponseToMobile> changeArtistPassword(@AuthenticationPrincipal UserPrincipal user,
                                                                    @RequestParam("old_hash_password") String newPassword,
                                                                    @RequestParam("new_hash_password") String oldPassword) {
@@ -91,7 +91,7 @@ public class ArtistProfileEditMobile extends MbController {
         return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
     }
 
-    @GetMapping(value = "/creativity.change")
+    @PostMapping(value = "/creativity.change")
     public ResponseEntity<MbResponseToMobile> changeArtistCreativity(@AuthenticationPrincipal UserPrincipal user,
                                                                      @RequestParam("creativity") String creativity) {
         try {
@@ -103,7 +103,7 @@ public class ArtistProfileEditMobile extends MbController {
         return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
     }
 
-    @GetMapping(value = "/instrument.change")
+    @PostMapping(value = "/instrument.change")
     public ResponseEntity<MbResponseToMobile> changeArtistInstrument(@AuthenticationPrincipal UserPrincipal user,
                                                                      @RequestParam("instrument") String instrument) {
         try {
@@ -115,7 +115,7 @@ public class ArtistProfileEditMobile extends MbController {
         return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
     }
 
-    @GetMapping(value = "/genre.change")
+    @PostMapping(value = "/genre.change")
     public ResponseEntity<MbResponseToMobile> changeArtistGenre(@AuthenticationPrincipal UserPrincipal user,
                                                                 @RequestParam("genre") String genre) {
         try {
@@ -127,7 +127,7 @@ public class ArtistProfileEditMobile extends MbController {
         return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
     }
 
-    @GetMapping(value = "/setOrderable.change")
+    @PostMapping(value = "/setOrderable.change")
     public ResponseEntity<MbResponseToMobile> changeArtistSetOrderable(@AuthenticationPrincipal UserPrincipal user,
                                                                        @RequestParam("set_orderable") Boolean setOrderable) {
         try {
@@ -140,7 +140,7 @@ public class ArtistProfileEditMobile extends MbController {
 
     }
 
-    @GetMapping(value = "/artist.deletePhotos")
+    @PostMapping(value = "/artist.deletePhotos")
     public ResponseEntity<MbResponseToMobile> artistDeletePhotos(@AuthenticationPrincipal UserPrincipal user,
                                                                  @RequestParam("photos_id") List<String> photosId) {
         try {

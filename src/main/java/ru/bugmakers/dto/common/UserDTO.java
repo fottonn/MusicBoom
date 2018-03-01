@@ -34,6 +34,7 @@ public class UserDTO implements Serializable {
     private String tlg;
     private String wapp;
     private Boolean isOrdered;
+    private String cardNumber;
     private String regDate;
     private String allEarnedMoney;
     private String allDerivedMoney;
@@ -51,13 +52,14 @@ public class UserDTO implements Serializable {
     public UserDTO() {
     }
 
-    public UserDTO(String userType, String password, String id, String name, String surname, String patronimyc, String birthday, String sex, String nickname, String country, String city, String phoneNumber, String email, String creativity, String instrument, String genre, String vk, String tlg, String wapp, Boolean isOrdered, String regDate, String allEarnedMoney, String allDerivedMoney, Double cityRating, Double countryRating, String currentBalance, Integer allDonatedArtists, Boolean isLinkedCard, StatOfPerformanceDTO statOfPerformance, String isAllowOfPersonalData, String isArtistContact, String avatar, List<String> photos) {
+    public UserDTO(String userType, String password, String id, String name, String surname, String patronimyc, String aboutMe, String birthday, String sex, String nickname, String country, String city, String phoneNumber, String email, String creativity, String instrument, String genre, String vk, String tlg, String wapp, Boolean isOrdered, String cardNumber, String regDate, String allEarnedMoney, String allDerivedMoney, Double cityRating, Double countryRating, String currentBalance, Integer allDonatedArtists, Boolean isLinkedCard, StatOfPerformanceDTO statOfPerformance, String isAllowOfPersonalData, String isArtistContact, String avatar, List<String> photos) {
         this.userType = userType;
         this.password = password;
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.patronimyc = patronimyc;
+        this.aboutMe = aboutMe;
         this.birthday = birthday;
         this.sex = sex;
         this.nickname = nickname;
@@ -72,6 +74,7 @@ public class UserDTO implements Serializable {
         this.tlg = tlg;
         this.wapp = wapp;
         this.isOrdered = isOrdered;
+        this.cardNumber = cardNumber;
         this.regDate = regDate;
         this.allEarnedMoney = allEarnedMoney;
         this.allDerivedMoney = allDerivedMoney;
@@ -359,6 +362,18 @@ public class UserDTO implements Serializable {
         this.photos = photos;
     }
 
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+    public UserDTO withCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+        return this;
+    }
     public UserDTO withUserType(String userType) {
         this.userType = userType;
         return this;

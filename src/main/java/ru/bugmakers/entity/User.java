@@ -149,6 +149,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<FeedBack> feedBacks;
 
+    @Column(name = "card_number")
+    private String cardNumber;
+
     public User() {
     }
 
@@ -396,6 +399,14 @@ public class User {
 
     public void setRecipientTransactions(List<Transaction> recipientTransactions) {
         this.recipientTransactions = recipientTransactions;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
     }
 
     public ArtistRating getArtistRating() {
