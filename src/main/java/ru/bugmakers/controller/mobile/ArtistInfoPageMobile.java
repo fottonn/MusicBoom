@@ -49,7 +49,7 @@ public class ArtistInfoPageMobile extends MbController {
         this.userService = userService;
     }
 
-    @PostMapping(value = "/getArtist")
+    @PostMapping(value = "/artist.get")
     public ResponseEntity<MbResponseToMobile> getArtist(@RequestBody GetArtistRqMobile rq) {
         GetArtistResponseMobile getArtistResponseMobile;
         try {
