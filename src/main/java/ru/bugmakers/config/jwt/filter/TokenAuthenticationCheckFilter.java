@@ -12,7 +12,6 @@ import org.springframework.web.filter.GenericFilterBean;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 import ru.bugmakers.config.jwt.TokenAuthentication;
-import ru.bugmakers.config.jwt.TokenData;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -23,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
+import static ru.bugmakers.config.jwt.TokenData.TOKEN_NAME;
 import static ru.bugmakers.utils.MultipartUtils.findJsonPart;
 
 /**
@@ -30,7 +30,7 @@ import static ru.bugmakers.utils.MultipartUtils.findJsonPart;
  * <p>
  * Created by Ivan
  */
-public class TokenAuthenticationCheckFilter extends GenericFilterBean implements TokenData {
+public class TokenAuthenticationCheckFilter extends GenericFilterBean {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TokenAuthenticationCheckFilter.class);
 

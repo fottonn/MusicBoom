@@ -7,10 +7,29 @@ import ru.bugmakers.dto.request.SessionDataRequest;
  */
 
 public class TransactionRequestMobile extends SessionDataRequest {
+
+    private String recipientId;
+    private String senderId;
     private String sum;
     private String numberOfTransaction;
     private String date;
     private String time;
+
+    public String getRecipientId() {
+        return recipientId;
+    }
+
+    public void setRecipientId(String recipientId) {
+        this.recipientId = recipientId;
+    }
+
+    public String getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
+    }
 
     public String getSum() {
         return sum;

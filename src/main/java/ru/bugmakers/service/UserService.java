@@ -5,8 +5,6 @@ import org.springframework.stereotype.Service;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.repository.UserRepo;
 
-import java.util.Optional;
-
 /**
  * Created by Ivan
  */
@@ -46,10 +44,6 @@ public class UserService {
 
     public User updateUser(User user) {
         return userRepo.saveAndFlush(user);
-    }
-
-    public Optional<User> findUserById(String id) {
-        return userRepo.findById(Long.valueOf(id));
     }
 
     public User findUserById(Long id) {

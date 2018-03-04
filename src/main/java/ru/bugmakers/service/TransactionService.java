@@ -2,6 +2,7 @@ package ru.bugmakers.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.bugmakers.entity.Transaction;
 import ru.bugmakers.enums.MoneyBearerKind;
 import ru.bugmakers.repository.TransactionRepo;
 
@@ -88,5 +89,9 @@ public class TransactionService {
      */
     public String allDonatedArtistCount(Long userId) {
         return String.valueOf(transactionRepo.countDistinctBySenderIdAndRecipientMoneyBearerKind(userId, MoneyBearerKind.WALLET));
+    }
+
+    public void saveTransaction(Transaction transaction) {
+        transactionRepo.saveAndFlush(transaction);
     }
 }
