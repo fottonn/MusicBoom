@@ -9,16 +9,17 @@ import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.Role;
 import ru.bugmakers.enums.Sex;
 import ru.bugmakers.enums.UserType;
-import ru.bugmakers.utils.DateTimeFormatters;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import static ru.bugmakers.utils.DateTimeFormatters.DATE_FORMATTER;
 
 /**
  * Created by Ayrat on 27.12.2017.
  */
 @Component
-public class UserDto2UserConverter implements MbConverter<UserDTO, User>, DateTimeFormatters {
+public class UserDto2UserConverter implements MbConverter<UserDTO, User> {
 
     private PasswordEncoder passwordEncoder;
 

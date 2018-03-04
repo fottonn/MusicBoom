@@ -14,11 +14,13 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
+import static ru.bugmakers.config.jwt.TokenData.*;
+
 /**
  * Created by Ivan
  */
 @Component
-public class TokenUtils implements TokenData {
+public class TokenUtils {
 
     public static String generate(Authentication authentication) {
 

@@ -8,15 +8,17 @@ import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.service.EventService;
 import ru.bugmakers.service.TransactionService;
-import ru.bugmakers.utils.DateTimeFormatters;
 
 import java.util.ArrayList;
+
+import static ru.bugmakers.utils.DateTimeFormatters.DATE_FORMATTER;
+import static ru.bugmakers.utils.DateTimeFormatters.DATE_TIME_FORMATTER;
 
 /**
  * Created by Ivan
  */
 @Component
-public class User2UserDtoConverter implements MbConverter<User, UserDTO>, DateTimeFormatters {
+public class User2UserDtoConverter implements MbConverter<User, UserDTO> {
 
     private TransactionService transactionService;
     private EventService eventService;
