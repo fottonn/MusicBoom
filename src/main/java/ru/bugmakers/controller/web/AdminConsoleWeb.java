@@ -23,7 +23,7 @@ public class AdminConsoleWeb extends MbController {
     }
 
     @PostMapping(value = "/artists/artist.edit")
-    public ResponseEntity<MbResponseToWeb> editArtist(@RequestBody ArtistEditWebRequestWeb artistBlockRequest) {
+    public ResponseEntity<MbResponseToWeb> editArtist(@RequestBody ArtistEditRqWeb artistBlockRequest) {
         ArtistEditingResponseWeb artistEditingResponseWeb = null;
         return ResponseEntity.ok(artistEditingResponseWeb);
     }

@@ -41,53 +41,15 @@ public class UserDTO implements Serializable {
     private Double cityRating;
     private Double countryRating;
     private String currentBalance;
-    private Integer allDonatedArtists;
+    private String allDonatedArtists;
     private Boolean isLinkedCard;
     private StatOfPerformanceDTO statOfPerformance;
-    private String isAllowOfPersonalData;
-    private String isArtistContact;
+    private Boolean isAllowOfPersonalData;
+    private Boolean isArtistContact;
     private String avatar;
     private List<String> photos;
 
     public UserDTO() {
-    }
-
-    public UserDTO(String userType, String password, String id, String name, String surname, String patronimyc, String aboutMe, String birthday, String sex, String nickname, String country, String city, String phoneNumber, String email, String creativity, String instrument, String genre, String vk, String tlg, String wapp, Boolean isOrdered, String cardNumber, String regDate, String allEarnedMoney, String allDerivedMoney, Double cityRating, Double countryRating, String currentBalance, Integer allDonatedArtists, Boolean isLinkedCard, StatOfPerformanceDTO statOfPerformance, String isAllowOfPersonalData, String isArtistContact, String avatar, List<String> photos) {
-        this.userType = userType;
-        this.password = password;
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.patronimyc = patronimyc;
-        this.aboutMe = aboutMe;
-        this.birthday = birthday;
-        this.sex = sex;
-        this.nickname = nickname;
-        this.country = country;
-        this.city = city;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.creativity = creativity;
-        this.instrument = instrument;
-        this.genre = genre;
-        this.vk = vk;
-        this.tlg = tlg;
-        this.wapp = wapp;
-        this.isOrdered = isOrdered;
-        this.cardNumber = cardNumber;
-        this.regDate = regDate;
-        this.allEarnedMoney = allEarnedMoney;
-        this.allDerivedMoney = allDerivedMoney;
-        this.cityRating = cityRating;
-        this.countryRating = countryRating;
-        this.currentBalance = currentBalance;
-        this.allDonatedArtists = allDonatedArtists;
-        this.isLinkedCard = isLinkedCard;
-        this.statOfPerformance = statOfPerformance;
-        this.isAllowOfPersonalData = isAllowOfPersonalData;
-        this.isArtistContact = isArtistContact;
-        this.avatar = avatar;
-        this.photos = photos;
     }
 
     public String getPassword() {
@@ -98,19 +60,19 @@ public class UserDTO implements Serializable {
         this.password = password;
     }
 
-    public String getIsAllowOfPersonalData() {
+    public Boolean getIsAllowOfPersonalData() {
         return isAllowOfPersonalData;
     }
 
-    public void setIsAllowOfPersonalData(String isAllowOfPersonalData) {
+    public void setIsAllowOfPersonalData(Boolean isAllowOfPersonalData) {
         this.isAllowOfPersonalData = isAllowOfPersonalData;
     }
 
-    public String getIsArtistContact() {
+    public Boolean getIsArtistContact() {
         return isArtistContact;
     }
 
-    public void setIsArtistContact(String isArtistContact) {
+    public void setIsArtistContact(Boolean isArtistContact) {
         this.isArtistContact = isArtistContact;
     }
 
@@ -322,11 +284,11 @@ public class UserDTO implements Serializable {
         this.currentBalance = currentBalance;
     }
 
-    public Integer getAllDonatedArtists() {
+    public String getAllDonatedArtists() {
         return allDonatedArtists;
     }
 
-    public void setAllDonatedArtists(Integer allDonatedArtists) {
+    public void setAllDonatedArtists(String allDonatedArtists) {
         this.allDonatedArtists = allDonatedArtists;
     }
 
@@ -399,12 +361,12 @@ public class UserDTO implements Serializable {
         return this;
     }
 
-    public UserDTO withAllowOfPersonalData(String isAllowOfPersonalData) {
+    public UserDTO withAllowOfPersonalData(Boolean isAllowOfPersonalData) {
         this.isAllowOfPersonalData = isAllowOfPersonalData;
         return this;
     }
 
-    public UserDTO withArtistContact(String isArtistContact) {
+    public UserDTO withArtistContact(Boolean isArtistContact) {
         this.isArtistContact = isArtistContact;
         return this;
     }
@@ -519,7 +481,7 @@ public class UserDTO implements Serializable {
         return this;
     }
 
-    public UserDTO withAllDonatedArtists(Integer allDonatedArtists) {
+    public UserDTO withAllDonatedArtists(String allDonatedArtists) {
         this.allDonatedArtists = allDonatedArtists;
         return this;
     }
@@ -529,8 +491,8 @@ public class UserDTO implements Serializable {
         return this;
     }
 
-    public UserDTO withStatOfPerfomance(StatOfPerformanceDTO statOfPerfomance) {
-        this.statOfPerformance = statOfPerfomance;
+    public UserDTO withStatOfPerformance(StatOfPerformanceDTO statOfPerformance) {
+        this.statOfPerformance = statOfPerformance;
         return this;
     }
 

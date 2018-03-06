@@ -1,6 +1,7 @@
 package ru.bugmakers.entity;
 
 import org.hibernate.annotations.Type;
+import ru.bugmakers.enums.MoneyBearerKind;
 import ru.bugmakers.enums.Status;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ import static ru.bugmakers.entity.EntityConstants.LOCAL_DATE_TIME_TYPE;
  * Created by Ayrat on 16.11.2017.
  */
 @Entity
-@Table(name = "transaction")
+@Table(name = "transactions")
 public class Transaction {
 
     @Id
@@ -28,7 +29,15 @@ public class Transaction {
     @JoinColumn(name = "recipient_id")
     private User recipient;
 
-    @Column(name = "amount")
+    @Column(name = "sender_payment_kind")
+    @Enumerated(EnumType.STRING)
+    private MoneyBearerKind senderMoneyBearerKind;
+
+    @Column(name = "recipient_payment_kind")
+    @Enumerated(EnumType.STRING)
+    private MoneyBearerKind recipientMoneyBearerKind;
+
+    @Column(name = "amount", scale = 2)
     private BigDecimal amount;
 
     @Column(name = "number")
@@ -63,6 +72,22 @@ public class Transaction {
 
     public void setRecipient(User recipient) {
         this.recipient = recipient;
+    }
+
+    public MoneyBearerKind getSenderMoneyBearerKind() {
+        return senderMoneyBearerKind;
+    }
+
+    public void setSenderMoneyBearerKind(MoneyBearerKind senderMoneyBearerKind) {
+        this.senderMoneyBearerKind = senderMoneyBearerKind;
+    }
+
+    public MoneyBearerKind getRecipientMoneyBearerKind() {
+        return recipientMoneyBearerKind;
+    }
+
+    public void setRecipientMoneyBearerKind(MoneyBearerKind recipientMoneyBearerKind) {
+        this.recipientMoneyBearerKind = recipientMoneyBearerKind;
     }
 
     public BigDecimal getAmount() {

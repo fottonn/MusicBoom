@@ -15,7 +15,7 @@ import java.time.Instant;
 /**
  * Created by Ivan
  */
-public class TokenAuthenticationProvider implements AuthenticationProvider, TokenData {
+public class TokenAuthenticationProvider implements AuthenticationProvider {
 
     private UserDetailsService userDetailsService;
     private WhiteTokenService whiteTokenService;

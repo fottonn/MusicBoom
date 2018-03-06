@@ -7,16 +7,17 @@ import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.entity.Email;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.mappers.converters.MbConverter;
-import ru.bugmakers.utils.DateTimeFormatters;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import static ru.bugmakers.utils.DateTimeFormatters.DATE_FORMATTER;
 
 /**
  * Created by Ayrat on 27.12.2017.
  */
 @Component
-public class UserDtoToUserRegisterConverter implements MbConverter<UserDTO, User>, DateTimeFormatters {
+public class UserDtoToUserRegisterConverter implements MbConverter<UserDTO, User> {
 
     private PasswordEncoder passwordEncoder;
 
@@ -46,8 +47,8 @@ public class UserDtoToUserRegisterConverter implements MbConverter<UserDTO, User
                 .withVkContact(source.getVk())
                 .withTlgContact(source.getTlg())
                 .withWhatsappContact(source.getWapp())
-                .withIsAllowOfPersonalData(source.getIsAllowOfPersonalData())
-                .withIsArtistContact(source.getIsArtistContact());
+                .withPersonalDataConsent(source.getIsAllowOfPersonalData())
+                .withContractConsent(source.getIsArtistContact());
     }
 
 }

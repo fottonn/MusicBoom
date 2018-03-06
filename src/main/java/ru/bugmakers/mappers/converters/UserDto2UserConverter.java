@@ -9,16 +9,17 @@ import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.Role;
 import ru.bugmakers.enums.Sex;
 import ru.bugmakers.enums.UserType;
-import ru.bugmakers.utils.DateTimeFormatters;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import static ru.bugmakers.utils.DateTimeFormatters.DATE_FORMATTER;
 
 /**
  * Created by Ayrat on 27.12.2017.
  */
 @Component
-public class UserDto2UserConverter implements MbConverter<UserDTO, User>, DateTimeFormatters {
+public class UserDto2UserConverter implements MbConverter<UserDTO, User> {
 
     private PasswordEncoder passwordEncoder;
 
@@ -26,6 +27,7 @@ public class UserDto2UserConverter implements MbConverter<UserDTO, User>, DateTi
     public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
+
     @Override
     public User convert(UserDTO source) {
         User user = new User();
@@ -51,8 +53,8 @@ public class UserDto2UserConverter implements MbConverter<UserDTO, User>, DateTi
         user.setVkContact(source.getVk());
         user.setTlgContact(source.getTlg());
         user.setWhatsappContact(source.getWapp());
-        user.setIsAllowOfPersonalData(source.getIsAllowOfPersonalData());
-        user.setIsArtistContact(source.getIsArtistContact());
+        user.setPersonalDataConsent(source.getIsAllowOfPersonalData());
+        user.setContractConsent(source.getIsArtistContact());
         return user;
     }
 }

@@ -8,7 +8,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
-import ru.bugmakers.config.jwt.TokenData;
 import ru.bugmakers.config.jwt.TokenUtils;
 import ru.bugmakers.enums.Role;
 import ru.bugmakers.enums.RsStatus;
@@ -23,12 +22,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collection;
 
+import static ru.bugmakers.config.jwt.TokenData.TOKEN_NAME;
+
 /**
  * Created by Ivan
- *
+ * <p>
  * Добавляет токен в ответ, если пользователь авторизовался
  */
-public class TokenAuthenticationIncludeFilter extends GenericFilterBean implements TokenData {
+public class TokenAuthenticationIncludeFilter extends GenericFilterBean {
 
     private WhiteTokenService whiteTokenService;
 
