@@ -1,10 +1,10 @@
 package ru.bugmakers.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.Type;
 import ru.bugmakers.entity.auth.FbAuth;
 import ru.bugmakers.entity.auth.GoogleAuth;
 import ru.bugmakers.entity.auth.VkAuth;
+import ru.bugmakers.enums.Rank;
 import ru.bugmakers.enums.Role;
 import ru.bugmakers.enums.Sex;
 import ru.bugmakers.enums.UserType;
@@ -48,7 +48,6 @@ public class User {
     private String aboutMe;
 
     @Column(name = "birthday")
-    @Type(type = LOCAL_DATE_TYPE)
     private LocalDate birthDay;
 
     @Column(name = "country")
@@ -61,7 +60,6 @@ public class User {
     private String nickname;
 
     @Column(name = "registration_date")
-    @Type(type = LOCAL_DATE_TIME_TYPE)
     private LocalDateTime registrationDate;
 
     @Column(name = "public_name")
@@ -148,6 +146,10 @@ public class User {
 
     @Column(name = "is_ordered")
     private boolean ordered = false;
+
+    @Column(name = "rank")
+    @Enumerated(EnumType.STRING)
+    private Rank rank;
 
     public User() {
     }
@@ -445,6 +447,14 @@ public class User {
         this.ordered = ordered;
     }
 
+    public Rank getRank() {
+        return rank;
+    }
+
+    public void setRank(Rank rank) {
+        this.rank = rank;
+    }
+
     public User withRegistered(boolean registered) {
         this.registered = registered;
         return this;
@@ -612,6 +622,11 @@ public class User {
 
     public User withOrdered(boolean ordered) {
         this.ordered = ordered;
+        return this;
+    }
+
+    public User withRank(Rank rank) {
+        this.rank = rank;
         return this;
     }
 }

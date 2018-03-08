@@ -4,26 +4,18 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 
-import static java.time.temporal.ChronoField.*;
-
 /**
  * Created by Ivan
  */
 public class DateTimeFormatters {
 
     /**
-     * dd.MM.yyyy
+     * yyyy-MM-dd
      */
     public static final DateTimeFormatter DATE_FORMATTER;
 
     static {
-        DATE_FORMATTER = new DateTimeFormatterBuilder()
-                .appendValue(DAY_OF_MONTH, 2)
-                .appendLiteral('.')
-                .appendValue(MONTH_OF_YEAR, 2)
-                .appendLiteral('.')
-                .appendValue(YEAR, 4)
-                .toFormatter();
+        DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
     }
 
     /**
@@ -32,42 +24,32 @@ public class DateTimeFormatters {
     public static final DateTimeFormatter TIME_FORMATTER;
 
     static {
-        TIME_FORMATTER = new DateTimeFormatterBuilder()
-                .appendValue(HOUR_OF_DAY, 2)
-                .appendLiteral(':')
-                .appendValue(MINUTE_OF_HOUR, 2)
-                .appendLiteral(':')
-                .appendValue(SECOND_OF_MINUTE, 2)
-                .toFormatter();
+        TIME_FORMATTER = DateTimeFormatter.ISO_LOCAL_TIME;
     }
 
     /**
-     * dd.MM.yyyy'T'HH:mm:ss
+     * yyyy-MM-ddTHH:mm:ss
      */
     public static final DateTimeFormatter DATE_TIME_FORMATTER;
 
     static {
-        DATE_TIME_FORMATTER = new DateTimeFormatterBuilder()
-                .append(DATE_FORMATTER)
-                .appendLiteral("'T'")
-                .append(TIME_FORMATTER)
-                .toFormatter();
+        DATE_TIME_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
     }
 
     /**
-     * dd.MM.yyyy'T'HH:mm:ss+03:00
+     * yyyy-MM-ddTHH:mm:ss+HH:MM
      */
     public static final DateTimeFormatter ZONED_DATE_TIME_FORMATTER;
 
     static {
         ZONED_DATE_TIME_FORMATTER = new DateTimeFormatterBuilder()
                 .append(DATE_TIME_FORMATTER)
-                .appendOffsetId()
+                .appendOffset("+HH:MM", "+00:00")
                 .toFormatter();
     }
 
-    public static LocalDateTime parseLocalDateTime(String date, String time) {
-        return LocalDateTime.parse(date + "'T'" + time, DATE_TIME_FORMATTER);
+    public static LocalDateTime parseLocalDateTime(String date) {
+        return LocalDateTime.parse(date, DATE_TIME_FORMATTER);
     }
 
 }
