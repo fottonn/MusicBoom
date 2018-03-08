@@ -1,7 +1,6 @@
 package ru.bugmakers.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.Type;
 import ru.bugmakers.entity.auth.FbAuth;
 import ru.bugmakers.entity.auth.GoogleAuth;
 import ru.bugmakers.entity.auth.VkAuth;
@@ -49,7 +48,6 @@ public class User {
     private String aboutMe;
 
     @Column(name = "birthday")
-    @Type(type = LOCAL_DATE_TYPE)
     private LocalDate birthDay;
 
     @Column(name = "country")
@@ -62,7 +60,6 @@ public class User {
     private String nickname;
 
     @Column(name = "registration_date")
-    @Type(type = LOCAL_DATE_TIME_TYPE)
     private LocalDateTime registrationDate;
 
     @Column(name = "public_name")

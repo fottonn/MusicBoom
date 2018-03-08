@@ -1,14 +1,11 @@
 package ru.bugmakers.entity;
 
-import org.hibernate.annotations.Type;
 import ru.bugmakers.enums.MoneyBearerKind;
 import ru.bugmakers.enums.Status;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
-import static ru.bugmakers.entity.EntityConstants.LOCAL_DATE_TIME_TYPE;
 
 /**
  * Created by Ayrat on 16.11.2017.
@@ -44,7 +41,6 @@ public class Transaction {
     private String number;
 
     @Column(name = "date")
-    @Type(type = LOCAL_DATE_TIME_TYPE)
     private LocalDateTime date;
 
     @Column(name = "status")
