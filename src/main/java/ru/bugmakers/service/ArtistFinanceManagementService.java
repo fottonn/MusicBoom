@@ -3,9 +3,14 @@ package ru.bugmakers.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.bugmakers.dto.request.mobile.CardInfoRequestMobile;
+import ru.bugmakers.entity.Transaction;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
+import ru.bugmakers.utils.UuidGenerator;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * Created by Ayrat on 19.02.2018.
@@ -50,6 +55,13 @@ public class ArtistFinanceManagementService  {
         if (userById == null) {
             throw MbException.create(MbError.CME03);
         }
+        Transaction transaction = new Transaction();
+        transaction.setDate(LocalDateTime.now());
+        transaction.setNumber(UuidGenerator.timeBasedUuidGenerate());
+        transaction.setRecipient(userById);
+        transaction.setSender(userById);
+        transaction.setAmount(new BigDecimal(summ));
+        transaction.setStatus();
 
         return null;
     }

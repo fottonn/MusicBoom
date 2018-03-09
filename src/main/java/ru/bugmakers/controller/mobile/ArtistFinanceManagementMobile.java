@@ -96,5 +96,6 @@ public class ArtistFinanceManagementMobile extends MbController {
                                                        @RequestParam("sum") String summ) {
         String id = user.getUser().getId().toString();
         artistFinanceManagementService.withdraw(id, summ);
+        return null;
     }
 }
