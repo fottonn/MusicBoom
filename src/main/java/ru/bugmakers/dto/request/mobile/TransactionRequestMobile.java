@@ -13,7 +13,6 @@ public class TransactionRequestMobile extends SessionDataRequest {
     private String sum;
     private String numberOfTransaction;
     private String date;
-    private String time;
 
     public String getRecipientId() {
         return recipientId;
@@ -55,11 +54,4 @@ public class TransactionRequestMobile extends SessionDataRequest {
         this.date = date;
     }
 
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
 }

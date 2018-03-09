@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.bugmakers.entity.Transaction;
 import ru.bugmakers.enums.MoneyBearerKind;
+import ru.bugmakers.enums.UserType;
 import ru.bugmakers.repository.TransactionRepo;
+import ru.bugmakers.utils.BigDecimalUtils;
 
 import java.time.LocalDateTime;
 
@@ -19,10 +21,16 @@ import static ru.bugmakers.utils.DecimalFormatters.MONEY_FORMATTER;
 public class TransactionService {
 
     private TransactionRepo transactionRepo;
+    private RankPropsService rankPropsService;
 
     @Autowired
     public void setTransactionRepo(TransactionRepo transactionRepo) {
         this.transactionRepo = transactionRepo;
+    }
+
+    @Autowired
+    public void setRankPropsService(RankPropsService rankPropsService) {
+        this.rankPropsService = rankPropsService;
     }
 
     /**
@@ -91,7 +99,21 @@ public class TransactionService {
         return String.valueOf(transactionRepo.countDistinctBySenderIdAndRecipientMoneyBearerKind(userId, MoneyBearerKind.WALLET));
     }
 
+    /**
+     * Сохранение транзакции в БД
+     *
+     * Если получатель денежных средств АРТИСТ, и перевод осуществляется на внутренний кошелек с других платежных
+     * средств за исключением внутреннего кошелька, то вычитаем комиссию, установленную текущему артисту
+     *
+     * @param transaction транзакция
+     */
     public void saveTransaction(Transaction transaction) {
+        if (transaction.getRecipient().getUserType() == UserType.ARTIST
+                && transaction.getRecipientMoneyBearerKind() == MoneyBearerKind.WALLET
+                && transaction.getSenderMoneyBearerKind() != MoneyBearerKind.WALLET) {
+            transaction.setAmount(BigDecimalUtils.withoutFee(transaction.getAmount(),
+                    rankPropsService.getFeeByRank(transaction.getRecipient().getRank())));
+        }
         transactionRepo.saveAndFlush(transaction);
     }
 }

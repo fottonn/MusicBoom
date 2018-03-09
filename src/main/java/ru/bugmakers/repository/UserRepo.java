@@ -3,6 +3,8 @@ package ru.bugmakers.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.bugmakers.entity.User;
 
+import java.util.List;
+
 /**
  * Created by Ivan
  */
@@ -25,4 +27,6 @@ public interface UserRepo extends JpaRepository<User, Long> {
     boolean existsByLogin(String login);
 
     boolean existsByPhone(String phone);
+
+    List<User> findDistinctByNicknameLike(String value);
 }

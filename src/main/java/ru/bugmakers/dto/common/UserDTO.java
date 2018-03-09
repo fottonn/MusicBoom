@@ -52,6 +52,11 @@ public class UserDTO implements Serializable {
     public UserDTO() {
     }
 
+    public UserDTO(String id, String nickname) {
+        this.id = id;
+        this.nickname = nickname;
+    }
+
     public String getPassword() {
         return password;
     }

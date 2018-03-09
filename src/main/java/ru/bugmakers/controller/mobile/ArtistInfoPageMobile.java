@@ -70,10 +70,10 @@ public class ArtistInfoPageMobile extends MbController {
         transaction.setSender(userService.findUserById(Long.valueOf(rq.getSenderId())));
         transaction.setRecipient(userService.findUserById(Long.valueOf(rq.getRecipientId())));
         transaction.setSenderMoneyBearerKind(MoneyBearerKind.CARD);
-        transaction.setSenderMoneyBearerKind(MoneyBearerKind.WALLET);
+        transaction.setRecipientMoneyBearerKind(MoneyBearerKind.WALLET);
         transaction.setAmount(new BigDecimal(rq.getSum()));
         transaction.setNumber(rq.getNumberOfTransaction());
-        transaction.setDate(DateTimeFormatters.parseLocalDateTime(rq.getDate(), rq.getTime()));
+        transaction.setDate(DateTimeFormatters.parseLocalDateTime(rq.getDate()));
         transactionService.saveTransaction(transaction);
         return ResponseEntity.ok(new MbResponseToMobile(RsStatus.SUCCESS));
     }

@@ -1,13 +1,10 @@
 package ru.bugmakers.entity;
 
-import org.hibernate.annotations.Type;
 import ru.bugmakers.enums.EventType;
 
 import javax.persistence.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
-
-import static ru.bugmakers.entity.EntityConstants.LOCAL_DATE_TIME_TYPE;
 
 /**
  * Created by Ayrat on 14.11.2017.
@@ -31,11 +28,9 @@ public class Event {
     private String eventDescription;
 
     @Column(name = "start_date")
-    @Type(type = LOCAL_DATE_TIME_TYPE)
     private LocalDateTime startDate;
 
     @Column(name = "end_date")
-    @Type(type = LOCAL_DATE_TIME_TYPE)
     private LocalDateTime endDate;
 
     /**

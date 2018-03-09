@@ -9,37 +9,41 @@ import java.text.DecimalFormatSymbols;
  */
 public class DecimalFormatters {
 
-    public static final DecimalFormat MONEY_FORMATTER = getMoneyFormatter();
-    public static final DecimalFormat HOURS_FORMATTER = getHoursFormatter();
+    /**
+     * Денежный формат ###.##
+     *
+     * 12.00
+     * 12.30
+     * 12.03
+     */
+    public static final DecimalFormat MONEY_FORMATTER;
 
-    private static DecimalFormat getMoneyFormatter() {
-        if (MONEY_FORMATTER != null) return MONEY_FORMATTER;
-        DecimalFormat moneyFormatter = new DecimalFormat();
-        moneyFormatter.setMaximumFractionDigits(2);
-        moneyFormatter.setMinimumFractionDigits(2);
-        moneyFormatter.setRoundingMode(RoundingMode.DOWN);
-        moneyFormatter.setGroupingUsed(false);
+    static {
+        MONEY_FORMATTER = new DecimalFormat();
+        MONEY_FORMATTER.setMaximumFractionDigits(2);
+        MONEY_FORMATTER.setMinimumFractionDigits(2);
+        MONEY_FORMATTER.setRoundingMode(RoundingMode.DOWN);
+        MONEY_FORMATTER.setGroupingUsed(false);
         DecimalFormatSymbols dfs = new DecimalFormatSymbols();
         dfs.setDecimalSeparator('.');
-        moneyFormatter.setDecimalFormatSymbols(dfs);
-        return moneyFormatter;
+        MONEY_FORMATTER.setDecimalFormatSymbols(dfs);
     }
 
-    private static DecimalFormat getHoursFormatter() {
-        if (HOURS_FORMATTER != null) return HOURS_FORMATTER;
-        DecimalFormat hoursFormatter = new DecimalFormat();
-        hoursFormatter.setMaximumFractionDigits(1);
-        hoursFormatter.setGroupingUsed(false);
+    /**
+     * Формат времени в часах ###.#
+     *
+     * 5
+     * 5.3
+     */
+    public static final DecimalFormat HOURS_FORMATTER;
+
+    static {
+        HOURS_FORMATTER = new DecimalFormat();
+        HOURS_FORMATTER.setMaximumFractionDigits(1);
+        HOURS_FORMATTER.setGroupingUsed(false);
         DecimalFormatSymbols dfs = new DecimalFormatSymbols();
         dfs.setDecimalSeparator('.');
-        hoursFormatter.setDecimalFormatSymbols(dfs);
-        return hoursFormatter;
+        HOURS_FORMATTER.setDecimalFormatSymbols(dfs);
     }
-
-
-
-
-
-
 
 }

@@ -1,14 +1,10 @@
 package ru.bugmakers.localpers.entity;
 
-import org.hibernate.annotations.Type;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
-
-import static ru.bugmakers.entity.EntityConstants.LOCAL_DATE_TIME_TYPE;
 
 /**
  * Created by Ayrat on 16.11.2017.
@@ -27,11 +23,9 @@ public class ActiveEvent {
     private Double lat;
 
     @Column(name = "begin_time")
-    @Type(type = LOCAL_DATE_TIME_TYPE)
     private LocalDateTime beginTime;
 
     @Column(name = "end_time")
-    @Type(type = LOCAL_DATE_TIME_TYPE)
     private LocalDateTime endTime;
 
     public ActiveEvent() {
