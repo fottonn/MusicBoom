@@ -37,7 +37,7 @@ public class ArtistFinanceManagementService  {
     /**
      * Метод который позволяет пользователю прикрепить карту.
      * @param cardInfoRequestMobile - информация о карте
-     * @param user
+     * @param user - пользователь
      * @return
      * @throws MbException
      */
@@ -51,7 +51,7 @@ public class ArtistFinanceManagementService  {
 
     /**
      * Метод который позволяет открепить карту.
-     * @param user
+     * @param user - пользователь
      * @return
      * @throws MbException
      */
@@ -65,24 +65,20 @@ public class ArtistFinanceManagementService  {
 
     /**
      * Сервис который позволяет запланировать вывод пользователем средств себе на карту
-     * @param id - id пользователя
+     * @param user -  пользователm
      * @param amount - выводимая им сумма
      * @return
      * @throws MbException
      */
-    public void withdraw(String id, String amount) throws MbException {
-        User userById = userService.findUserById(Long.valueOf(id));
-        if (userById == null) {
-            throw MbException.create(MbError.CME03);
-        }
-        if (!amountValidation(amount, userById)) {
+    public void withdraw(User user, String amount) throws MbException {
+        if (!amountValidation(amount, user)) {
             throw MbException.create(MbError.TRE01);
         }
         Transaction transaction = new Transaction();
         transaction.setDate(LocalDateTime.now());
         transaction.setNumber(UuidGenerator.timeBasedUuidGenerate());
-        transaction.setRecipient(userById);
-        transaction.setSender(userById);
+        transaction.setRecipient(user);
+        transaction.setSender(user);
         transaction.setAmount(new BigDecimal(amount));
         transaction.setStatus(Status.OPEN);
         transaction.setSenderMoneyBearerKind(MoneyBearerKind.WALLET);

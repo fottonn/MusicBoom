@@ -89,7 +89,7 @@ public class ArtistFinanceManagementMobile extends MbController {
                                                        @RequestParam("sum") String amount) {
         String id = user.getUser().getId().toString();
         try {
-            artistFinanceManagementService.withdraw(id, amount);
+            artistFinanceManagementService.withdraw(user.getUser(), amount);
         } catch (MbException e) {
             return ResponseEntity.ok(new FinanceManagementResponseMobile(e, RsStatus.ERROR));
         }
