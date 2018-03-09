@@ -88,14 +88,18 @@ public class ArtistFinanceManagementMobile extends MbController {
     /**
      * Вывод денег пользователя на карту
      * @param user - пользователь
-     * @param summ -  сумма
+     * @param amount -  сумма
      * @return - ответ на ПЛ
      */
     @PostMapping(value = "withdraw")
     public ResponseEntity<MbResponseToMobile> withdraw(@AuthenticationPrincipal UserPrincipal user,
-                                                       @RequestParam("sum") String summ) {
+                                                       @RequestParam("sum") String amount) {
         String id = user.getUser().getId().toString();
-        artistFinanceManagementService.withdraw(id, summ);
-        return null;
+        try {
+            artistFinanceManagementService.withdraw(id, amount);
+        } catch (MbException e) {
+            return ResponseEntity.ok(new FinanceManagementResponseMobile(e, RsStatus.ERROR));
+        }
+        return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
     }
 }
