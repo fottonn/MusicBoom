@@ -1,47 +1,103 @@
 package ru.bugmakers.controller.mobile;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import ru.bugmakers.config.principal.UserPrincipal;
 import ru.bugmakers.controller.MbController;
 import ru.bugmakers.dto.request.mobile.CardInfoRequestMobile;
+import ru.bugmakers.dto.response.mobile.ArtistEditingResponseMobile;
 import ru.bugmakers.dto.response.mobile.FinanceManagementResponseMobile;
 import ru.bugmakers.dto.response.mobile.MbResponseToMobile;
+import ru.bugmakers.enums.RsStatus;
+import ru.bugmakers.exceptions.MbError;
+import ru.bugmakers.exceptions.MbException;
+import ru.bugmakers.service.ArtistFinanceManagementService;
 
 /**
+ * Контроллер для управления финансами через МП
  * Created by Ayrat on 24.11.2017.
  */
 @RestController
 @RequestMapping("/mapi/artist/")
 public class ArtistFinanceManagementMobile extends MbController {
 
+    private ArtistFinanceManagementService artistFinanceManagementService;
+
+    @Autowired
+    public void setArtistFinanceManagementService(ArtistFinanceManagementService artistFinanceManagementService) {
+        this.artistFinanceManagementService = artistFinanceManagementService;
+    }
+
+    /**
+     * Привязывание карточки куда будут выводиться деньги
+     * @param user                  - пользователь
+     * @param cardInfoRequestMobile - номер карточки
+     * @return
+     */
     @PostMapping(value = "card.attach")
-    public ResponseEntity<MbResponseToMobile> cardAttach(@RequestBody CardInfoRequestMobile cardInfoRequestMobile) {
+    public ResponseEntity<MbResponseToMobile> cardAttach(@AuthenticationPrincipal UserPrincipal user,
+                                                         @RequestBody CardInfoRequestMobile cardInfoRequestMobile) {
+        try {
+            if (cardInfoRequestMobile.getCardNumber() == null) {
+                throw MbException.create(MbError.FDE01);
+            }
+            artistFinanceManagementService.attachCard(cardInfoRequestMobile.getCardNumber(), user.getUser());
+        } catch (MbException e) {
+            return ResponseEntity.ok(new FinanceManagementResponseMobile(e, RsStatus.ERROR));
+        } catch (Exception e) {
+            return ResponseEntity.ok(new FinanceManagementResponseMobile(RsStatus.ERROR));
+        }
+        return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
 
-        FinanceManagementResponseMobile financeManagementResponseMobile = null;
-        return ResponseEntity.ok(financeManagementResponseMobile);
     }
 
+    /**
+     * Обновление карточки
+     * @param user                  - пользователь
+     * @param cardInfoRequestMobile - номер карточки
+     */
     @PostMapping(value = "card.update")
-    public ResponseEntity<MbResponseToMobile> cardUpdate(@RequestBody CardInfoRequestMobile cardInfoRequestMobile) {
-
-        FinanceManagementResponseMobile financeManagementResponseMobile = null;
-        return ResponseEntity.ok(financeManagementResponseMobile);
+    public void cardUpdate(@AuthenticationPrincipal UserPrincipal user,
+                           @RequestBody CardInfoRequestMobile cardInfoRequestMobile) {
+        this.cardAttach(user, cardInfoRequestMobile);
     }
 
-    @GetMapping(value = "card.detach")
-    public ResponseEntity<MbResponseToMobile> cardDetach(@RequestParam("session_id") String sessionId,
-                                                         @RequestParam("id") String id) {
-
-        FinanceManagementResponseMobile financeManagementResponseMobile = null;
-        return ResponseEntity.ok(financeManagementResponseMobile);
+    /**
+     * Удаление привязанно карточки
+     * @param user  - пользователь
+     * @return      - ответ на ПЛ
+     */
+    @PostMapping(value = "card.detach")
+    public ResponseEntity<MbResponseToMobile> cardDetach(@AuthenticationPrincipal UserPrincipal user
+                                                         ) {
+        try {
+            artistFinanceManagementService.detachCard(user.getUser());
+        } catch (MbException e) {
+            return ResponseEntity.ok(new FinanceManagementResponseMobile(e, RsStatus.ERROR));
+        } catch (Exception e) {
+            return ResponseEntity.ok(new FinanceManagementResponseMobile(RsStatus.ERROR));
+        }
+        return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
     }
 
-    @GetMapping(value = "withdraw")
-    public ResponseEntity<MbResponseToMobile> withdraw(@RequestParam("session_id") String sessionId,
-                                                       @RequestParam("id") String id,
-                                                       @RequestParam("sum") String summ) {
-
-        FinanceManagementResponseMobile financeManagementResponseMobile = null;
-        return ResponseEntity.ok(financeManagementResponseMobile);
+    /**
+     * Вывод денег пользователя на карту
+     * @param user      - пользователь
+     * @param amount    - сумма
+     * @return          - ответ на ПЛ
+     */
+    @PostMapping(value = "withdraw")
+    public ResponseEntity<MbResponseToMobile> withdraw(@AuthenticationPrincipal UserPrincipal user,
+                                                       @RequestParam("sum") String amount) {
+        try {
+            artistFinanceManagementService.withdraw(user.getUser(), amount);
+        } catch (MbException e) {
+            return ResponseEntity.ok(new FinanceManagementResponseMobile(e, RsStatus.ERROR));
+        } catch (Exception e) {
+            return ResponseEntity.ok(new FinanceManagementResponseMobile(RsStatus.ERROR));
+        }
+        return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
     }
 }

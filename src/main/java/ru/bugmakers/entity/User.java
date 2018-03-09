@@ -147,11 +147,22 @@ public class User {
     @Column(name = "is_ordered")
     private boolean ordered = false;
 
+    @Column(name = "card_number")
+    private String cardNumber;
+
     @Column(name = "rank")
     @Enumerated(EnumType.STRING)
     private Rank rank;
 
     public User() {
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
     }
 
     public Long getId() {

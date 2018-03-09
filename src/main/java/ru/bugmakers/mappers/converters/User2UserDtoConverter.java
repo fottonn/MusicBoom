@@ -69,7 +69,17 @@ public class User2UserDtoConverter implements MbConverter<User, UserDTO> {
                 .withAllowOfPersonalData(source.isPersonalDataConsent())
                 .withArtistContact(source.isContractConsent())
                 .withAvatar(source.getAvatar())
+                .withCardNumber(source.getCardNumber() != null ? getMappedCardNumber(source.getCardNumber()) : null)
                 .withPhotos(CollectionUtils.isNotEmpty(source.getPhotos()) ? new ArrayList<>(source.getPhotos()) : null);
+
+    }
+
+    private String getMappedCardNumber(String cardNumber) {
+        char[] chars = cardNumber.toCharArray();
+        for (int i = 4; i < 12; i++) {
+            chars[i] = '*';
+        }
+        return chars.toString();
     }
 
     private StatOfPerformanceDTO getStatOfPerformance(Long id) {

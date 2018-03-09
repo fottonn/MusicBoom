@@ -4,6 +4,7 @@ import com.fasterxml.uuid.Generators;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
+import ru.bugmakers.utils.UuidGenerator;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,10 +17,10 @@ import java.util.UUID;
 public class SaveImagesService {
 
     String saveFile(MultipartFile file, String rootPath) throws IOException {
-        UUID fileNameUUID = Generators.timeBasedGenerator().generate();
+        String fileNameUUID = UuidGenerator.timeBasedUuidGenerate();
         String originalFileName = file.getOriginalFilename();
         Assert.notNull(originalFileName, "OriginalFileName is null");
-        String fileName = fileNameUUID.toString() + originalFileName.substring(originalFileName.lastIndexOf("."));
+        String fileName = fileNameUUID + originalFileName.substring(originalFileName.lastIndexOf("."));
         File fileToSave = new File(rootPath, fileName);
         file.transferTo(fileToSave);
         return fileName;

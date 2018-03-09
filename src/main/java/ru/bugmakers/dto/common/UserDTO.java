@@ -34,6 +34,7 @@ public class UserDTO implements Serializable {
     private String tlg;
     private String wapp;
     private Boolean isOrdered;
+    private String cardNumber;
     private String regDate;
     private String allEarnedMoney;
     private String allDerivedMoney;
@@ -328,6 +329,18 @@ public class UserDTO implements Serializable {
         this.photos = photos;
     }
 
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+    public UserDTO withCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+        return this;
+    }
     public UserDTO withUserType(String userType) {
         this.userType = userType;
         return this;
