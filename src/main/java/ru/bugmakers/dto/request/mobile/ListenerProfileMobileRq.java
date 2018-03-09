@@ -5,9 +5,12 @@ import ru.bugmakers.dto.request.SessionDataRequest;
 /**
  * Created by Ayrat on 27.11.2017.
  */
-public class ListenerProfileRequestMobile extends SessionDataRequest {
+public class ListenerProfileMobileRq extends SessionDataRequest {
+
     private String country;
     private String city;
+    private String isAttached;
+    private String phone;
 
     public String getCountry() {
         return country;
@@ -23,5 +26,21 @@ public class ListenerProfileRequestMobile extends SessionDataRequest {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getIsAttached() {
+        return isAttached;
+    }
+
+    public void setIsAttached(String isAttached) {
+        this.isAttached = isAttached;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }
