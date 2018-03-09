@@ -73,9 +73,9 @@ public class ArtistDesktopFunctionalMobile extends MbController {
             activeEvent.setLng(Double.valueOf(rq.getLongitude()));
             activeEventService.saveActiveEvent(activeEvent);
             rs = new PerformanceStartResponseMobile(RsStatus.SUCCESS);
-        } catch (Exception e) {
-            rs = new PerformanceStartResponseMobile(RsStatus.ERROR);
-        }
+            } catch (Exception e) {
+                rs = new PerformanceStartResponseMobile(RsStatus.ERROR);
+            }
         return ResponseEntity.ok(rs);
     }
 

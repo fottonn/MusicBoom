@@ -2,7 +2,6 @@ package ru.bugmakers.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.bugmakers.dto.request.mobile.CardInfoRequestMobile;
 import ru.bugmakers.entity.Transaction;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.MoneyBearerKind;
@@ -36,13 +35,13 @@ public class ArtistFinanceManagementService  {
 
     /**
      * Метод который позволяет пользователю прикрепить карту.
-     * @param cardInfoRequestMobile - информация о карте
-     * @param user - пользователь
+     * @param cardNumber    - номер карты
+     * @param user          - пользователь
      * @return
      * @throws MbException
      */
-    public void attachCard(CardInfoRequestMobile cardInfoRequestMobile, User user) throws MbException {
-        user.setCardNumber(cardInfoRequestMobile.getCardNumber());
+    public void attachCard(String cardNumber, User user) throws MbException {
+        user.setCardNumber(cardNumber);
         User savedUser = userService.saveUser(user);
         if (savedUser == null) {
             throw MbException.create(MbError.CME04);
@@ -65,8 +64,8 @@ public class ArtistFinanceManagementService  {
 
     /**
      * Сервис который позволяет запланировать вывод пользователем средств себе на карту
-     * @param user -  пользователm
-     * @param amount - выводимая им сумма
+     * @param user      - пользователь
+     * @param amount    - выводимая им сумма
      * @return
      * @throws MbException
      */
@@ -88,8 +87,8 @@ public class ArtistFinanceManagementService  {
 
     /**
      * Проверяем доступна ли указанная сумма пользователю для вывода
-     * @param amount - суммма
-     * @param user - пользователь
+     * @param amount    - суммма
+     * @param user      - пользователь
      * @return если сумма равна или меньше доступной у пользователя то TRUE иначе FALSE.
      */
     private Boolean amountValidation(String amount, User user) {
