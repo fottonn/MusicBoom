@@ -1,5 +1,6 @@
 package ru.bugmakers.dto.request.mobile;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import ru.bugmakers.dto.request.SessionDataRequest;
 
 /**
@@ -8,8 +9,12 @@ import ru.bugmakers.dto.request.SessionDataRequest;
 public class ListenerProfileMobileRq extends SessionDataRequest {
 
     private String country;
+
     private String city;
+
+    @JsonProperty("is_attached")
     private String isAttached;
+
     private String phone;
 
     public String getCountry() {

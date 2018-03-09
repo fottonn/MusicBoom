@@ -1,6 +1,6 @@
 package ru.bugmakers.dto.response.mobile;
 
-import ru.bugmakers.dto.ArtistPerformanceDuration;
+import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.exceptions.MbException;
 
@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class FindArtistResponseMobile extends MbResponseToMobile {
 
-    List<ArtistPerformanceDuration> artistPerformanceDurations;
+    private List<UserDTO> artists;
 
     public FindArtistResponseMobile(MbException e, RsStatus status) {
         super(e, status);
@@ -21,11 +21,11 @@ public class FindArtistResponseMobile extends MbResponseToMobile {
         super(status);
     }
 
-    public List<ArtistPerformanceDuration> getArtistPerformanceDurations() {
-        return artistPerformanceDurations;
+    public List<UserDTO> getArtists() {
+        return artists;
     }
 
-    public void setArtistPerformanceDurations(List<ArtistPerformanceDuration> artistPerformanceDurations) {
-        this.artistPerformanceDurations = artistPerformanceDurations;
+    public void setArtists(List<UserDTO> artists) {
+        this.artists = artists;
     }
 }

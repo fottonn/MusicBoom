@@ -2,8 +2,12 @@ package ru.bugmakers.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.repository.UserRepo;
+
+import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Created by Ivan
@@ -68,5 +72,20 @@ public class UserService {
 
     public boolean isExistsByPhone(String phone) {
         return userRepo.existsByPhone(phone);
+    }
+
+    public List<UserDTO> findAllUsersByNicknameLikeValue(final String value) {
+        final List<UserDTO> result = new ArrayList<>();
+        if (value == null || value.length() < 3) return result;
+        final String[] array = Pattern.compile("[\\p{Punct}]").split(value);
+        final List<String> values = new ArrayList<>();
+        for (String s : array) {
+            if (s.length() > 2) values.add("%" + s.toUpperCase() + "%");
+        }
+        final Map<Long, User> users = new HashMap<>();
+        values.forEach(s -> userRepo.findDistinctByNicknameLike(s).forEach(user -> users.putIfAbsent(user.getId(), user)));
+        users.values().forEach(user -> result.add(new UserDTO(String.valueOf(user.getId()), user.getNickname())));
+        result.sort(Comparator.comparing(UserDTO::getNickname));
+        return result;
     }
 }
