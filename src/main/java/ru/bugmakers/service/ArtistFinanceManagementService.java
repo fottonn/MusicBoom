@@ -36,41 +36,31 @@ public class ArtistFinanceManagementService  {
 
     /**
      * Метод который позволяет пользователю прикрепить карту.
-     * @param id - id пользователя
      * @param cardInfoRequestMobile - информация о карте
+     * @param user
      * @return
      * @throws MbException
      */
-    public Boolean attachCard(String id, CardInfoRequestMobile cardInfoRequestMobile) throws MbException {
-        User userById = userService.findUserById(Long.valueOf(id));
-        if (userById == null) {
-            throw MbException.create(MbError.CME03);
-        }
-        userById.setCardNumber(cardInfoRequestMobile.getCardNumber());
-        User user = userService.saveUser(userById);
-        if (user == null) {
+    public void attachCard(CardInfoRequestMobile cardInfoRequestMobile, User user) throws MbException {
+        user.setCardNumber(cardInfoRequestMobile.getCardNumber());
+        User savedUser = userService.saveUser(user);
+        if (savedUser == null) {
             throw MbException.create(MbError.CME04);
         }
-        return Boolean.TRUE;
     }
 
     /**
      * Метод который позволяет открепить карту.
-     * @param id - id пользовталя
+     * @param user
      * @return
      * @throws MbException
      */
-    public Boolean detachCard(String id) throws MbException {
-        User userById = userService.findUserById(Long.valueOf(id));
-        if (userById == null) {
-            throw MbException.create(MbError.CME03);
-        }
-        userById.setCardNumber(null);
-        User user = userService.saveUser(userById);
-        if (user == null) {
+    public void detachCard(User user) throws MbException {
+        user.setCardNumber(null);
+        User savedUser = userService.saveUser(user);
+        if (savedUser == null) {
             throw MbException.create(MbError.CME04);
         }
-        return Boolean.TRUE;
     }
 
     /**
@@ -85,7 +75,7 @@ public class ArtistFinanceManagementService  {
         if (userById == null) {
             throw MbException.create(MbError.CME03);
         }
-        if (amountValidation(amount, userById)) {
+        if (!amountValidation(amount, userById)) {
             throw MbException.create(MbError.TRE01);
         }
         Transaction transaction = new Transaction();
@@ -104,11 +94,11 @@ public class ArtistFinanceManagementService  {
      * Проверяем доступна ли указанная сумма пользователю для вывода
      * @param amount - суммма
      * @param user - пользователь
-     * @return если сумма равна или меньше доступной у пользователя то FALSE иначе TRUE.
+     * @return если сумма равна или меньше доступной у пользователя то TRUE иначе FALSE.
      */
     private Boolean amountValidation(String amount, User user) {
         BigDecimal userCurrentBalance = new BigDecimal(transactionService.getCurrentBalance(user.getId()));
         BigDecimal withdrawAmount = new BigDecimal(amount);
-        return (userCurrentBalance.compareTo(withdrawAmount) == 1) || (userCurrentBalance.compareTo(withdrawAmount) == 0) ? Boolean.FALSE : Boolean.TRUE;
+        return (userCurrentBalance.compareTo(withdrawAmount) == 1) || (userCurrentBalance.compareTo(withdrawAmount) == 0) ? Boolean.TRUE : Boolean.FALSE;
     }
 }

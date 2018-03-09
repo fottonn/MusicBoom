@@ -43,15 +43,12 @@ public class ArtistFinanceManagementMobile extends MbController {
             if (cardInfoRequestMobile.getCardNumber() == null) {
                 throw MbException.create(MbError.FDE01);
             }
-            String id = user.getUser().getId().toString();
-            if (artistFinanceManagementService.attachCard(id, cardInfoRequestMobile)) {
-                return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
-            } else {
-                return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.ERROR));
-            }
+            artistFinanceManagementService.attachCard(cardInfoRequestMobile, user.getUser());
         } catch (MbException e) {
             return ResponseEntity.ok(new FinanceManagementResponseMobile(e, RsStatus.ERROR));
         }
+        return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
+
     }
 
     /**
@@ -74,15 +71,11 @@ public class ArtistFinanceManagementMobile extends MbController {
     public ResponseEntity<MbResponseToMobile> cardDetach(@AuthenticationPrincipal UserPrincipal user
                                                          ) {
         try {
-            String id = user.getUser().getId().toString();
-            if (artistFinanceManagementService.detachCard(id)) {
-                return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
-            } else {
-                return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.ERROR));
-            }
+            artistFinanceManagementService.detachCard(user.getUser());
         } catch (MbException e) {
             return ResponseEntity.ok(new FinanceManagementResponseMobile(e, RsStatus.ERROR));
         }
+        return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
     }
 
     /**
