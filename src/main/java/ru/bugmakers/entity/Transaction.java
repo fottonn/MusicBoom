@@ -2,6 +2,7 @@ package ru.bugmakers.entity;
 
 import ru.bugmakers.enums.MoneyBearerKind;
 import ru.bugmakers.enums.Status;
+import ru.bugmakers.utils.UuidGenerator;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -15,16 +16,13 @@ import java.time.LocalDateTime;
 public class Transaction {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    private String id;
 
-    @ManyToOne
-    @JoinColumn(name = "sender_id")
-    private User sender;
+    @Column(name = "sender_id")
+    private Long senderId;
 
-    @ManyToOne
-    @JoinColumn(name = "recipient_id")
-    private User recipient;
+    @Column(name = "recipient_id")
+    private Long recipientId;
 
     @Column(name = "sender_payment_kind")
     @Enumerated(EnumType.STRING)
@@ -44,30 +42,35 @@ public class Transaction {
     private LocalDateTime date;
 
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private Status status;
 
-    public Long getId() {
+    public Transaction() {
+        this.id = UuidGenerator.timeBasedUuidGenerate();
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public User getSender() {
-        return sender;
+    public Long getSenderId() {
+        return senderId;
     }
 
-    public void setSender(User sender) {
-        this.sender = sender;
+    public void setSenderId(Long senderId) {
+        this.senderId = senderId;
     }
 
-    public User getRecipient() {
-        return recipient;
+    public Long getRecipientId() {
+        return recipientId;
     }
 
-    public void setRecipient(User recipient) {
-        this.recipient = recipient;
+    public void setRecipientId(Long recipientId) {
+        this.recipientId = recipientId;
     }
 
     public MoneyBearerKind getSenderMoneyBearerKind() {

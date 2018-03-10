@@ -67,8 +67,8 @@ public class ArtistInfoPageMobile extends MbController {
     @PostMapping(value = "/transaction")
     public ResponseEntity<MbResponseToMobile> transaction(@RequestBody TransactionRequestMobile rq) {
         Transaction transaction = new Transaction();
-        transaction.setSender(userService.findUserById(Long.valueOf(rq.getSenderId())));
-        transaction.setRecipient(userService.findUserById(Long.valueOf(rq.getRecipientId())));
+        transaction.setSenderId(Long.valueOf(rq.getSenderId()));
+        transaction.setRecipientId(Long.valueOf(rq.getRecipientId()));
         transaction.setSenderMoneyBearerKind(MoneyBearerKind.CARD);
         transaction.setRecipientMoneyBearerKind(MoneyBearerKind.WALLET);
         transaction.setAmount(new BigDecimal(rq.getSum()));

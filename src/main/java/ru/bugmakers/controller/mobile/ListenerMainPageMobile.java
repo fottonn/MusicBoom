@@ -12,6 +12,7 @@ import ru.bugmakers.dto.request.mobile.ListenerMainPageMobileRq;
 import ru.bugmakers.dto.response.mobile.FindArtistResponseMobile;
 import ru.bugmakers.dto.response.mobile.MbResponseToMobile;
 import ru.bugmakers.enums.RsStatus;
+import ru.bugmakers.enums.UserType;
 import ru.bugmakers.service.UserService;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public class ListenerMainPageMobile extends MbController {
     public ResponseEntity<MbResponseToMobile> findArtist(@RequestBody ListenerMainPageMobileRq rq) {
         FindArtistResponseMobile findArtistResponseMobile;
         try {
-            List<UserDTO> artists = userService.findAllUsersByNicknameLikeValue(rq.getArtistAlias());
+            List<UserDTO> artists = userService.findAllUsersByUserTypeAndByNicknameLikeValue(UserType.ARTIST, rq.getArtistAlias());
             findArtistResponseMobile = new FindArtistResponseMobile(RsStatus.SUCCESS);
             findArtistResponseMobile.setArtists(artists);
         } catch (Exception e) {

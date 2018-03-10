@@ -1,7 +1,10 @@
 package ru.bugmakers.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.bugmakers.entity.User;
+import ru.bugmakers.enums.UserType;
 
 import java.util.List;
 
@@ -28,5 +31,7 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
     boolean existsByPhone(String phone);
 
-    List<User> findDistinctByNicknameLike(String value);
+    List<User> findDistinctByUserTypeAndNicknameLike(UserType userType, String nickname);
+
+    Page<User> findAllByUserType(UserType userType, Pageable pageable);
 }
