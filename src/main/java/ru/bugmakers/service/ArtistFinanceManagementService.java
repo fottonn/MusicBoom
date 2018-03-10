@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
  * Сервис по управлению финансовыми данными артиста через МП
  */
 @Component
-public class ArtistFinanceManagementService  {
+public class ArtistFinanceManagementService {
     private UserService userService;
     private TransactionService transactionService;
 
@@ -35,8 +35,9 @@ public class ArtistFinanceManagementService  {
 
     /**
      * Метод который позволяет пользователю прикрепить карту.
-     * @param cardNumber    - номер карты
-     * @param user          - пользователь
+     *
+     * @param cardNumber - номер карты
+     * @param user       - пользователь
      * @return
      * @throws MbException
      */
@@ -50,6 +51,7 @@ public class ArtistFinanceManagementService  {
 
     /**
      * Метод который позволяет открепить карту.
+     *
      * @param user - пользователь
      * @return
      * @throws MbException
@@ -64,8 +66,9 @@ public class ArtistFinanceManagementService  {
 
     /**
      * Сервис который позволяет запланировать вывод пользователем средств себе на карту
-     * @param user      - пользователь
-     * @param amount    - выводимая им сумма
+     *
+     * @param user   - пользователь
+     * @param amount - выводимая им сумма
      * @return
      * @throws MbException
      */
@@ -76,8 +79,8 @@ public class ArtistFinanceManagementService  {
         Transaction transaction = new Transaction();
         transaction.setDate(LocalDateTime.now());
         transaction.setNumber(UuidGenerator.timeBasedUuidGenerate());
-        transaction.setRecipient(user);
-        transaction.setSender(user);
+        transaction.setRecipientId(user.getId());
+        transaction.setSenderId(user.getId());
         transaction.setAmount(new BigDecimal(amount));
         transaction.setStatus(Status.OPEN);
         transaction.setSenderMoneyBearerKind(MoneyBearerKind.WALLET);
@@ -87,8 +90,9 @@ public class ArtistFinanceManagementService  {
 
     /**
      * Проверяем доступна ли указанная сумма пользователю для вывода
-     * @param amount    - суммма
-     * @param user      - пользователь
+     *
+     * @param amount - суммма
+     * @param user   - пользователь
      * @return если сумма равна или меньше доступной у пользователя то TRUE иначе FALSE.
      */
     private Boolean amountValidation(String amount, User user) {

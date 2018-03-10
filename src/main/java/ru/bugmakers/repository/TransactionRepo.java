@@ -22,7 +22,7 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long> {
             "select " +
             "sum (t.amount) " +
             "from Transaction t " +
-            "where t.recipient.id = :id")
+            "where t.recipientId = :id")
     BigDecimal getReceivedMoney(@Param("id") Long id);
 
     /**
@@ -33,7 +33,7 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long> {
             "select " +
             "sum (t.amount) " +
             "from Transaction t " +
-            "where t.sender.id = :id " +
+            "where t.senderId = :id " +
             "and t.senderMoneyBearerKind = ru.bugmakers.enums.MoneyBearerKind.WALLET")
     BigDecimal getDerivedMoney(@Param("id") Long id);
 
@@ -47,7 +47,7 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long> {
             "select " +
             "sum (t.amount) " +
             "from Transaction t " +
-            "where t.recipient.id = :id " +
+            "where t.recipientId = :id " +
             "and t.date between :start and :finish")
     BigDecimal getReceivedMoneyForPeriod(@Param("id") Long id, @Param("start") LocalDateTime start, @Param("finish") LocalDateTime finish);
 
@@ -61,7 +61,7 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long> {
             "select " +
             "sum (t.amount) " +
             "from Transaction t " +
-            "where t.sender.id = :id " +
+            "where t.senderId = :id " +
             "and t.senderMoneyBearerKind = ru.bugmakers.enums.MoneyBearerKind.WALLET " +
             "and t.date between :start and :finish")
     BigDecimal getDerivedMoneyForPeriod(@Param("id") Long id, @Param("start") LocalDateTime start, @Param("finish") LocalDateTime finish);

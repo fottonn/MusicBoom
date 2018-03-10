@@ -3,6 +3,7 @@ package ru.bugmakers.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.bugmakers.entity.Transaction;
+import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.MoneyBearerKind;
 import ru.bugmakers.enums.UserType;
 import ru.bugmakers.repository.TransactionRepo;
@@ -22,6 +23,7 @@ public class TransactionService {
 
     private TransactionRepo transactionRepo;
     private RankPropsService rankPropsService;
+    private UserService userService;
 
     @Autowired
     public void setTransactionRepo(TransactionRepo transactionRepo) {
@@ -31,6 +33,11 @@ public class TransactionService {
     @Autowired
     public void setRankPropsService(RankPropsService rankPropsService) {
         this.rankPropsService = rankPropsService;
+    }
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
     /**
@@ -108,11 +115,12 @@ public class TransactionService {
      * @param transaction транзакция
      */
     public void saveTransaction(Transaction transaction) {
-        if (transaction.getRecipient().getUserType() == UserType.ARTIST
+        User recipient = userService.findUserById(transaction.getRecipientId());
+        if (recipient.getUserType() == UserType.ARTIST
                 && transaction.getRecipientMoneyBearerKind() == MoneyBearerKind.WALLET
                 && transaction.getSenderMoneyBearerKind() != MoneyBearerKind.WALLET) {
             transaction.setAmount(BigDecimalUtils.withoutFee(transaction.getAmount(),
-                    rankPropsService.getFeeByRank(transaction.getRecipient().getRank())));
+                    rankPropsService.getFeeByRank(recipient.getRank())));
         }
         transactionRepo.saveAndFlush(transaction);
     }
