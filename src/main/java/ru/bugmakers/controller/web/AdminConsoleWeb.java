@@ -16,43 +16,43 @@ import ru.bugmakers.dto.response.web.*;
 @RequestMapping("/webapi/admin")
 public class AdminConsoleWeb extends MbController {
 
-    @PostMapping(value = "/getartistlist")
+    @PostMapping(value = "/artist.list")
     public ResponseEntity<MbResponseToWeb> getArtistInfo(@RequestBody ArtistListRequestWeb artistListRequestWeb) {
         ArtistInfoFromAdminConsoleResponseWeb artistInfoFromAdminConsoleResponseWeb = null;
         return ResponseEntity.ok(artistInfoFromAdminConsoleResponseWeb);
     }
 
-    @PostMapping(value = "/artists/artist.edit")
+    @PostMapping(value = "/artist.edit")
     public ResponseEntity<MbResponseToWeb> editArtist(@RequestBody ArtistEditRqWeb artistBlockRequest) {
         ArtistEditingResponseWeb artistEditingResponseWeb = null;
         return ResponseEntity.ok(artistEditingResponseWeb);
     }
 
-    @PostMapping(value = "/artists/artist.block")
+    @PostMapping(value = "/artist.block")
     public ResponseEntity<MbResponseToWeb> blockArtist(@RequestBody ArtistBlockRequestWeb artistBlockRequestWeb) {
         ArtistBlockResponseWeb artistBlockResponseWeb = null;
         return ResponseEntity.ok(artistBlockResponseWeb);
     }
 
-    @PostMapping(value = "/artists/artist.delete")
+    @PostMapping(value = "/artist.delete")
     public ResponseEntity<MbResponseToWeb> deleteArtist(@RequestBody ArtistDeleteRequestWeb artistDeleteRequestWeb) {
         ArtistDeleteResponseWeb artistDeleteResponseWeb = null;
         return ResponseEntity.ok(artistDeleteResponseWeb);
     }
 
-    @PostMapping(value = "/artists/sendmessage")
+    @PostMapping(value = "/message.send")
     public ResponseEntity<MbResponseToWeb> sendMessage(@RequestBody SendMessageRequestWeb sendMessagerequestWeb) {
         SendMessageResponseMobile sendMessageResponseMobile = null;
         return ResponseEntity.ok(sendMessageResponseMobile);
     }
 
-    @PostMapping(value = "/artists/artist.stat")
+    @PostMapping(value = "/artist.stat")
     public ResponseEntity<MbResponseToWeb> getArtistStatistic(@RequestBody ArtistStatisticRequestWeb artistStatisticRequestWeb) {
         ArtistStatisticFromAdminConsoleResponseWeb artistStatisticFromAdminConsoleResponseWeb = null;
         return ResponseEntity.ok(artistStatisticFromAdminConsoleResponseWeb);
     }
 
-    @PostMapping(value = "/artists/artist.stat.period")
+    @PostMapping(value = "/artist.stat.period")
     public ResponseEntity<MbResponseToWeb> getArtistStatisticWithPeriod(@RequestBody ArtistStatisticWithPeriodRequestWeb artistStatisticRequest) {
         ArtistStatisticFromAdminConsoleResponseWeb artistStatisticFromAdminConsoleResponseWeb = null;
         return ResponseEntity.ok(artistStatisticFromAdminConsoleResponseWeb);

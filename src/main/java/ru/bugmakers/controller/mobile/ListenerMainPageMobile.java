@@ -32,7 +32,7 @@ public class ListenerMainPageMobile extends MbController {
 
     @GetMapping(value = "/find.artist")
     public ResponseEntity<MbResponseToMobile> findArtist(@RequestBody ListenerMainPageMobileRq rq) {
-        FindArtistResponseMobile findArtistResponseMobile = null;
+        FindArtistResponseMobile findArtistResponseMobile;
         try {
             List<UserDTO> artists = userService.findAllUsersByNicknameLikeValue(rq.getArtistAlias());
             findArtistResponseMobile = new FindArtistResponseMobile(RsStatus.SUCCESS);
