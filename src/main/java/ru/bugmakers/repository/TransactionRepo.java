@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 /**
  * Created by Ivan
  */
-public interface TransactionRepo extends JpaRepository<Transaction, Long> {
+public interface TransactionRepo extends JpaRepository<Transaction, String> {
 
     /**
      * @param id идентификатор пользователя

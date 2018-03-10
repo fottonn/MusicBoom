@@ -2,6 +2,7 @@ package ru.bugmakers.entity;
 
 import ru.bugmakers.enums.MoneyBearerKind;
 import ru.bugmakers.enums.Status;
+import ru.bugmakers.utils.UuidGenerator;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -15,8 +16,7 @@ import java.time.LocalDateTime;
 public class Transaction {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    private String id;
 
     @Column(name = "sender_id")
     private Long senderId;
@@ -42,13 +42,18 @@ public class Transaction {
     private LocalDateTime date;
 
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private Status status;
 
-    public Long getId() {
+    public Transaction() {
+        this.id = UuidGenerator.timeBasedUuidGenerate();
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
