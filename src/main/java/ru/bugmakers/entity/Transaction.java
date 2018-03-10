@@ -18,13 +18,11 @@ public class Transaction {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "sender_id")
-    private User sender;
+    @Column(name = "sender_id")
+    private Long senderId;
 
-    @ManyToOne
-    @JoinColumn(name = "recipient_id")
-    private User recipient;
+    @Column(name = "recipient_id")
+    private Long recipientId;
 
     @Column(name = "sender_payment_kind")
     @Enumerated(EnumType.STRING)
@@ -54,20 +52,20 @@ public class Transaction {
         this.id = id;
     }
 
-    public User getSender() {
-        return sender;
+    public Long getSenderId() {
+        return senderId;
     }
 
-    public void setSender(User sender) {
-        this.sender = sender;
+    public void setSenderId(Long senderId) {
+        this.senderId = senderId;
     }
 
-    public User getRecipient() {
-        return recipient;
+    public Long getRecipientId() {
+        return recipientId;
     }
 
-    public void setRecipient(User recipient) {
-        this.recipient = recipient;
+    public void setRecipientId(Long recipientId) {
+        this.recipientId = recipientId;
     }
 
     public MoneyBearerKind getSenderMoneyBearerKind() {
