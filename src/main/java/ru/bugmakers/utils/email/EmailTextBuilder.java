@@ -1,9 +1,10 @@
 package ru.bugmakers.utils.email;
 
+import org.springframework.core.io.ClassPathResource;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Objects;
 
 /**
  * Created by Ivan
@@ -17,8 +18,7 @@ public class EmailTextBuilder {
 
     static {
         StringBuilder sb = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new FileReader(
-                Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("email.html")).getFile()))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(new ClassPathResource("email.html").getFile()))) {
             br.lines().forEach(sb::append);
         } catch (IOException e) {
             throw new RuntimeException(e);
