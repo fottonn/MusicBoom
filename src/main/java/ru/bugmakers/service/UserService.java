@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.UserType;
-import ru.bugmakers.mappers.converters.User2UserDtoConverter;
 import ru.bugmakers.repository.UserRepo;
 
 import java.util.*;
@@ -20,16 +19,10 @@ import java.util.regex.Pattern;
 public class UserService {
 
     private UserRepo userRepo;
-    private User2UserDtoConverter user2UserDtoConverter;
 
     @Autowired
     public void setUserRepo(UserRepo userRepo) {
         this.userRepo = userRepo;
-    }
-
-    @Autowired
-    public void setUser2UserDtoConverter(User2UserDtoConverter user2UserDtoConverter) {
-        this.user2UserDtoConverter = user2UserDtoConverter;
     }
 
     public User saveUser(User user) {
@@ -113,8 +106,16 @@ public class UserService {
      * @param pageable {@link Pageable}
      * @return страница пользователей с типом {@code userType}
      */
-    public Page<UserDTO> findAllUsersByUserType(final UserType userType, final Pageable pageable) {
-        Page<User> users = userRepo.findAllByUserType(userType, pageable);
-        return users.map(user -> user2UserDtoConverter.convert(user));
+    public Page<User> findAllUsersByUserType(final UserType userType, final Pageable pageable) {
+        return userRepo.findAllByUserType(userType, pageable);
+    }
+
+    /**
+     * Удаление пользователя
+     *
+     * @param id идентификатор пользователя
+     */
+    public void deleteUserById(Long id) {
+        userRepo.deleteById(id);
     }
 }

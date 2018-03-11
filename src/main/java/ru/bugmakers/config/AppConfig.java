@@ -23,6 +23,8 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Created by Ivan
  */
@@ -51,9 +53,18 @@ public class AppConfig implements WebMvcConfigurer {
 
     @Bean
     public ConfigurationProvider appConfigProvider() {
-        ConfigFilesProvider provider = () -> Collections.singletonList(Paths.get("app_config.properties"));
+        ConfigFilesProvider provider = () -> Collections.singletonList(Paths.get(requireNonNull(getClass().getClassLoader().getResource("app_config.properties")).getPath()));
         ConfigurationSource source = new FilesConfigurationSource(provider);
         return new ConfigurationProviderBuilder().withConfigurationSource(source).build();
+    }
+
+    @Bean
+    public ConfigurationProvider emailConfigProvider() {
+        ConfigFilesProvider provider = () -> Collections.singletonList(Paths.get(requireNonNull(getClass().getClassLoader().getResource("email.properties")).getPath()));
+        ConfigurationSource source = new FilesConfigurationSource(provider);
+        return new ConfigurationProviderBuilder()
+                .withConfigurationSource(source)
+                .build();
     }
 
     @Override

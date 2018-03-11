@@ -10,7 +10,7 @@ import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.mappers.UserDtoToUserRegisterConverter;
 import ru.bugmakers.mappers.converters.User2UserDtoConverter;
 import ru.bugmakers.mappers.enrichers.UserDTO2UserEnricher;
-import ru.bugmakers.service.EmailConfirmationService;
+import ru.bugmakers.service.EmailService;
 import ru.bugmakers.service.UserService;
 import ru.bugmakers.utils.SecurityContextUtils;
 
@@ -24,7 +24,7 @@ public abstract class AbstractRegistrator implements Registrator {
     private UserDtoToUserRegisterConverter userDtoToUserRegisterConverter;
     private User2UserDtoConverter user2UserDtoConverter;
     private UserDTO2UserEnricher userDTO2UserEnricher;
-    private EmailConfirmationService emailConfirmationService;
+    private EmailService emailService;
 
 
     @Autowired
@@ -51,8 +51,8 @@ public abstract class AbstractRegistrator implements Registrator {
         this.userDTO2UserEnricher = userDTO2UserEnricher;
     }
     @Autowired
-    public void setEmailConfirmationService(EmailConfirmationService emailConfirmationService) {
-        this.emailConfirmationService = emailConfirmationService;
+    public void setEmailService(EmailService emailService) {
+        this.emailService = emailService;
     }
 
     @Override
@@ -85,7 +85,7 @@ public abstract class AbstractRegistrator implements Registrator {
         user = userService.saveUser(user);
         SecurityContextUtils.setAuthentication(user);
         if (user.getEmail() != null && !user.getEmail().isEnabled()) {
-            emailConfirmationService.sendConfirmationEmail(user);
+            emailService.sendConfirmationEmail(user);
         }
         return user2UserDtoConverter.convert(user);
     }

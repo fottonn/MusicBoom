@@ -12,11 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.bugmakers.controller.MbController;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.dto.request.web.*;
-import ru.bugmakers.dto.response.web.*;
+import ru.bugmakers.dto.response.web.ArtistListWebRs;
+import ru.bugmakers.dto.response.web.ArtistStatisticFromAdminConsoleResponseWeb;
+import ru.bugmakers.dto.response.web.MbResponseToWeb;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.enums.UserType;
+import ru.bugmakers.mappers.converters.User2UserDtoConverter;
 import ru.bugmakers.mappers.enrichers.UserDTO2UserEnricher;
+import ru.bugmakers.service.EmailService;
 import ru.bugmakers.service.UserService;
 
 /**
@@ -27,7 +31,9 @@ import ru.bugmakers.service.UserService;
 public class AdminConsoleWeb extends MbController {
 
     private UserService userService;
+    private EmailService emailService;
     private UserDTO2UserEnricher userDTO2UserEnricher;
+    private User2UserDtoConverter user2UserDtoConverter;
 
     @Autowired
     public void setUserService(UserService userService) {
@@ -35,8 +41,18 @@ public class AdminConsoleWeb extends MbController {
     }
 
     @Autowired
+    public void setEmailService(EmailService emailService) {
+        this.emailService = emailService;
+    }
+
+    @Autowired
     public void setUserDTO2UserEnricher(UserDTO2UserEnricher userDTO2UserEnricher) {
         this.userDTO2UserEnricher = userDTO2UserEnricher;
+    }
+
+    @Autowired
+    public void setUser2UserDtoConverter(User2UserDtoConverter user2UserDtoConverter) {
+        this.user2UserDtoConverter = user2UserDtoConverter;
     }
 
     @PostMapping(value = "/artist.list")
@@ -45,7 +61,8 @@ public class AdminConsoleWeb extends MbController {
         try {
             int page = Integer.parseInt(rq.getPage()) - 1;
             int size = Integer.parseInt(rq.getSize());
-            Page<UserDTO> artistsPage = userService.findAllUsersByUserType(UserType.ARTIST, PageRequest.of(page, size, Sort.by("id")));
+            Page<User> users = userService.findAllUsersByUserType(UserType.ARTIST, PageRequest.of(page, size, Sort.by("id")));
+            Page<UserDTO> artistsPage = users.map(user -> user2UserDtoConverter.convert(user));
             rs = new ArtistListWebRs(RsStatus.SUCCESS);
             rs.setArtists(artistsPage.getContent());
             rs.setPage(artistsPage.getNumber() + 1);
@@ -85,15 +102,25 @@ public class AdminConsoleWeb extends MbController {
     }
 
     @PostMapping(value = "/artist.delete")
-    public ResponseEntity<MbResponseToWeb> deleteArtist(@RequestBody ArtistDeleteRequestWeb artistDeleteRequestWeb) {
-        ArtistDeleteResponseWeb artistDeleteResponseWeb = null;
-        return ResponseEntity.ok(artistDeleteResponseWeb);
+    public ResponseEntity<MbResponseToWeb> deleteArtist(@RequestBody ArtistDeleteWebRq rq) {
+
+        try {
+            userService.deleteUserById(Long.valueOf(rq.getArtist().getId()));
+        } catch (Exception e) {
+            return ResponseEntity.ok(new MbResponseToWeb(RsStatus.ERROR));
+        }
+        return ResponseEntity.ok(new MbResponseToWeb(RsStatus.SUCCESS));
     }
 
     @PostMapping(value = "/message.send")
-    public ResponseEntity<MbResponseToWeb> sendMessage(@RequestBody SendMessageRequestWeb sendMessagerequestWeb) {
-        SendMessageResponseMobile sendMessageResponseMobile = null;
-        return ResponseEntity.ok(sendMessageResponseMobile);
+    public ResponseEntity<MbResponseToWeb> sendMessage(@RequestBody SendMessageWebRq rq) {
+
+        try {
+            emailService.sendEmailToAllArtists(rq.getMessage(), rq.getSubject());
+        } catch (Exception e) {
+            return ResponseEntity.ok(new MbResponseToWeb(RsStatus.ERROR));
+        }
+        return ResponseEntity.ok(new MbResponseToWeb(RsStatus.SUCCESS));
     }
 
     @PostMapping(value = "/artist.stat")
