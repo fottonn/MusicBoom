@@ -4,22 +4,23 @@ package ru.bugmakers.dto;
  * Created by Ayrat on 11.12.2017.
  */
 public class Period {
-    private String startDate;
-    private String endDate;
 
-    public String getStartDate() {
-        return startDate;
+    private String start;
+    private String end;
+
+    public String getStart() {
+        return start;
     }
 
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
+    public void setStart(String start) {
+        this.start = start;
     }
 
-    public String getEndDate() {
-        return endDate;
+    public String getEnd() {
+        return end;
     }
 
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
+    public void setEnd(String end) {
+        this.end = end;
     }
 }

@@ -13,7 +13,7 @@ import ru.bugmakers.controller.MbController;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.dto.request.web.*;
 import ru.bugmakers.dto.response.web.ArtistListWebRs;
-import ru.bugmakers.dto.response.web.ArtistStatisticFromAdminConsoleResponseWeb;
+import ru.bugmakers.dto.response.web.ArtistStatisticForAdminWebRs;
 import ru.bugmakers.dto.response.web.MbResponseToWeb;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.RsStatus;
@@ -21,7 +21,13 @@ import ru.bugmakers.enums.UserType;
 import ru.bugmakers.mappers.converters.User2UserDtoConverter;
 import ru.bugmakers.mappers.enrichers.UserDTO2UserEnricher;
 import ru.bugmakers.service.EmailService;
+import ru.bugmakers.service.EventService;
+import ru.bugmakers.service.TransactionService;
 import ru.bugmakers.service.UserService;
+
+import java.time.LocalDateTime;
+
+import static ru.bugmakers.utils.DateTimeFormatters.parseLocalDateTime;
 
 /**
  * Created by Ayrat on 06.12.2017.
@@ -32,6 +38,8 @@ public class AdminConsoleWeb extends MbController {
 
     private UserService userService;
     private EmailService emailService;
+    private TransactionService transactionService;
+    private EventService eventService;
     private UserDTO2UserEnricher userDTO2UserEnricher;
     private User2UserDtoConverter user2UserDtoConverter;
 
@@ -43,6 +51,16 @@ public class AdminConsoleWeb extends MbController {
     @Autowired
     public void setEmailService(EmailService emailService) {
         this.emailService = emailService;
+    }
+
+    @Autowired
+    public void setTransactionService(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
+
+    @Autowired
+    public void setEventService(EventService eventService) {
+        this.eventService = eventService;
     }
 
     @Autowired
@@ -124,15 +142,39 @@ public class AdminConsoleWeb extends MbController {
     }
 
     @PostMapping(value = "/artist.stat")
-    public ResponseEntity<MbResponseToWeb> getArtistStatistic(@RequestBody ArtistStatisticRequestWeb artistStatisticRequestWeb) {
-        ArtistStatisticFromAdminConsoleResponseWeb artistStatisticFromAdminConsoleResponseWeb = null;
-        return ResponseEntity.ok(artistStatisticFromAdminConsoleResponseWeb);
+    public ResponseEntity<MbResponseToWeb> getArtistStatistic(@RequestBody ArtistStatisticWebRq rq) {
+        ArtistStatisticForAdminWebRs rs;
+        try {
+            rs = new ArtistStatisticForAdminWebRs(RsStatus.SUCCESS);
+            Long id = Long.valueOf(rq.getArtist().getId());
+            rs.setId(String.valueOf(id));
+            rs.setDonated(transactionService.getAllReceivedMoney(id));
+            rs.setCashout(transactionService.getAllDerivedMoney(id));
+            rs.setBalance(transactionService.getCurrentBalance(id));
+            rs.setShowTime(eventService.getTotalEventsTime(id));
+        } catch (Exception e) {
+            rs = new ArtistStatisticForAdminWebRs(RsStatus.ERROR);
+        }
+        return ResponseEntity.ok(rs);
     }
 
     @PostMapping(value = "/artist.stat.period")
-    public ResponseEntity<MbResponseToWeb> getArtistStatisticWithPeriod(@RequestBody ArtistStatisticWithPeriodRequestWeb artistStatisticRequest) {
-        ArtistStatisticFromAdminConsoleResponseWeb artistStatisticFromAdminConsoleResponseWeb = null;
-        return ResponseEntity.ok(artistStatisticFromAdminConsoleResponseWeb);
+    public ResponseEntity<MbResponseToWeb> getArtistStatisticWithPeriod(@RequestBody ArtistStatisticWithPeriodWebRq rq) {
+        ArtistStatisticForAdminWebRs rs;
+        try {
+            rs = new ArtistStatisticForAdminWebRs(RsStatus.SUCCESS);
+            final Long id = Long.valueOf(rq.getArtist().getId());
+            final LocalDateTime start = parseLocalDateTime(rq.getPeriod().getStart());
+            final LocalDateTime end = parseLocalDateTime(rq.getPeriod().getEnd());
+            rs.setId(String.valueOf(id));
+            rs.setDonated(transactionService.getReceivedMoneyForPeriod(id, start, end));
+            rs.setCashout(transactionService.getDerivedMoneyForPeriod(id, start, end));
+            rs.setBalance(transactionService.getCurrentBalance(id));
+            rs.setShowTime(eventService.getPeriodEventsTime(id, start, end));
+        } catch (Exception e) {
+            rs = new ArtistStatisticForAdminWebRs(RsStatus.ERROR);
+        }
+        return ResponseEntity.ok(rs);
     }
 
 

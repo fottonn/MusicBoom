@@ -20,7 +20,7 @@ import ru.bugmakers.service.ArtistFinanceManagementService;
  * Created by Ayrat on 24.11.2017.
  */
 @RestController
-@RequestMapping("/mapi/artist/")
+@RequestMapping("/mapi/artist")
 public class ArtistFinanceManagementMobile extends MbController {
 
     private ArtistFinanceManagementService artistFinanceManagementService;
@@ -36,7 +36,7 @@ public class ArtistFinanceManagementMobile extends MbController {
      * @param cardInfoRequestMobile - номер карточки
      * @return
      */
-    @PostMapping(value = "card.attach")
+    @PostMapping(value = "/card.attach")
     public ResponseEntity<MbResponseToMobile> cardAttach(@AuthenticationPrincipal UserPrincipal user,
                                                          @RequestBody CardInfoRequestMobile cardInfoRequestMobile) {
         try {
@@ -58,7 +58,7 @@ public class ArtistFinanceManagementMobile extends MbController {
      * @param user                  - пользователь
      * @param cardInfoRequestMobile - номер карточки
      */
-    @PostMapping(value = "card.update")
+    @PostMapping(value = "/card.update")
     public void cardUpdate(@AuthenticationPrincipal UserPrincipal user,
                            @RequestBody CardInfoRequestMobile cardInfoRequestMobile) {
         this.cardAttach(user, cardInfoRequestMobile);
@@ -69,7 +69,7 @@ public class ArtistFinanceManagementMobile extends MbController {
      * @param user  - пользователь
      * @return      - ответ на ПЛ
      */
-    @PostMapping(value = "card.detach")
+    @PostMapping(value = "/card.detach")
     public ResponseEntity<MbResponseToMobile> cardDetach(@AuthenticationPrincipal UserPrincipal user
                                                          ) {
         try {
@@ -88,7 +88,7 @@ public class ArtistFinanceManagementMobile extends MbController {
      * @param amount    - сумма
      * @return          - ответ на ПЛ
      */
-    @PostMapping(value = "withdraw")
+    @PostMapping(value = "/withdraw")
     public ResponseEntity<MbResponseToMobile> withdraw(@AuthenticationPrincipal UserPrincipal user,
                                                        @RequestParam("sum") String amount) {
         try {

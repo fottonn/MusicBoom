@@ -57,4 +57,14 @@ public interface EventRepo extends JpaRepository<Event, Long> {
             "where e.user.id = :id")
     Long getAllEventDuration(@Param("id") Long userId);
 
+    @Query("" +
+            "select " +
+            "sum (e.eventDuration) " +
+            "from Event e " +
+            "where e.user.id = :id " +
+            "and e.startDate between :start and :finish")
+    Long getAllEventDurationForPeriod(@Param("id") Long userId,
+                                      @Param("start") LocalDateTime start,
+                                      @Param("finish") LocalDateTime finish);
+
 }
