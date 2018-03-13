@@ -10,6 +10,7 @@ import ru.bugmakers.service.EventService;
 import ru.bugmakers.service.TransactionService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static ru.bugmakers.utils.DateTimeFormatters.DATE_FORMATTER;
 import static ru.bugmakers.utils.DateTimeFormatters.DATE_TIME_FORMATTER;
@@ -79,7 +80,7 @@ public class User2UserDtoConverter implements MbConverter<User, UserDTO> {
         for (int i = 4; i < 12; i++) {
             chars[i] = '*';
         }
-        return chars.toString();
+        return Arrays.toString(chars);
     }
 
     private StatOfPerformanceDTO getStatOfPerformance(Long id) {

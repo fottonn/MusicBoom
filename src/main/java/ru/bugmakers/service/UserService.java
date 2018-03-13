@@ -1,9 +1,12 @@
 package ru.bugmakers.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.entity.User;
+import ru.bugmakers.enums.UserType;
 import ru.bugmakers.repository.UserRepo;
 
 import java.util.*;
@@ -74,7 +77,14 @@ public class UserService {
         return userRepo.existsByPhone(phone);
     }
 
-    public List<UserDTO> findAllUsersByNicknameLikeValue(final String value) {
+    /**
+     * Поиск всех пользователей, {@code nickname} которых содержит {@code value}, и тип {@code userType}
+     *
+     * @param userType тип пользователя
+     * @param value    поисковое значение
+     * @return все пользователи с {@code nickname} LIKE {@code %value%}
+     */
+    public List<UserDTO> findAllUsersByUserTypeAndByNicknameLikeValue(final UserType userType, final String value) {
         final List<UserDTO> result = new ArrayList<>();
         if (value == null || value.length() < 3) return result;
         final String[] array = Pattern.compile("[\\p{Punct}]").split(value);
@@ -83,9 +93,29 @@ public class UserService {
             if (s.length() > 2) values.add("%" + s.toUpperCase() + "%");
         }
         final Map<Long, User> users = new HashMap<>();
-        values.forEach(s -> userRepo.findDistinctByNicknameLike(s).forEach(user -> users.putIfAbsent(user.getId(), user)));
+        values.forEach(s -> userRepo.findDistinctByUserTypeAndNicknameLike(userType, s).forEach(user -> users.putIfAbsent(user.getId(), user)));
         users.values().forEach(user -> result.add(new UserDTO(String.valueOf(user.getId()), user.getNickname())));
         result.sort(Comparator.comparing(UserDTO::getNickname));
         return result;
+    }
+
+    /**
+     * Постраничный поиск всех пользователей с типом {@code userType}
+     *
+     * @param userType тип пользователя
+     * @param pageable {@link Pageable}
+     * @return страница пользователей с типом {@code userType}
+     */
+    public Page<User> findAllUsersByUserType(final UserType userType, final Pageable pageable) {
+        return userRepo.findAllByUserType(userType, pageable);
+    }
+
+    /**
+     * Удаление пользователя
+     *
+     * @param id идентификатор пользователя
+     */
+    public void deleteUserById(Long id) {
+        userRepo.deleteById(id);
     }
 }

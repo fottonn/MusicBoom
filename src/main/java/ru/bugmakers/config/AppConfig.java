@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -19,6 +20,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import ru.bugmakers.config.logout.MbLogoutSuccessHandler;
 
+import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
@@ -50,10 +53,21 @@ public class AppConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public ConfigurationProvider appConfigProvider() {
-        ConfigFilesProvider provider = () -> Collections.singletonList(Paths.get("app_config.properties"));
+    public ConfigurationProvider appConfigProvider() throws IOException {
+        URI config = new ClassPathResource("app_config.properties").getURI();
+        ConfigFilesProvider provider = () -> Collections.singletonList(Paths.get(config));
         ConfigurationSource source = new FilesConfigurationSource(provider);
         return new ConfigurationProviderBuilder().withConfigurationSource(source).build();
+    }
+
+    @Bean
+    public ConfigurationProvider emailConfigProvider() throws IOException {
+        URI config = new ClassPathResource("email.properties").getURI();
+        ConfigFilesProvider provider = () -> Collections.singletonList(Paths.get(config));
+        ConfigurationSource source = new FilesConfigurationSource(provider);
+        return new ConfigurationProviderBuilder()
+                .withConfigurationSource(source)
+                .build();
     }
 
     @Override

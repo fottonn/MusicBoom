@@ -19,6 +19,8 @@ import static ru.bugmakers.utils.DecimalFormatters.MONEY_FORMATTER;
 @Service
 public class EventService {
 
+    private static final BigDecimal SIXTY = new BigDecimal(60);
+    private static final BigDecimal THIRTY = new BigDecimal(30);
     private EventRepo eventRepo;
     private TransactionRepo transactionRepo;
 
@@ -53,8 +55,8 @@ public class EventService {
         LocalDateTime lastEndDate = eventRepo.getLastEndDate(userId);
         Duration duration = Duration.between(firstStartDate, lastEndDate);
         BigDecimal totalDays = new BigDecimal(duration.toDays());
-        BigDecimal totalMonths = totalDays.divide(new BigDecimal(30), RoundingMode.HALF_UP);
-        BigDecimal allEventDuration = new BigDecimal(eventRepo.getAllEventDuration(userId)).divide(new BigDecimal(60), RoundingMode.HALF_UP);
+        BigDecimal totalMonths = totalDays.divide(THIRTY, RoundingMode.HALF_UP);
+        BigDecimal allEventDuration = new BigDecimal(eventRepo.getAllEventDuration(userId)).divide(SIXTY, RoundingMode.HALF_UP);
         BigDecimal hoursOfMonth = allEventDuration.divide(totalMonths, RoundingMode.HALF_UP);
         return HOURS_FORMATTER.format(hoursOfMonth);
     }
@@ -70,7 +72,7 @@ public class EventService {
         LocalDateTime lastEndDate = eventRepo.getLastEndDate(userId);
         Duration duration = Duration.between(firstStartDate, lastEndDate);
         BigDecimal totalDays = new BigDecimal(duration.toDays());
-        BigDecimal totalMonths = totalDays.divide(new BigDecimal(30), RoundingMode.HALF_UP);
+        BigDecimal totalMonths = totalDays.divide(THIRTY, RoundingMode.HALF_UP);
         BigDecimal allMoney = transactionRepo.getReceivedMoney(userId);
         BigDecimal moneyOfMonth = allMoney.divide(totalMonths, RoundingMode.DOWN);
         return MONEY_FORMATTER.format(moneyOfMonth);
@@ -84,9 +86,37 @@ public class EventService {
      */
     public String getAverageEventTime(Long userId) {
         BigDecimal allEvents = new BigDecimal(eventRepo.countByUserId(userId));
-        BigDecimal allEventsDuration = new BigDecimal(eventRepo.getAllEventDuration(userId)).divide(new BigDecimal(60), RoundingMode.HALF_UP);
+        BigDecimal allEventsDuration = new BigDecimal(eventRepo.getAllEventDuration(userId)).divide(SIXTY, RoundingMode.HALF_UP);
         BigDecimal averageEventTime = allEventsDuration.divide(allEvents, RoundingMode.HALF_UP);
         return HOURS_FORMATTER.format(averageEventTime);
     }
 
+    /**
+     * Общее время выступлений в часах
+     *
+     * @param userId идентификатор пользователя
+     * @return суммарное время всех выступлений в часах в формате ###.#
+     */
+    public String getTotalEventsTime(Long userId) {
+        if (userId == null) return null;
+        BigDecimal totalTime = new BigDecimal(eventRepo.getAllEventDuration(userId)).divide(SIXTY, 1, RoundingMode.HALF_UP);
+        return HOURS_FORMATTER.format(totalTime);
+    }
+
+    /**
+     * Общее время выступлений в часах за период
+     *
+     * @param userId идентификатор пользователя
+     * @param start  начало опериода
+     * @param end    конец периода
+     * @return время выступлений в часах за период
+     */
+    public String getPeriodEventsTime(Long userId, LocalDateTime start, LocalDateTime end) {
+        if (userId == null) return null;
+        if (start == null) start = eventRepo.getFirstStartDate(userId);
+        if (end == null) end = eventRepo.getLastEndDate(userId);
+        BigDecimal duration = new BigDecimal(eventRepo.getAllEventDurationForPeriod(userId, start, end));
+        BigDecimal hoursDuration = duration.divide(SIXTY, 1, RoundingMode.HALF_UP);
+        return HOURS_FORMATTER.format(hoursDuration);
+    }
 }

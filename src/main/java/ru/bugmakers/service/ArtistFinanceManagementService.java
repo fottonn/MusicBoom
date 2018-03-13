@@ -98,6 +98,6 @@ public class ArtistFinanceManagementService {
     private Boolean amountValidation(String amount, User user) {
         BigDecimal userCurrentBalance = new BigDecimal(transactionService.getCurrentBalance(user.getId()));
         BigDecimal withdrawAmount = new BigDecimal(amount);
-        return (userCurrentBalance.compareTo(withdrawAmount) == 1) || (userCurrentBalance.compareTo(withdrawAmount) == 0) ? Boolean.TRUE : Boolean.FALSE;
+        return (userCurrentBalance.compareTo(withdrawAmount) > 0) || (userCurrentBalance.compareTo(withdrawAmount) == 0) ? Boolean.TRUE : Boolean.FALSE;
     }
 }
