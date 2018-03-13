@@ -29,7 +29,7 @@ public class ArtistProfileEditService {
     private UserService userService;
     private UserDTO2UserEnricher userDTO2UserEnricher;
     private SaveImagesService saveImagesService;
-    private EmailConfirmationService emailConfirmationService;
+    private EmailService emailService;
     private ConfigurationProvider appConfigProvider;
 
     @Autowired
@@ -53,8 +53,8 @@ public class ArtistProfileEditService {
     }
 
     @Autowired
-    public void setEmailConfirmationService(EmailConfirmationService emailConfirmationService) {
-        this.emailConfirmationService = emailConfirmationService;
+    public void setEmailService(EmailService emailService) {
+        this.emailService = emailService;
     }
 
     @Autowired
@@ -75,7 +75,7 @@ public class ArtistProfileEditService {
         if (user.getUserType() != UserType.ARTIST) throw MbException.create(MbError.APE02);
         userDTO2UserEnricher.enrich(userDTO, user);
         if (user.getEmail() != null && !user.getEmail().isEnabled()) {
-            emailConfirmationService.sendConfirmationEmail(user);
+            emailService.sendConfirmationEmail(user);
         }
         try {
             User savedUser = userService.updateUser(user);

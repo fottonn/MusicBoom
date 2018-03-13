@@ -21,7 +21,7 @@ import ru.bugmakers.service.FeedBackService;
  * Created by Ayrat on 24.11.2017.
  */
 @RestController
-@RequestMapping("/mapi/registereduser/")
+@RequestMapping("/mapi/registereduser")
 public class RegistredUserMenuMobile extends MbController {
 
     private FeedBackService feedBackService;
@@ -31,7 +31,7 @@ public class RegistredUserMenuMobile extends MbController {
         this.feedBackService = feedBackService;
     }
 
-    @PostMapping(value = "feedback.send")
+    @PostMapping(value = "/feedback.send")
     public ResponseEntity<MbResponseToMobile> feedbackSend(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                            @RequestBody FeedBackRequestMobile rq) {
 

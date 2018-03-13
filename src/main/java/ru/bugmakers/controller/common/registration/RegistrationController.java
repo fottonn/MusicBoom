@@ -13,7 +13,6 @@ import ru.bugmakers.enums.SocialProvider;
 import ru.bugmakers.enums.UserType;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
-import ru.bugmakers.service.EmailConfirmationService;
 import ru.bugmakers.validator.common.RegistrationRequestValidator;
 
 /**
