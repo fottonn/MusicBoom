@@ -2,8 +2,9 @@ package ru.bugmakers.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.bugmakers.dto.response.MbResponse;
 import ru.bugmakers.entity.Email;
@@ -12,9 +13,6 @@ import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.service.EmailService;
 import ru.bugmakers.service.UserService;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -32,18 +30,20 @@ public class TestController {
     @Autowired
     private EmailService emailService;
 
-    @PostMapping
-    public ResponseEntity<MbResponse> testMethod(HttpServletRequest request) throws IOException, ServletException {
+    @GetMapping
+    public ResponseEntity<MbResponse> testMethod(@RequestParam("email") String email,
+                                                 @RequestParam("name") String name,
+                                                 @RequestParam("surname") String surname) {
         User user = new User();
         user
-                .withName("Ayrat")
-                .withSurName("Tagirov")
+                .withName(name)
+                .withSurName(surname)
                 .withBirthDay(LocalDate.of(1986, Month.OCTOBER, 24))
                 .withRegistrationDate(LocalDateTime.now())
                 .withCountry("Russia")
-                .withEmail(new Email("ikolpakoff@gmail.com"));
+                .withEmail(new Email(email));
         try {
-            emailService.sendEmailToArtist(user, "Hello, Ayrat!!! Халляр ничек?", "Хеллер белешу темасы");
+            emailService.sendEmailToArtist(user, "Hello, " + name + "!!! Халляр ничек?", "Хеллер белешу темасы");
         } catch (Exception e) {
             e.printStackTrace();
         }

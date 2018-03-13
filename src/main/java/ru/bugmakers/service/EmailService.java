@@ -1,6 +1,5 @@
 package ru.bugmakers.service;
 
-import org.apache.commons.mail.EmailException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +13,6 @@ import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.utils.UuidGenerator;
 import ru.bugmakers.utils.email.EmailSender;
 import ru.bugmakers.utils.email.EmailTextBuilder;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Ayrat on 31.01.2018.
@@ -48,6 +44,7 @@ public class EmailService {
      * @param user пользователь
      * @throws MbException
      */
+
     public void sendConfirmationEmail(User user) throws MbException {
         String generatedValue = UuidGenerator.timeBasedUuidGenerate();
         user.getEmail().setConfirmationCode(generatedValue);
@@ -59,17 +56,10 @@ public class EmailService {
         String email = user.getEmail().getValue();
         String confirmLink = DOMAIN + generatedValue;
         String messageText = EmailTextBuilder.confirmBuild(user.getName(), user.getSurName(), confirmLink);
-        try {
-            emailSender.send(email, CONFIRMATION_SUBJECT, messageText);
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
-            throw MbException.create(MbError.SEE01);
-        }
+        emailSender.send(email, CONFIRMATION_SUBJECT, messageText);
     }
 
     public void sendEmailToAllArtists(String message, String subject) {
-
-        final List<User> losers = new ArrayList<>();
 
         int page = 0;
         int size = 100;
@@ -77,27 +67,13 @@ public class EmailService {
         Page<User> userPage = null;
         while (userPage == null || page != userPage.getTotalPages()) {
             userPage = userService.findAllUsersByUserType(UserType.ARTIST, PageRequest.of(page, size));
-            userPage.forEach(user -> {
-                try {
-                    sendEmailToArtist(user, message, subject);
-                } catch (Exception e) {
-                    losers.add(user);
-                }
-            });
+            userPage.forEach(user -> sendEmailToArtist(user, message, subject));
             page++;
         }
         LOGGER.info("The message is complete");
-        if (losers.isEmpty()) {
-            LOGGER.info("The message sent successfully to all artists");
-        } else {
-            StringBuilder sb = new StringBuilder(String.format("The message not sent to %d loser(s):\n", losers.size()));
-            losers.forEach(user -> sb.append(String.format("%6s %-30s\n", user.getId(), user.getEmail().getValue())));
-            LOGGER.error(sb.toString());
-        }
-
     }
 
-    public void sendEmailToArtist(User user, String message, String subject) throws EmailException {
+    public void sendEmailToArtist(User user, String message, String subject) {
         emailSender.send(user.getEmail().getValue(), subject, EmailTextBuilder.build(user.getName(), user.getSurName(), message));
     }
 }
