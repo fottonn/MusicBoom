@@ -10,6 +10,7 @@ import ru.bugmakers.mappers.converters.MbConverter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static ru.bugmakers.utils.DateTimeFormatters.DATE_FORMATTER;
 
@@ -47,8 +48,8 @@ public class UserDtoToUserRegisterConverter implements MbConverter<UserDTO, User
                 .withVkContact(source.getVk())
                 .withTlgContact(source.getTlg())
                 .withWhatsappContact(source.getWapp())
-                .withPersonalDataConsent(source.getIsAllowOfPersonalData())
-                .withContractConsent(source.getIsArtistContact());
+                .withPersonalDataConsent(Optional.ofNullable(source.getIsAllowOfPersonalData()).orElse(false))
+                .withContractConsent(Optional.ofNullable(source.getIsArtistContact()).orElse(false));
     }
 
 }

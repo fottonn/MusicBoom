@@ -53,12 +53,17 @@ public class EventService {
     public String getHoursOfMonth(Long userId) {
         LocalDateTime firstStartDate = eventRepo.getFirstStartDate(userId);
         LocalDateTime lastEndDate = eventRepo.getLastEndDate(userId);
-        Duration duration = Duration.between(firstStartDate, lastEndDate);
-        BigDecimal totalDays = new BigDecimal(duration.toDays());
-        BigDecimal totalMonths = totalDays.divide(THIRTY, RoundingMode.HALF_UP);
-        BigDecimal allEventDuration = new BigDecimal(eventRepo.getAllEventDuration(userId)).divide(SIXTY, RoundingMode.HALF_UP);
-        BigDecimal hoursOfMonth = allEventDuration.divide(totalMonths, RoundingMode.HALF_UP);
-        return HOURS_FORMATTER.format(hoursOfMonth);
+
+        if (firstStartDate != null && lastEndDate != null) {
+            Duration duration = Duration.between(firstStartDate, lastEndDate);
+            BigDecimal totalDays = new BigDecimal(duration.toDays());
+            BigDecimal totalMonths = totalDays.divide(THIRTY, RoundingMode.HALF_UP);
+            BigDecimal allEventDuration = new BigDecimal(eventRepo.getAllEventDuration(userId)).divide(SIXTY, RoundingMode.HALF_UP);
+            BigDecimal hoursOfMonth = allEventDuration.divide(totalMonths, RoundingMode.HALF_UP);
+            return HOURS_FORMATTER.format(hoursOfMonth);
+        } else {
+            return String.valueOf(0);
+        }
     }
 
     /**
@@ -70,12 +75,17 @@ public class EventService {
     public String getMoneyOfMonth(Long userId) {
         LocalDateTime firstStartDate = eventRepo.getFirstStartDate(userId);
         LocalDateTime lastEndDate = eventRepo.getLastEndDate(userId);
-        Duration duration = Duration.between(firstStartDate, lastEndDate);
-        BigDecimal totalDays = new BigDecimal(duration.toDays());
-        BigDecimal totalMonths = totalDays.divide(THIRTY, RoundingMode.HALF_UP);
-        BigDecimal allMoney = transactionRepo.getReceivedMoney(userId);
-        BigDecimal moneyOfMonth = allMoney.divide(totalMonths, RoundingMode.DOWN);
-        return MONEY_FORMATTER.format(moneyOfMonth);
+
+        if (firstStartDate != null && lastEndDate != null) {
+            Duration duration = Duration.between(firstStartDate, lastEndDate);
+            BigDecimal totalDays = new BigDecimal(duration.toDays());
+            BigDecimal totalMonths = totalDays.divide(THIRTY, RoundingMode.HALF_UP);
+            BigDecimal allMoney = transactionRepo.getReceivedMoney(userId);
+            BigDecimal moneyOfMonth = allMoney.divide(totalMonths, RoundingMode.DOWN);
+            return MONEY_FORMATTER.format(moneyOfMonth);
+        } else {
+            return String.valueOf(0);
+        }
     }
 
     /**
@@ -86,9 +96,14 @@ public class EventService {
      */
     public String getAverageEventTime(Long userId) {
         BigDecimal allEvents = new BigDecimal(eventRepo.countByUserId(userId));
-        BigDecimal allEventsDuration = new BigDecimal(eventRepo.getAllEventDuration(userId)).divide(SIXTY, RoundingMode.HALF_UP);
-        BigDecimal averageEventTime = allEventsDuration.divide(allEvents, RoundingMode.HALF_UP);
-        return HOURS_FORMATTER.format(averageEventTime);
+
+        if (allEvents.compareTo(BigDecimal.ZERO) != 0) {
+            BigDecimal allEventsDuration = new BigDecimal(eventRepo.getAllEventDuration(userId)).divide(SIXTY, RoundingMode.HALF_UP);
+            BigDecimal averageEventTime = allEventsDuration.divide(allEvents, RoundingMode.HALF_UP);
+            return HOURS_FORMATTER.format(averageEventTime);
+        } else {
+            return String.valueOf(0);
+        }
     }
 
     /**

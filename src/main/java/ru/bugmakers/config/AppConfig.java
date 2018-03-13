@@ -11,6 +11,7 @@ import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -32,7 +33,7 @@ import java.util.List;
 @Configuration
 @ComponentScan(value = "ru.bugmakers", excludeFilters = @Filter(Configuration.class))
 @Import({SecurityConfig.class, PersistConfig.class, LocalPersistConfig.class})
-@EnableWebMvc
+@EnableWebMvc @EnableAsync
 public class AppConfig implements WebMvcConfigurer {
 
     @Bean

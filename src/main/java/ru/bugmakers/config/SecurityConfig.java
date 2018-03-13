@@ -175,7 +175,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             http
                     .csrf().disable()
-                    .anonymous().disable()
                     .requestMatchers()
                     .antMatchers(HttpMethod.POST, "/authentication")
                     .and()
@@ -218,7 +217,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             http
                     .csrf().disable()
-                    .anonymous().disable()
                     .requestMatchers()
                     .antMatchers(HttpMethod.GET, "/authentication")
                     .antMatchers(HttpMethod.POST, "/registration")

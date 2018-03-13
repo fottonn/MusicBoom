@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 
+import static java.time.temporal.ChronoField.*;
+
 /**
  * Created by Ivan
  */
@@ -24,7 +26,14 @@ public class DateTimeFormatters {
     public static final DateTimeFormatter TIME_FORMATTER;
 
     static {
-        TIME_FORMATTER = DateTimeFormatter.ISO_LOCAL_TIME;
+        TIME_FORMATTER = new DateTimeFormatterBuilder()
+                .appendValue(HOUR_OF_DAY, 2)
+                .appendLiteral(':')
+                .appendValue(MINUTE_OF_HOUR, 2)
+                .optionalStart()
+                .appendLiteral(':')
+                .appendValue(SECOND_OF_MINUTE, 2)
+                .toFormatter();
     }
 
     /**
@@ -33,7 +42,12 @@ public class DateTimeFormatters {
     public static final DateTimeFormatter DATE_TIME_FORMATTER;
 
     static {
-        DATE_TIME_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+        DATE_TIME_FORMATTER = new DateTimeFormatterBuilder()
+                .parseCaseInsensitive()
+                .append(DATE_FORMATTER)
+                .appendLiteral('T')
+                .append(TIME_FORMATTER)
+                .toFormatter();
     }
 
     /**
