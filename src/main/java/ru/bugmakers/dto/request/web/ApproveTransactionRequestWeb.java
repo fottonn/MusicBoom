@@ -8,4 +8,12 @@ import ru.bugmakers.dto.request.SessionDataRequest;
  */
 public class ApproveTransactionRequestWeb extends SessionDataRequest {
     private TransactionApprove transactionRequest;
+
+    public TransactionApprove getTransactionRequest() {
+        return transactionRequest;
+    }
+
+    public void setTransactionRequest(TransactionApprove transactionRequest) {
+        this.transactionRequest = transactionRequest;
+    }
 }

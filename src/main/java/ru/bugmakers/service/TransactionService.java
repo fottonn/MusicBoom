@@ -57,7 +57,7 @@ public class TransactionService {
      * @return сумма выведенных пользователем денег, включая переведенные на кошельки других пользователей,
      * за всё время в формате ###.##
      */
-    public String getAllDerivedMoney(Long userId) {
+    public String  getAllDerivedMoney(Long userId) {
         return MONEY_FORMATTER.format(ofNullable(transactionRepo.getDerivedMoney(userId)).orElse(ZERO));
     }
 
@@ -123,5 +123,14 @@ public class TransactionService {
                     rankPropsService.getFeeByRank(recipient.getRank())));
         }
         transactionRepo.saveAndFlush(transaction);
+    }
+
+    /**
+     * Метод по поиску транзакии по ID
+     * @param transactionId - id транзакции
+     * @return
+     */
+    public Transaction findTransactionById(String transactionId) {
+        return transactionRepo.findById(transactionId).orElse(null);
     }
 }
