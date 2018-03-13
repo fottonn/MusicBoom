@@ -63,4 +63,8 @@ public class OperatorService {
         }
 
     }
+
+    public void getOpenWithdawList(String page, String size) {
+
+    }
 }

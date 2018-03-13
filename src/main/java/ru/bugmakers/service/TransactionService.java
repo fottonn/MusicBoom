@@ -1,10 +1,13 @@
 package ru.bugmakers.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.bugmakers.entity.Transaction;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.MoneyBearerKind;
+import ru.bugmakers.enums.Status;
 import ru.bugmakers.enums.UserType;
 import ru.bugmakers.repository.TransactionRepo;
 import ru.bugmakers.utils.BigDecimalUtils;
@@ -132,5 +135,15 @@ public class TransactionService {
      */
     public Transaction findTransactionById(String transactionId) {
         return transactionRepo.findById(transactionId).orElse(null);
+    }
+
+    /**
+     * Метод который ищет все транзакции с определенным статусом
+     * @param status - статус транзакции {@link Status}
+     * @param pageable - информация о странице {@link Pageable}
+     * @return - список транзакций
+     */
+    public Page<Transaction> findAllTransactionByStatus(final Status status, final Pageable pageable) {
+        return transactionRepo.findAllByStatus(status, pageable);
     }
 }
