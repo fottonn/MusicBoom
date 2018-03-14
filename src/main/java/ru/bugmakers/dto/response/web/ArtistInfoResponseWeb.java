@@ -9,7 +9,7 @@ import ru.bugmakers.exceptions.MbException;
  */
 public class ArtistInfoResponseWeb extends MbResponseToWeb {
 
-    private UserDTO userDTO;
+    private UserDTO user;
 
     public ArtistInfoResponseWeb(MbException e, RsStatus status) {
         super(e, status);
@@ -19,11 +19,11 @@ public class ArtistInfoResponseWeb extends MbResponseToWeb {
         super(status);
     }
 
-    public UserDTO getUserDTO() {
-        return userDTO;
+    public UserDTO getUser() {
+        return user;
     }
 
-    public void setUserDTO(UserDTO userDTO) {
-        this.userDTO = userDTO;
+    public void setUser(UserDTO user) {
+        this.user = user;
     }
 }
