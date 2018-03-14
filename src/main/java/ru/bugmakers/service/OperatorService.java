@@ -1,9 +1,14 @@
 package ru.bugmakers.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+import ru.bugmakers.dto.response.web.TransactionListWebRs;
 import ru.bugmakers.entity.Transaction;
 import ru.bugmakers.enums.MoneyBearerKind;
+import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.enums.Status;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
@@ -64,7 +69,25 @@ public class OperatorService {
 
     }
 
-    public void getOpenWithdawList(String page, String size) {
+    /**
+     * Метод который возвращает списко всех транзакий которые соответствую статусу {@link Status}
+     * @param page - номер запрашиваемой страницы
+     * @param size - количество элементов на странице
+     * @param status - статут транзакций
+     * @return
+     */
 
+    public TransactionListWebRs getOpenWithdrawList(String page, String size, Status status) {
+        int localPage = Integer.parseInt(page) - 1;
+        int localSize = Integer.parseInt(size);
+        TransactionListWebRs rs = new TransactionListWebRs(RsStatus.SUCCESS);
+        Page<Transaction> transactions = transactionService.findAllTransactionByStatus(status, PageRequest.of(localPage, localSize, Sort.by("id")));
+        rs.setTransactions(transactions.getContent());
+        rs.setPage(transactions.getNumber() + 1);
+        rs.setPageSize(transactions.getSize());
+        rs.setTransactionCountInPage(transactions.getNumberOfElements());
+        rs.setTotalPages(transactions.getTotalPages());
+        rs.setTotalTransaction(transactions.getTotalElements());
+        return rs;
     }
 }
