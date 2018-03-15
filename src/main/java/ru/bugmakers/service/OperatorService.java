@@ -76,7 +76,6 @@ public class OperatorService {
      * @param status - статут транзакций
      * @return
      */
-
     public TransactionListWebRs getOpenWithdrawList(String page, String size, Status status) {
         int localPage = Integer.parseInt(page) - 1;
         int localSize = Integer.parseInt(size);
