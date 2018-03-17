@@ -12,7 +12,6 @@ import ru.bugmakers.controller.MbController;
 import ru.bugmakers.dto.request.mobile.FeedBackRequestMobile;
 import ru.bugmakers.dto.response.mobile.MbResponseToMobile;
 import ru.bugmakers.entity.FeedBack;
-import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.FeedBackType;
 import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.service.FeedBackService;
@@ -39,9 +38,8 @@ public class RegistredUserMenuMobile extends MbController {
 
         try {
 
-            User user = userPrincipal.getUser();
             FeedBack feedBack = new FeedBack();
-            feedBack.setUser(user);
+            feedBack.setUserId(userPrincipal.getUser().getId());
             feedBack.setFeedBackType(FeedBackType.valueOf(rq.getType().toUpperCase()));
             feedBack.setText(rq.getText());
             feedBackService.saveFeedBack(feedBack);
