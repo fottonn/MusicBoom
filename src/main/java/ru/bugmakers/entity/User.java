@@ -138,9 +138,6 @@ public class User {
     @Column(name = "avatar")
     private String avatar;
 
-    @OneToMany(mappedBy = "user")
-    private List<FeedBack> feedBacks;
-
     @Column(name = "linked_card")
     private boolean linkedCard = false;
 
@@ -432,14 +429,6 @@ public class User {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
-    }
-
-    public List<FeedBack> getFeedBacks() {
-        return feedBacks;
-    }
-
-    public void setFeedBacks(List<FeedBack> feedBacks) {
-        this.feedBacks = feedBacks;
     }
 
     public boolean isLinkedCard() {

@@ -14,6 +14,9 @@ public class FeedBack {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "user_id")
+    private Long userId;
+
     @Column(name = "feed_back_type")
     @Enumerated(EnumType.STRING)
     private FeedBackType feedBackType;
@@ -21,9 +24,14 @@ public class FeedBack {
     @Column(name = "text")
     private String text;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    public FeedBack() {
+    }
+
+    public FeedBack(Long userId, FeedBackType feedBackType, String text) {
+        this.userId = userId;
+        this.feedBackType = feedBackType;
+        this.text = text;
+    }
 
     public Long getId() {
         return id;
@@ -49,11 +57,11 @@ public class FeedBack {
         this.text = text;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }
