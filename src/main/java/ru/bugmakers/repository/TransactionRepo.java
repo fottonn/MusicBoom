@@ -1,10 +1,13 @@
 package ru.bugmakers.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.bugmakers.entity.Transaction;
 import ru.bugmakers.enums.MoneyBearerKind;
+import ru.bugmakers.enums.Status;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -74,4 +77,11 @@ public interface TransactionRepo extends JpaRepository<Transaction, String> {
      */
     int countDistinctBySenderIdAndRecipientMoneyBearerKind(Long id, MoneyBearerKind recipientMoneyBearerKind);
 
+    /**
+     * Список всех транзакций с определенным статусом
+     * @param status - статус транзакции
+     * @param pageable - {@link Pageable}
+     * @return - страница транзакций со статусом
+     */
+    Page<Transaction> findAllByStatus(Status status, Pageable pageable);
 }

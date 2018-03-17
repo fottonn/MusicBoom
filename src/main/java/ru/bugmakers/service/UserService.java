@@ -103,7 +103,7 @@ public class UserService {
      * Постраничный поиск всех пользователей с типом {@code userType}
      *
      * @param userType тип пользователя
-     * @param pageable {@link Pageable}
+         * @param pageable {@link Pageable}
      * @return страница пользователей с типом {@code userType}
      */
     public Page<User> findAllUsersByUserType(final UserType userType, final Pageable pageable) {

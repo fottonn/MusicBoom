@@ -4,6 +4,7 @@ package ru.bugmakers.dto;
  * Created by Ayrat on 13.12.2017.
  */
 public class TransactionApprove {
+
     private String transactionId;
     private String transactionStatus;
     private String message;
