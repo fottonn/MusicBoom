@@ -23,7 +23,7 @@ dependencies {
     compile 'org.apache.commons:commons-collections4:4.1'
     compile 'org.apache.commons:commons-lang3:3.7'
     compile 'org.apache.commons:commons-email:1.5'
-    compile 'org.postgresql:postgresql:42.1.4'
+    compile 'org.postgresql:postgresql:42.2.1'
     compile 'org.hsqldb:hsqldb:2.4.0'
     compile 'com.squareup.okhttp3:okhttp:3.9.1'
     compile('com.github.fge:json-schema-validator:2.2.6') { exclude group: 'javax.mail', module: 'mailapi' }
