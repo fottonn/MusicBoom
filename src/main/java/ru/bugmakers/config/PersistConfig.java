@@ -16,6 +16,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.beans.PropertyVetoException;
+import java.util.Properties;
 
 /**
  * Created by Ivan
@@ -47,6 +48,11 @@ public class PersistConfig {
     private Integer dbPoolMax;
     @Value("${db.dbms}")
     private String dbms;
+    @Value("${hibernate.jdbc.lob.non_contextual_creation}")
+    private String lobNonContextualCreation;
+    @Value("${hibernate.hbm2ddl.auto}")
+    private String hbm2ddlAuto;
+
 
     @Bean
     public LocalContainerEntityManagerFactoryBean emf() throws PropertyVetoException {
@@ -54,6 +60,10 @@ public class PersistConfig {
         emf.setDataSource(dataSource());
         emf.setJpaVendorAdapter(jpaVendorAdapter());
         emf.setPackagesToScan("ru.bugmakers.entity");
+        Properties hibernateProps = new Properties();
+        hibernateProps.setProperty("hibernate.hbm2ddl.auto", hbm2ddlAuto);
+        hibernateProps.setProperty("hibernate.jdbc.lob.non_contextual_creation", lobNonContextualCreation);
+        emf.setJpaProperties(hibernateProps);
         return emf;
     }
 
@@ -75,7 +85,6 @@ public class PersistConfig {
         HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
         jpaVendorAdapter.setShowSql(true);
         jpaVendorAdapter.setDatabase(Database.valueOf(dbms));
-        jpaVendorAdapter.setGenerateDdl(true);
         jpaVendorAdapter.setDatabasePlatform(dbDialect);
         return jpaVendorAdapter;
     }
