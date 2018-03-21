@@ -64,9 +64,6 @@ public class    RegistrationController extends MbController {
             UserDTO user = registrator.register(UserType.valueOf(userType.toUpperCase()), registrationRequest.getUser());
             registrationResponse = new RegistrationResponse(RsStatus.SUCCESS);
             registrationResponse.setUser(user);
-            if (user.getEmail() != null) {
-                //TODO отправить емайл
-            }
         } catch (MbException e) {
             registrationResponse = new RegistrationResponse(e);
         } catch (Exception e) {
