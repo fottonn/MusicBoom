@@ -11,6 +11,7 @@ import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver;
 import org.springframework.web.client.RestTemplate;
@@ -18,7 +19,9 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import ru.bugmakers.config.interceptor.LoggingHttpRequestInterceptor;
 import ru.bugmakers.config.logout.MbLogoutSuccessHandler;
 
 import java.io.IOException;
@@ -26,6 +29,7 @@ import java.net.URI;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 /**
  * Created by Ivan
@@ -33,7 +37,8 @@ import java.util.List;
 @Configuration
 @ComponentScan(value = "ru.bugmakers", excludeFilters = @Filter(Configuration.class))
 @Import({SecurityConfig.class, PersistConfig.class, LocalPersistConfig.class})
-@EnableWebMvc @EnableAsync
+@EnableWebMvc
+@EnableAsync
 public class AppConfig implements WebMvcConfigurer {
 
     @Bean
@@ -71,8 +76,23 @@ public class AppConfig implements WebMvcConfigurer {
                 .build();
     }
 
+    @Bean
+    public Executor taskExecutor() {
+        return new SimpleAsyncTaskExecutor();
+    }
+
+    @Bean
+    public LoggingHttpRequestInterceptor loggingHttpRequestInterceptor() {
+        return new LoggingHttpRequestInterceptor();
+    }
+
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(new AuthenticationPrincipalArgumentResolver());
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(loggingHttpRequestInterceptor());
     }
 }

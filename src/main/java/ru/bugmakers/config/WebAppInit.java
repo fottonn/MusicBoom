@@ -27,8 +27,7 @@ public class WebAppInit extends AbstractAnnotationConfigDispatcherServletInitial
 
         servletContext.addFilter("addHeaderToResponse-filter", new OncePerRequestFilter() {
             @Override
-            protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-                    throws ServletException, IOException {
+            protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
                 response.addHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
                 filterChain.doFilter(request, response);
             }
