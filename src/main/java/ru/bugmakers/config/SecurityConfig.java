@@ -85,7 +85,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 "/test"
         };
         web
-                .debug(true)
+                .debug(false)
                 .ignoring().antMatchers(URLS)
         ;
     }
