@@ -41,4 +41,10 @@ public class EmailTextBuilder {
         return build(name, lastName, body);
     }
 
+    public static String pswdRestoreBuild(String name, String lastName, String link) {
+        String pswdRestoreLink = String.format("<a href=\"%s\">ссылке</a>", link);
+        String body = String.format("Для смены пароля перейдите по %s", pswdRestoreLink);
+        return build(name, lastName, body);
+    }
+
 }

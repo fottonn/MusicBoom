@@ -3,6 +3,8 @@ package ru.bugmakers.config.jwt.filter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,6 +33,9 @@ import static ru.bugmakers.config.jwt.TokenData.TOKEN_NAME;
  */
 public class TokenAuthenticationIncludeFilter extends GenericFilterBean {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(TokenAuthenticationIncludeFilter.class);
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
     private WhiteTokenService whiteTokenService;
 
     @Autowired
@@ -46,8 +51,7 @@ public class TokenAuthenticationIncludeFilter extends GenericFilterBean {
         final String responseContent = capturingResponseWrapper.getCaptureAsString();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated() && authentication.getName() != null && isAuthContainsRole(authentication)) {
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode rootNode = mapper.readTree(responseContent);
+            JsonNode rootNode = OBJECT_MAPPER.readTree(responseContent);
             if (rootNode != null && rootNode.path("status").isValueNode() && rootNode.path("status").textValue().equals(RsStatus.SUCCESS.name())) {
                 JsonNode tokenNode = rootNode.path(TOKEN_NAME);
                 if (tokenNode.isValueNode()) {
@@ -63,6 +67,8 @@ public class TokenAuthenticationIncludeFilter extends GenericFilterBean {
         } else {
             resultContent = responseContent;
         }
+        LOGGER.debug("Response:" + System.lineSeparator() + "{}",
+                OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(resultContent));
         response.getWriter().write(resultContent);
     }
 

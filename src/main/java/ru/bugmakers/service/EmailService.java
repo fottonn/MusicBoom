@@ -1,5 +1,6 @@
 package ru.bugmakers.service;
 
+import okhttp3.HttpUrl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,15 @@ public class EmailService {
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailService.class);
 
     private static final String CONFIRMATION_SUBJECT = "Подтверждение email";
-    private static final String DOMAIN = "https://www.musboom.ru/webapi/email/confirmation/";
+    private static final String PSWD_RESTORE_SUBJECT = "Восстановление пароля";
+    private static final String HOST = "www.musboom.ru";
+    private static final String WEBAPI = "webapi";
+    private static final String EMAIL = "email";
+    private static final String CONFIRMATION = "confirmation";
+    private static final String HTTPS = "https";
+    private static final String CODE = "code";
+    private static final String ID = "id";
+    private static final String RESTOREPASSWORD = "restorepassword";
 
     private EmailSender emailSender;
     private UserService userService;
@@ -54,9 +63,44 @@ public class EmailService {
             throw MbException.create(MbError.SEE02);
         }
         String email = user.getEmail().getValue();
-        String confirmLink = DOMAIN + generatedValue;
+
+        String confirmLink =
+                new HttpUrl.Builder()
+                        .scheme(HTTPS)
+                        .host(HOST)
+                        .addPathSegment(WEBAPI)
+                        .addPathSegment(EMAIL)
+                        .addPathSegment(CONFIRMATION)
+                        .addPathSegment(generatedValue)
+                        .build().toString();
+
         String messageText = EmailTextBuilder.confirmBuild(user.getName(), user.getSurName(), confirmLink);
         emailSender.send(email, CONFIRMATION_SUBJECT, messageText);
+    }
+
+    public void sendPasswordRestoreEmail(final String email) throws MbException {
+        String generatedValue = UuidGenerator.timeBasedUuidGenerate();
+        User user = userService.findUserByEmail(email);
+        if (user == null) {
+            throw MbException.create(MbError.SEE04);
+        } else if (!user.getEmail().isEnabled()) {
+            throw MbException.create(MbError.SEE05);
+        } else {
+            user.getEmail().setConfirmationCode(generatedValue);
+            userService.updateUser(user);
+        }
+        String pswdRestoreLink =
+                new HttpUrl.Builder()
+                        .scheme(HTTPS)
+                        .host(HOST)
+                        .addPathSegment(RESTOREPASSWORD)
+                        .addQueryParameter(EMAIL, email)
+                        .addQueryParameter(ID, user.getId().toString())
+                        .addQueryParameter(CODE, generatedValue)
+                        .build().toString();
+
+        String messageText = EmailTextBuilder.pswdRestoreBuild(user.getName(), user.getSurName(), pswdRestoreLink);
+        emailSender.send(email, PSWD_RESTORE_SUBJECT, messageText);
     }
 
     public void sendEmailToAllArtists(String message, String subject) {
