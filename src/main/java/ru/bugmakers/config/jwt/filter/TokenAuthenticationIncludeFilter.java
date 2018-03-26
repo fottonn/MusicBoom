@@ -67,8 +67,6 @@ public class TokenAuthenticationIncludeFilter extends GenericFilterBean {
         } else {
             resultContent = responseContent;
         }
-        LOGGER.debug("Response:" + System.lineSeparator() + "{}",
-                OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(resultContent));
         response.getWriter().write(resultContent);
     }
 
