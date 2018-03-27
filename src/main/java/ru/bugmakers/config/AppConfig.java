@@ -19,9 +19,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import ru.bugmakers.config.interceptor.LoggingHttpRequestInterceptor;
 import ru.bugmakers.config.logout.MbLogoutSuccessHandler;
 
 import java.io.IOException;
@@ -81,18 +79,9 @@ public class AppConfig implements WebMvcConfigurer {
         return new SimpleAsyncTaskExecutor();
     }
 
-    @Bean
-    public LoggingHttpRequestInterceptor loggingHttpRequestInterceptor() {
-        return new LoggingHttpRequestInterceptor();
-    }
-
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(new AuthenticationPrincipalArgumentResolver());
     }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loggingHttpRequestInterceptor());
-    }
 }

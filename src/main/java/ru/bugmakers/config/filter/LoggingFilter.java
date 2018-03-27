@@ -1,21 +1,29 @@
-package ru.bugmakers.config.interceptor;
+package ru.bugmakers.config.filter;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import io.jsonwebtoken.lang.Collections;
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
+import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
-import org.springframework.web.servlet.HandlerInterceptor;
+import ru.bugmakers.config.jwt.filter.CapturingResponseWrapper;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.transform.TransformerConfigurationException;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Map;
 
@@ -24,18 +32,22 @@ import static ru.bugmakers.utils.MultipartUtils.findJsonPart;
 /**
  * Created by Ivan
  */
-public class LoggingHttpRequestInterceptor implements HandlerInterceptor {
+public class LoggingFilter extends OncePerRequestFilter {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LoggingHttpRequestInterceptor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoggingFilter.class);
     private static final String LINE_SEPARATOR = System.lineSeparator();
     private static final String EMPTY_STRING = "";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
         logRequest(request);
-        return true;
+        CapturingResponseWrapper capturingResponseWrapper = new CapturingResponseWrapper(response);
+        filterChain.doFilter(request, capturingResponseWrapper);
+        logResponse(request, capturingResponseWrapper);
+        response.getWriter().write(capturingResponseWrapper.getCaptureAsString());
+
     }
 
     private void logRequest(HttpServletRequest request) {
@@ -46,7 +58,7 @@ public class LoggingHttpRequestInterceptor implements HandlerInterceptor {
         LOGGER.debug("Params:");
         logParams(request.getParameterMap());
         LOGGER.debug("Headers:");
-        logHeaders(request);
+        logRequestHeaders(request);
         if (request.getMethod().equalsIgnoreCase("POST")) {
             LOGGER.debug("ContentType:  {}", request.getContentType());
             String json = getJson(request);
@@ -56,6 +68,40 @@ public class LoggingHttpRequestInterceptor implements HandlerInterceptor {
         }
         LOGGER.debug("++++++++++++++++++++++REQUEST_END+++++++++++++++++++++");
         LOGGER.debug(EMPTY_STRING);
+    }
+
+    private void logResponse(HttpServletRequest request, CapturingResponseWrapper response) {
+
+        LOGGER.debug(EMPTY_STRING);
+        LOGGER.debug("+++++++++++++++++++++RESPONSE_BEGIN++++++++++++++++++++");
+        LOGGER.debug("URL:      {}", request.getRequestURL());
+        LOGGER.debug("Method:   {}", request.getMethod());
+        LOGGER.debug("Params:");
+        logParams(request.getParameterMap());
+        LOGGER.debug("Headers:");
+        logResponseHeaders(response);
+        LOGGER.debug("ContentType:  {}", response.getContentType());
+        try {
+            LOGGER.debug("Response:" + System.lineSeparator() + "{}", prettyPrintResponse(response));
+        } catch (Exception e) {
+            LOGGER.debug("Response content not available");
+        }
+        LOGGER.debug("++++++++++++++++++++++RESPONSE_END+++++++++++++++++++++");
+        LOGGER.debug(EMPTY_STRING);
+
+    }
+
+    private String prettyPrintResponse(CapturingResponseWrapper response) throws IOException, TransformerConfigurationException {
+        String rs = EMPTY_STRING;
+        String contentType = response.getContentType();
+        if (contentType != null) {
+            if (contentType.startsWith(MediaType.APPLICATION_JSON_VALUE)) {
+                rs = OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(OBJECT_MAPPER.readTree(response.getCaptureAsString()));
+            } else {
+                rs = response.getCaptureAsString();
+            }
+        }
+        return rs;
     }
 
     private void logParams(Map<String, String[]> parameterMap) {
@@ -71,13 +117,19 @@ public class LoggingHttpRequestInterceptor implements HandlerInterceptor {
         return sb.toString();
     }
 
-    private void logHeaders(HttpServletRequest request) {
+    private void logRequestHeaders(HttpServletRequest request) {
         if (request == null || request.getHeaderNames() == null) return;
         Enumeration<String> names = request.getHeaderNames();
         while (names.hasMoreElements()) {
             String header = names.nextElement();
             LOGGER.debug(String.format("          %s: %s", header, request.getHeader(header)));
         }
+    }
+
+    private void logResponseHeaders(CapturingResponseWrapper response) {
+        if (response == null || CollectionUtils.isEmpty(response.getHeaderNames())) return;
+        Collection<String> names = response.getHeaderNames();
+        names.forEach(header -> LOGGER.debug(String.format("          %s: %s", header, response.getHeader(header))));
     }
 
     private String getJson(HttpServletRequest request) {
@@ -101,4 +153,6 @@ public class LoggingHttpRequestInterceptor implements HandlerInterceptor {
 
         return json;
     }
+
+
 }
