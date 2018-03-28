@@ -37,7 +37,7 @@ public class UserDtoToUserRegisterConverter implements MbConverter<UserDTO, User
                 .withPhone(source.getPhoneNumber())
                 .withLogin(source.getPhoneNumber())
                 .withPassword(passwordEncoder.encode(source.getPassword()))
-                .withPatronymic(source.getPatronimyc())
+                .withPatronymic(source.getPatronymic())
                 .withNickname(source.getNickname())
                 .withBirthDay(source.getBirthday() != null ? LocalDate.parse(source.getBirthday(), DATE_FORMATTER) : null)
                 .withPhone(source.getPhoneNumber())
@@ -48,8 +48,8 @@ public class UserDtoToUserRegisterConverter implements MbConverter<UserDTO, User
                 .withVkContact(source.getVk())
                 .withTlgContact(source.getTlg())
                 .withWhatsappContact(source.getWapp())
-                .withPersonalDataConsent(Optional.ofNullable(source.getIsAllowOfPersonalData()).orElse(false))
-                .withContractConsent(Optional.ofNullable(source.getIsArtistContact()).orElse(false));
+                .withPersonalDataConsent(Optional.ofNullable(source.getIsAgreementOfPersonalData()).orElse(false))
+                .withContractConsent(Optional.ofNullable(source.getIsArtistContract()).orElse(false));
     }
 
 }

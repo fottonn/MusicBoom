@@ -1,7 +1,6 @@
 package ru.bugmakers.dto.common;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonRootName;
 
 import java.io.Serializable;
 import java.util.List;
@@ -9,7 +8,6 @@ import java.util.List;
 /**
  * Created by Ivan
  */
-@JsonRootName("user")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO implements Serializable {
 
@@ -18,7 +16,7 @@ public class UserDTO implements Serializable {
     private String id;
     private String name;
     private String surname;
-    private String patronimyc;
+    private String patronymic;
     private String aboutMe;
     private String birthday;
     private String sex;
@@ -44,8 +42,8 @@ public class UserDTO implements Serializable {
     private String allDonatedArtists;
     private Boolean isLinkedCard;
     private StatOfPerformanceDTO statOfPerformance;
-    private Boolean isAllowOfPersonalData;
-    private Boolean isArtistContact;
+    private Boolean isAgreementOfPersonalData;
+    private Boolean isArtistContract;
     private String avatar;
     private List<String> photos;
 
@@ -65,20 +63,20 @@ public class UserDTO implements Serializable {
         this.password = password;
     }
 
-    public Boolean getIsAllowOfPersonalData() {
-        return isAllowOfPersonalData;
+    public Boolean getIsAgreementOfPersonalData() {
+        return isAgreementOfPersonalData;
     }
 
-    public void setIsAllowOfPersonalData(Boolean isAllowOfPersonalData) {
-        this.isAllowOfPersonalData = isAllowOfPersonalData;
+    public void setIsAgreementOfPersonalData(Boolean isAgreementOfPersonalData) {
+        this.isAgreementOfPersonalData = isAgreementOfPersonalData;
     }
 
-    public Boolean getIsArtistContact() {
-        return isArtistContact;
+    public Boolean getIsArtistContract() {
+        return isArtistContract;
     }
 
-    public void setIsArtistContact(Boolean isArtistContact) {
-        this.isArtistContact = isArtistContact;
+    public void setIsArtistContract(Boolean isArtistContract) {
+        this.isArtistContract = isArtistContract;
     }
 
     public String getUserType() {
@@ -113,12 +111,12 @@ public class UserDTO implements Serializable {
         this.surname = surname;
     }
 
-    public String getPatronimyc() {
-        return patronimyc;
+    public String getPatronymic() {
+        return patronymic;
     }
 
-    public void setPatronimyc(String patronimyc) {
-        this.patronimyc = patronimyc;
+    public void setPatronymic(String patronymic) {
+        this.patronymic = patronymic;
     }
 
     public String getAboutMe() {
@@ -367,17 +365,17 @@ public class UserDTO implements Serializable {
     }
 
     public UserDTO withAllowOfPersonalData(Boolean isAllowOfPersonalData) {
-        this.isAllowOfPersonalData = isAllowOfPersonalData;
+        this.isAgreementOfPersonalData = isAllowOfPersonalData;
         return this;
     }
 
     public UserDTO withArtistContact(Boolean isArtistContact) {
-        this.isArtistContact = isArtistContact;
+        this.isArtistContract = isArtistContact;
         return this;
     }
 
     public UserDTO withPatronimyc(String patronimyc) {
-        this.patronimyc = patronimyc;
+        this.patronymic = patronimyc;
         return this;
     }
 

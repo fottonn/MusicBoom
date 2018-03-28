@@ -34,12 +34,12 @@ public class UserDto2UserConverter implements MbConverter<UserDTO, User> {
         user.setCity(source.getCity());
         user.setName(source.getName());
         user.setSurName(source.getSurname());
-        user.setPatronymic(source.getPatronimyc());
+        user.setPatronymic(source.getPatronymic());
         user.setAboutMe(source.getAboutMe());
         user.setEmail(new Email(source.getEmail()));
         user.setLogin(source.getEmail());
         user.setPassword(passwordEncoder.encode(source.getPassword()));
-        user.setPatronymic(source.getPatronimyc());
+        user.setPatronymic(source.getPatronymic());
         user.setNickname(source.getNickname());
         user.setBirthDay(LocalDate.parse(source.getBirthday(), DATE_FORMATTER));
         user.setPhone(source.getPhoneNumber());
@@ -53,8 +53,8 @@ public class UserDto2UserConverter implements MbConverter<UserDTO, User> {
         user.setVkContact(source.getVk());
         user.setTlgContact(source.getTlg());
         user.setWhatsappContact(source.getWapp());
-        user.setPersonalDataConsent(source.getIsAllowOfPersonalData());
-        user.setContractConsent(source.getIsArtistContact());
+        user.setPersonalDataConsent(source.getIsAgreementOfPersonalData());
+        user.setContractConsent(source.getIsArtistContract());
         return user;
     }
 }
