@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
+import ru.bugmakers.config.jwt.filter.CapturingRequestWrapper;
 import ru.bugmakers.config.jwt.filter.CapturingResponseWrapper;
 
 import javax.servlet.FilterChain;
@@ -42,11 +43,16 @@ public class LoggingFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        logRequest(request);
-        CapturingResponseWrapper capturingResponseWrapper = new CapturingResponseWrapper(response);
-        filterChain.doFilter(request, capturingResponseWrapper);
-        logResponse(request, capturingResponseWrapper);
-        response.getWriter().write(capturingResponseWrapper.getCaptureAsString());
+        if (LOGGER.isDebugEnabled()) {
+            CapturingRequestWrapper capturingRequestWrapper = new CapturingRequestWrapper(request);
+            CapturingResponseWrapper capturingResponseWrapper = new CapturingResponseWrapper(response);
+            logRequest(capturingRequestWrapper);
+            filterChain.doFilter(capturingRequestWrapper, capturingResponseWrapper);
+            logResponse(capturingRequestWrapper, capturingResponseWrapper);
+            response.getWriter().write(capturingResponseWrapper.getCaptureAsString());
+        } else {
+            filterChain.doFilter(request, response);
+        }
 
     }
 

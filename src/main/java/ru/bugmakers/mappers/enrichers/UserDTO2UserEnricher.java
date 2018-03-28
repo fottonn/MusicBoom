@@ -26,7 +26,7 @@ public class UserDTO2UserEnricher implements MBEnricher<UserDTO, User> {
             if (target.getEmail() == null || !target.getEmail().getValue().equals(source.getEmail()))
                 target.setEmail(new Email(source.getEmail()));
         }
-        target.setPatronymic(Optional.ofNullable(source.getPatronimyc()).orElse(target.getPatronymic()));
+        target.setPatronymic(Optional.ofNullable(source.getPatronymic()).orElse(target.getPatronymic()));
         target.setPatronymic(Optional.ofNullable(source.getAboutMe()).orElse(target.getAboutMe()));
         target.setNickname(Optional.ofNullable(source.getNickname()).orElse(target.getNickname()));
         target.setBirthDay(Optional.ofNullable(LocalDate.parse(source.getBirthday(), DATE_FORMATTER)).orElse(target.getBirthDay()));
