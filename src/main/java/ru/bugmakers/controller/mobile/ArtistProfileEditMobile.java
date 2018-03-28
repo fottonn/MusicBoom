@@ -31,7 +31,7 @@ public class ArtistProfileEditMobile extends MbController {
         this.artistProfileEditService = artistProfileEditService;
     }
 
-    @PostMapping(value = "/artist.personal")
+    @PostMapping(value = "/personal")
     public ResponseEntity<MbResponseToMobile> artistEditing(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                             @RequestBody ArtistEditRqMobile rq) {
         try {
