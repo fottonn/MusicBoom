@@ -15,7 +15,7 @@ public class ListenerProfileMobileRq extends SessionDataRequest {
     @JsonProperty("is_attached")
     private String isAttached;
 
-    private String phone;
+    private String email;
 
     public String getCountry() {
         return country;
@@ -41,11 +41,11 @@ public class ListenerProfileMobileRq extends SessionDataRequest {
         this.isAttached = isAttached;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

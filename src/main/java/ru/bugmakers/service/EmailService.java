@@ -55,6 +55,7 @@ public class EmailService {
      */
 
     public void sendConfirmationEmail(User user) throws MbException {
+        if (user == null || user.getEmail() == null) return;
         String generatedValue = UuidGenerator.timeBasedUuidGenerate();
         user.getEmail().setConfirmationCode(generatedValue);
         try {
@@ -79,6 +80,7 @@ public class EmailService {
     }
 
     public void sendPasswordRestoreEmail(final String email) throws MbException {
+        if (email == null) return;
         String generatedValue = UuidGenerator.timeBasedUuidGenerate();
         User user = userService.findUserByEmail(email);
         if (user == null) {
@@ -117,7 +119,16 @@ public class EmailService {
         LOGGER.info("The message is complete");
     }
 
+    /**
+     * Отправка письма пользователю, у которого email подтвержден
+     *
+     * @param user пользователь, которому отправляется письмо
+     * @param message сообщение
+     * @param subject тема письма
+     */
     public void sendEmailToArtist(User user, String message, String subject) {
-        emailSender.send(user.getEmail().getValue(), subject, EmailTextBuilder.build(user.getName(), user.getSurName(), message));
+        if (user != null && user.getEmail() != null && user.getEmail().isEnabled()) {
+            emailSender.send(user.getEmail().getValue(), subject, EmailTextBuilder.build(user.getName(), user.getSurName(), message));
+        }
     }
 }

@@ -1,5 +1,6 @@
 package ru.bugmakers.utils.email;
 
+import com.google.common.base.Strings;
 import org.apache.commons.mail.HtmlEmail;
 import org.cfg4j.provider.ConfigurationProvider;
 import org.slf4j.Logger;
@@ -28,6 +29,7 @@ public class EmailSender {
 
     @Async
     public void send(String email, String subject, String text) {
+        if (Strings.isNullOrEmpty(email)) return;
         try {
             HtmlEmail htmlEmail = new HtmlEmail();
             htmlEmail.setFrom(
