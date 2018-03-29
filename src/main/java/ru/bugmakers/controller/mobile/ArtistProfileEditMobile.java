@@ -138,7 +138,7 @@ public class ArtistProfileEditMobile extends MbController {
 
     }
 
-    @GetMapping(value = "/artist.deletePhotos")
+    @GetMapping(value = "/photos.delete")
     public ResponseEntity<MbResponseToMobile> artistDeletePhotos(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                                  @RequestBody ArtistEditRqMobile rq) {
         try {
@@ -152,7 +152,7 @@ public class ArtistProfileEditMobile extends MbController {
 
     }
 
-    @PostMapping(value = "/artist.uploadPhotos")
+    @PostMapping(value = "/photos.upload")
     public ResponseEntity<MbResponseToMobile> artistUploadPhotos(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                                  MultipartHttpServletRequest rq) {
         try {

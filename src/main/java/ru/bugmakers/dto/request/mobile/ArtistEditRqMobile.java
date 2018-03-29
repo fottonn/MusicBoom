@@ -98,8 +98,8 @@ public class ArtistEditRqMobile extends SessionDataRequest {
         return orderable;
     }
 
-    public Boolean getOrderable() {
-        return orderable;
+    public void setOrderable(Boolean orderable) {
+        this.orderable = orderable;
     }
 
     public Set<String> getPhotoIds() {
