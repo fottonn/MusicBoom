@@ -7,7 +7,7 @@ import javax.persistence.*;
  * Created by Ayrat on 05.02.2018.
  */
 @Entity
-@Table(name = "value")
+@Table(name = "email")
 public class Email {
     @Id
     @GeneratedValue
@@ -21,6 +21,10 @@ public class Email {
 
     @Column(name = "generated_value")
     private String confirmationCode;
+
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     public Email() {
     }
@@ -52,5 +56,21 @@ public class Email {
 
     public void setConfirmationCode(String confirmationCode) {
         this.confirmationCode = confirmationCode;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

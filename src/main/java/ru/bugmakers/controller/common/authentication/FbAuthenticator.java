@@ -59,9 +59,7 @@ public class FbAuthenticator implements Authenticator {
             user = userService.findUserByFbSocialId(id);
             if (user == null) {
                 user = new User();
-                FbAuth fbAuth = new FbAuth(id);
-                fbAuth.setUser(user);
-                user.setFbAuth(fbAuth);
+                user.setFbAuth(new FbAuth(id));
                 user = userService.saveUser(user);
             }
         } else {

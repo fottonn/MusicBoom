@@ -23,9 +23,9 @@ import static ru.bugmakers.entity.EntityConstants.*;
 @Table(name = "user_t")
 @SecondaryTables({
         @SecondaryTable(name = USER_LOGIN, pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id")),
-        @SecondaryTable(name = VK_CONTACT, pkJoinColumns = @PrimaryKeyJoinColumn(name = "vk_contact_id")),
-        @SecondaryTable(name = WHATSAPP_CONTACT, pkJoinColumns = @PrimaryKeyJoinColumn(name = "whatsapp_contact_id")),
-        @SecondaryTable(name = TLG_CONTACT, pkJoinColumns = @PrimaryKeyJoinColumn(name = "tlg_contact_id"))})
+        @SecondaryTable(name = VK_CONTACT, pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id")),
+        @SecondaryTable(name = WHATSAPP_CONTACT, pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id")),
+        @SecondaryTable(name = TLG_CONTACT, pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))})
 public class User {
 
     @Id
@@ -65,7 +65,7 @@ public class User {
     @Column(name = "public_name")
     private String publicName;
 
-    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private Email email;
 
     @Column(name = "user_type")
@@ -264,6 +264,7 @@ public class User {
 
     public void setEmail(Email email) {
         this.email = email;
+        if (email != null) email.setUser(this);
     }
 
     public UserType getUserType() {
@@ -332,6 +333,7 @@ public class User {
 
     public void setVkAuth(VkAuth vkAuth) {
         this.vkAuth = vkAuth;
+        if (vkAuth != null) vkAuth.setUser(this);
     }
 
     public FbAuth getFbAuth() {
@@ -340,6 +342,7 @@ public class User {
 
     public void setFbAuth(FbAuth fbAuth) {
         this.fbAuth = fbAuth;
+        if (fbAuth != null) fbAuth.setUser(this);
     }
 
     public GoogleAuth getGoogleAuth() {
@@ -348,6 +351,7 @@ public class User {
 
     public void setGoogleAuth(GoogleAuth googleAuth) {
         this.googleAuth = googleAuth;
+        if (googleAuth != null) googleAuth.setUser(this);
     }
 
     public ArtistInfo getArtistInfo() {
@@ -356,6 +360,7 @@ public class User {
 
     public void setArtistInfo(ArtistInfo artistInfo) {
         this.artistInfo = artistInfo;
+        if (artistInfo != null) artistInfo.setUser(this);
     }
 
     public String getVkContact() {
@@ -404,6 +409,7 @@ public class User {
     }
 
     public void setEvents(List<Event> events) {
+        if (events != null) events.forEach(event -> event.setUser(this));
         this.events = events;
     }
 
@@ -413,6 +419,7 @@ public class User {
 
     public void setArtistRating(ArtistRating artistRating) {
         this.artistRating = artistRating;
+        if (artistRating != null) artistRating.setUser(this);
     }
 
     public Set<String> getPhotos() {
@@ -512,6 +519,7 @@ public class User {
 
     public User withEmail(Email email) {
         this.email = email;
+        if (email != null) email.setUser(this);
         return this;
     }
 
@@ -552,21 +560,25 @@ public class User {
 
     public User withVkAuth(VkAuth vkAuth) {
         this.vkAuth = vkAuth;
+        if (vkAuth != null) vkAuth.setUser(this);
         return this;
     }
 
     public User withFbAuth(FbAuth fbAuth) {
         this.fbAuth = fbAuth;
+        if (fbAuth != null) fbAuth.setUser(this);
         return this;
     }
 
     public User withGoogleAuth(GoogleAuth googleAuth) {
         this.googleAuth = googleAuth;
+        if (googleAuth != null) googleAuth.setUser(this);
         return this;
     }
 
     public User withArtistInfo(ArtistInfo artistInfo) {
         this.artistInfo = artistInfo;
+        if (artistInfo != null) artistInfo.setUser(this);
         return this;
     }
 
@@ -597,11 +609,15 @@ public class User {
 
     public User withEvents(List<Event> events) {
         this.events = events;
+        if (events != null) events.forEach(event -> {
+            if (event != null) event.setUser(this);
+        });
         return this;
     }
 
     public User withArtistRating(ArtistRating artistRating) {
         this.artistRating = artistRating;
+        if (artistRating != null) artistRating.setUser(this);
         return this;
     }
 

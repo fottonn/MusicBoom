@@ -3,7 +3,6 @@ package ru.bugmakers.entity;
 import ru.bugmakers.enums.Genre;
 
 import javax.persistence.*;
-import javax.print.attribute.standard.MediaSize;
 
 /**
  * Created by Ayrat on 20.11.2017.
@@ -30,7 +29,7 @@ public class ArtistInfo {
     private Boolean isOrdered;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Long getId() {

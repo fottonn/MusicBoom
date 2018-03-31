@@ -60,9 +60,7 @@ public class GoogleAuthenticator implements Authenticator {
             user = userService.findUserByGoogleSocialId(id);
             if (user == null) {
                 user = new User();
-                GoogleAuth googleAuth = new GoogleAuth(id);
-                googleAuth.setUser(user);
-                user.setGoogleAuth(googleAuth);
+                user.setGoogleAuth(new GoogleAuth(id));
                 user = userService.saveUser(user);
             }
         } else {

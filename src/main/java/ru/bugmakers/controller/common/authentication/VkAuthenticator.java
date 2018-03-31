@@ -62,9 +62,7 @@ public class VkAuthenticator implements Authenticator {
             user = userService.findUserByVkSocialId(id);
             if (user == null) {
                 user = new User();
-                VkAuth vkAuth = new VkAuth(id);
-                vkAuth.setUser(user);
-                user.setVkAuth(vkAuth);
+                user.setVkAuth(new VkAuth(id));
                 user = userService.saveUser(user);
             }
         } else {

@@ -31,8 +31,8 @@ public class SecurityInit extends AbstractSecurityWebApplicationInitializer {
         servletContext.addFilter("addHeaderToResponse-filter", new OncePerRequestFilter() {
             @Override
             protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-                filterChain.doFilter(request, response);
                 response.addHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+                filterChain.doFilter(request, response);
             }
         }).addMappingForUrlPatterns(null, false, "/*");
 
