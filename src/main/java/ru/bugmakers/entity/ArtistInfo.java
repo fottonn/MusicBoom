@@ -4,15 +4,19 @@ import ru.bugmakers.enums.Genre;
 
 import javax.persistence.*;
 
+import static ru.bugmakers.entity.EntityConstants.ARTIST_INFO_GEN;
+import static ru.bugmakers.entity.EntityConstants.ARTIST_INFO_SEQ;
+
 /**
  * Created by Ayrat on 20.11.2017.
  */
 @Entity
 @Table(name = "artist_info")
+@SequenceGenerator(name = ARTIST_INFO_GEN, sequenceName = ARTIST_INFO_SEQ, allocationSize = 1)
 public class ArtistInfo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = ARTIST_INFO_GEN, strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(name = "creativity")

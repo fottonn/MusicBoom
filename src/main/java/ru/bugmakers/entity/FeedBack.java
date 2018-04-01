@@ -4,14 +4,19 @@ import ru.bugmakers.enums.FeedBackType;
 
 import javax.persistence.*;
 
+import static ru.bugmakers.entity.EntityConstants.FEED_BACK_GEN;
+import static ru.bugmakers.entity.EntityConstants.FEED_BACK_SEQ;
+
 /**
  * Created by Ayrat on 16.11.2017.
  */
 @Entity
 @Table(name = "feedback")
+@SequenceGenerator(name = FEED_BACK_GEN, sequenceName = FEED_BACK_SEQ, allocationSize = 1)
 public class FeedBack {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = FEED_BACK_GEN, strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(name = "user_id")

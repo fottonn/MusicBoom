@@ -2,15 +2,19 @@ package ru.bugmakers.entity;
 
 import javax.persistence.*;
 
+import static ru.bugmakers.entity.EntityConstants.ARTIST_RATING_GEN;
+import static ru.bugmakers.entity.EntityConstants.ARTIST_RATING_SEQ;
+
 /**
  * Created by Ayrat on 20.11.2017.
  */
 @Entity
 @Table(name = "artist_rating")
+@SequenceGenerator(name = ARTIST_RATING_GEN, sequenceName = ARTIST_RATING_SEQ, allocationSize = 1)
 public class ArtistRating {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = ARTIST_RATING_GEN, strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(name = "city_rating")

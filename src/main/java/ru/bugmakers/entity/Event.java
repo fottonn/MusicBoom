@@ -6,15 +6,19 @@ import javax.persistence.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+import static ru.bugmakers.entity.EntityConstants.EVENT_GEN;
+import static ru.bugmakers.entity.EntityConstants.EVENT_SEQ;
+
 /**
  * Created by Ayrat on 14.11.2017.
  */
 @Entity
 @Table(name = "event")
+@SequenceGenerator(name = EVENT_GEN, sequenceName = EVENT_SEQ, allocationSize = 1)
 public class Event {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = EVENT_GEN, strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(name = "event_name")

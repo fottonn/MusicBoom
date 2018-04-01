@@ -3,14 +3,19 @@ package ru.bugmakers.entity;
 
 import javax.persistence.*;
 
+import static ru.bugmakers.entity.EntityConstants.EMAIL_GEN;
+import static ru.bugmakers.entity.EntityConstants.EMAIL_SEQ;
+
 /**
  * Created by Ayrat on 05.02.2018.
  */
 @Entity
 @Table(name = "email")
+@SequenceGenerator(name = EMAIL_GEN, sequenceName = EMAIL_SEQ, allocationSize = 1)
 public class Email {
+
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = EMAIL_GEN, strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(name = "value")

@@ -26,10 +26,11 @@ import static ru.bugmakers.entity.EntityConstants.*;
         @SecondaryTable(name = VK_CONTACT, pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id")),
         @SecondaryTable(name = WHATSAPP_CONTACT, pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id")),
         @SecondaryTable(name = TLG_CONTACT, pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))})
+@SequenceGenerator(name = USER_GEN, sequenceName = USER_SEQ, allocationSize = 1)
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = USER_GEN, strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(name = "registered")

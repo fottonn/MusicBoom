@@ -5,15 +5,19 @@ import ru.bugmakers.enums.Rank;
 import javax.persistence.*;
 import java.math.BigDecimal;
 
+import static ru.bugmakers.entity.EntityConstants.RANK_PROPS_GEN;
+import static ru.bugmakers.entity.EntityConstants.RANK_PROPS_SEQ;
+
 /**
  * Created by Ivan
  */
 @Entity
 @Table(name = "rank_props")
+@SequenceGenerator(name = RANK_PROPS_GEN, sequenceName = RANK_PROPS_SEQ, allocationSize = 1)
 public class RankProps {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = RANK_PROPS_GEN, strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(name = "rank")
