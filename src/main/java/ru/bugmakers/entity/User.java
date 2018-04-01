@@ -150,7 +150,7 @@ public class User {
 
     @Column(name = "rank")
     @Enumerated(EnumType.STRING)
-    private Rank rank;
+    private Rank rank = Rank.NEWBE;
 
     public User() {
     }
