@@ -1,5 +1,6 @@
 package ru.bugmakers.service;
 
+import com.google.common.base.Strings;
 import okhttp3.HttpUrl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,13 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
+import ru.bugmakers.entity.Email;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.UserType;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
+import ru.bugmakers.repository.EmailRepo;
 import ru.bugmakers.utils.UuidGenerator;
 import ru.bugmakers.utils.email.EmailSender;
 import ru.bugmakers.utils.email.EmailTextBuilder;
+import ru.bugmakers.validator.EmailValidator;
 
 /**
  * Created by Ayrat on 31.01.2018.
@@ -37,6 +41,8 @@ public class EmailService {
 
     private EmailSender emailSender;
     private UserService userService;
+    private EmailRepo emailRepo;
+    private EmailValidator emailValidator;
 
     @Autowired
     public void setEmailSender(EmailSender emailSender) {
@@ -46,6 +52,16 @@ public class EmailService {
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+
+    @Autowired
+    public void setEmailRepo(EmailRepo emailRepo) {
+        this.emailRepo = emailRepo;
+    }
+
+    @Autowired
+    public void setEmailValidator(EmailValidator emailValidator) {
+        this.emailValidator = emailValidator;
     }
 
     /**
@@ -71,7 +87,8 @@ public class EmailService {
                         .scheme(HTTPS)
                         .host(HOST)
                         .addPathSegment(ACTIVATE)
-                        .addPathSegment(generatedValue)
+                        .addQueryParameter(EMAIL, email)
+                        .addQueryParameter(CODE, generatedValue)
                         .build().toString();
 
         String messageText = EmailTextBuilder.confirmBuild(user.getName(), user.getSurName(), confirmLink);
@@ -121,13 +138,22 @@ public class EmailService {
     /**
      * Отправка письма пользователю, у которого email подтвержден
      *
-     * @param user пользователь, которому отправляется письмо
+     * @param user    пользователь, которому отправляется письмо
      * @param message сообщение
      * @param subject тема письма
      */
     public void sendEmailToArtist(User user, String message, String subject) {
         if (user != null && user.getEmail() != null && user.getEmail().isEnabled()) {
             emailSender.send(user.getEmail().getValue(), subject, EmailTextBuilder.build(user.getName(), user.getSurName(), message));
+        }
+    }
+
+    public void checkConfirmationCode(String emailValue, String code) throws MbException {
+        emailValidator.validate(emailValue);
+        if (Strings.isNullOrEmpty(code)) throw MbException.create(MbError.CME07);
+        Email email = emailRepo.findByValue(emailValue);
+        if (email == null || !code.equals(email.getConfirmationCode())) {
+            throw MbException.create(MbError.CME06);
         }
     }
 }
