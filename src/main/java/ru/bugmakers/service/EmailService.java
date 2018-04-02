@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
+import ru.bugmakers.entity.Email;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.UserType;
 import ru.bugmakers.exceptions.MbError;
@@ -16,7 +17,6 @@ import ru.bugmakers.repository.EmailRepo;
 import ru.bugmakers.utils.UuidGenerator;
 import ru.bugmakers.utils.email.EmailSender;
 import ru.bugmakers.utils.email.EmailTextBuilder;
-import ru.bugmakers.validator.EmailValidator;
 
 /**
  * Created by Ayrat on 31.01.2018.
@@ -41,7 +41,6 @@ public class EmailService {
     private EmailSender emailSender;
     private UserService userService;
     private EmailRepo emailRepo;
-    private EmailValidator emailValidator;
 
     @Autowired
     public void setEmailSender(EmailSender emailSender) {
@@ -56,11 +55,6 @@ public class EmailService {
     @Autowired
     public void setEmailRepo(EmailRepo emailRepo) {
         this.emailRepo = emailRepo;
-    }
-
-    @Autowired
-    public void setEmailValidator(EmailValidator emailValidator) {
-        this.emailValidator = emailValidator;
     }
 
     /**
@@ -147,8 +141,15 @@ public class EmailService {
     }
 
     public void checkConfirmationCode(String code) throws MbException {
-        if (Strings.isNullOrEmpty(code) || !emailRepo.existsByConfirmationCode(code)) {
+        if (Strings.isNullOrEmpty(code)) throw MbException.create(MbError.CME07);
+        Email email = emailRepo.findByConfirmationCode(code);
+        if (email != null) {
+            email.setEnabled(true);
+            email.setConfirmationCode(null);
+            emailRepo.save(email);
+        } else {
             throw MbException.create(MbError.CME07);
         }
+
     }
 }
