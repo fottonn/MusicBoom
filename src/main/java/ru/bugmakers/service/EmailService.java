@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
-import ru.bugmakers.entity.Email;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.UserType;
 import ru.bugmakers.exceptions.MbError;
@@ -87,8 +86,7 @@ public class EmailService {
                         .scheme(HTTPS)
                         .host(HOST)
                         .addPathSegment(ACTIVATE)
-                        .addQueryParameter(EMAIL, email)
-                        .addQueryParameter(CODE, generatedValue)
+                        .addPathSegment(generatedValue)
                         .build().toString();
 
         String messageText = EmailTextBuilder.confirmBuild(user.getName(), user.getSurName(), confirmLink);
@@ -148,12 +146,9 @@ public class EmailService {
         }
     }
 
-    public void checkConfirmationCode(String emailValue, String code) throws MbException {
-        emailValidator.validate(emailValue);
-        if (Strings.isNullOrEmpty(code)) throw MbException.create(MbError.CME07);
-        Email email = emailRepo.findByValue(emailValue);
-        if (email == null || !code.equals(email.getConfirmationCode())) {
-            throw MbException.create(MbError.CME06);
+    public void checkConfirmationCode(String code) throws MbException {
+        if (Strings.isNullOrEmpty(code) || !emailRepo.existsByConfirmationCode(code)) {
+            throw MbException.create(MbError.CME07);
         }
     }
 }

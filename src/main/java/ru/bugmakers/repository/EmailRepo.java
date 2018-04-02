@@ -8,6 +8,6 @@ import ru.bugmakers.entity.Email;
  */
 public interface EmailRepo extends JpaRepository<Email, Long> {
 
-    Email findByValue(String email);
+    boolean existsByConfirmationCode(String code);
 
 }
