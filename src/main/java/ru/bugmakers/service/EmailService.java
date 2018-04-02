@@ -29,6 +29,7 @@ public class EmailService {
     private static final String WEBAPI = "webapi";
     private static final String EMAIL = "email";
     private static final String CONFIRMATION = "confirmation";
+    private static final String ACTIVATE = "activate";
     private static final String HTTPS = "https";
     private static final String CODE = "code";
     private static final String ID = "id";
@@ -69,9 +70,7 @@ public class EmailService {
                 new HttpUrl.Builder()
                         .scheme(HTTPS)
                         .host(HOST)
-                        .addPathSegment(WEBAPI)
-                        .addPathSegment(EMAIL)
-                        .addPathSegment(CONFIRMATION)
+                        .addPathSegment(ACTIVATE)
                         .addPathSegment(generatedValue)
                         .build().toString();
 
