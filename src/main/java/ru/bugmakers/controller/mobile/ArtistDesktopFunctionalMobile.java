@@ -23,6 +23,7 @@ import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.localpers.entity.ActiveEvent;
 import ru.bugmakers.localpers.service.ActiveEventService;
 import ru.bugmakers.mappers.converters.ActiveEvent2EventConverter;
+import ru.bugmakers.service.EventService;
 import ru.bugmakers.service.TransactionService;
 import ru.bugmakers.service.UserService;
 
@@ -36,6 +37,7 @@ import java.time.LocalDateTime;
 public class ArtistDesktopFunctionalMobile extends MbController {
 
     private ActiveEventService activeEventService;
+    private EventService eventService;
     private UserService userService;
     private ActiveEvent2EventConverter activeEvent2EventConverter;
     private TransactionService transactionService;
@@ -43,6 +45,11 @@ public class ArtistDesktopFunctionalMobile extends MbController {
     @Autowired
     public void setActiveEventService(ActiveEventService activeEventService) {
         this.activeEventService = activeEventService;
+    }
+
+    @Autowired
+    public void setEventService(EventService eventService) {
+        this.eventService = eventService;
     }
 
     @Autowired
@@ -116,8 +123,7 @@ public class ArtistDesktopFunctionalMobile extends MbController {
             Event event = activeEvent2EventConverter.convert(activeEvent);
             User user = userService.findUserById(activeEvent.getUserId());
             event.setUser(user);
-            user.getEvents().add(event);
-            user = userService.saveUser(user);
+            event = eventService.saveEvent(event);
 
             String earnedMoney = transactionService.getReceivedMoneyForPeriod(
                     user.getId(),

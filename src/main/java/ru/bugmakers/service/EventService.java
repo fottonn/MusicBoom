@@ -2,6 +2,7 @@ package ru.bugmakers.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.bugmakers.entity.Event;
 import ru.bugmakers.repository.EventRepo;
 import ru.bugmakers.repository.TransactionRepo;
 
@@ -42,6 +43,14 @@ public class EventService {
      */
     public String getAllEvents(Long userId) {
         return String.valueOf(eventRepo.countByUserId(userId));
+    }
+
+    public Event saveEvent(Event event) {
+        Event savedEvent = null;
+        if (event != null) {
+            savedEvent = eventRepo.saveAndFlush(event);
+        }
+        return savedEvent;
     }
 
     /**
