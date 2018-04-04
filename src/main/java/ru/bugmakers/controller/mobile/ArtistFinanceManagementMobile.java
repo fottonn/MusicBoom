@@ -3,9 +3,13 @@ package ru.bugmakers.controller.mobile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.bugmakers.config.principal.UserPrincipal;
 import ru.bugmakers.controller.MbController;
+import ru.bugmakers.dto.request.mobile.ArtistWithdrawMobileRq;
 import ru.bugmakers.dto.request.mobile.CardInfoRequestMobile;
 import ru.bugmakers.dto.response.mobile.ArtistEditingResponseMobile;
 import ru.bugmakers.dto.response.mobile.FinanceManagementResponseMobile;
@@ -32,6 +36,7 @@ public class ArtistFinanceManagementMobile extends MbController {
 
     /**
      * Привязывание карточки куда будут выводиться деньги
+     *
      * @param user                  - пользователь
      * @param cardInfoRequestMobile - номер карточки
      * @return
@@ -55,23 +60,25 @@ public class ArtistFinanceManagementMobile extends MbController {
 
     /**
      * Обновление карточки
+     *
      * @param user                  - пользователь
      * @param cardInfoRequestMobile - номер карточки
      */
     @PostMapping(value = "/card.update")
-    public void cardUpdate(@AuthenticationPrincipal UserPrincipal user,
-                           @RequestBody CardInfoRequestMobile cardInfoRequestMobile) {
-        this.cardAttach(user, cardInfoRequestMobile);
+    public ResponseEntity<MbResponseToMobile> cardUpdate(@AuthenticationPrincipal UserPrincipal user,
+                                                         @RequestBody CardInfoRequestMobile cardInfoRequestMobile) {
+        return this.cardAttach(user, cardInfoRequestMobile);
     }
 
     /**
      * Удаление привязанно карточки
-     * @param user  - пользователь
-     * @return      - ответ на ПЛ
+     *
+     * @param user - пользователь
+     * @return - ответ на ПЛ
      */
     @PostMapping(value = "/card.detach")
     public ResponseEntity<MbResponseToMobile> cardDetach(@AuthenticationPrincipal UserPrincipal user
-                                                         ) {
+    ) {
         try {
             artistFinanceManagementService.detachCard(user.getUser());
         } catch (MbException e) {
@@ -84,15 +91,15 @@ public class ArtistFinanceManagementMobile extends MbController {
 
     /**
      * Вывод денег пользователя на карту
-     * @param user      - пользователь
-     * @param amount    - сумма
-     * @return          - ответ на ПЛ
+     *
+     * @param user - пользователь
+     * @return - ответ на ПЛ
      */
     @PostMapping(value = "/withdraw")
     public ResponseEntity<MbResponseToMobile> withdraw(@AuthenticationPrincipal UserPrincipal user,
-                                                       @RequestParam("sum") String amount) {
+                                                       @RequestBody ArtistWithdrawMobileRq rq) {
         try {
-            artistFinanceManagementService.withdraw(user.getUser(), amount);
+            artistFinanceManagementService.withdraw(user.getUser(), rq.getSum());
         } catch (MbException e) {
             return ResponseEntity.ok(new FinanceManagementResponseMobile(e, RsStatus.ERROR));
         } catch (Exception e) {

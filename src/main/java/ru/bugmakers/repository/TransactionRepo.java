@@ -25,7 +25,9 @@ public interface TransactionRepo extends JpaRepository<Transaction, String> {
             "select " +
             "sum (t.amount) " +
             "from Transaction t " +
-            "where t.recipientId = :id")
+            "where t.recipientId = :id " +
+            "and t.recipientMoneyBearerKind = ru.bugmakers.enums.MoneyBearerKind.WALLET " +
+            "and t.status = ru.bugmakers.enums.Status.ACCEPTED")
     BigDecimal getReceivedMoney(@Param("id") Long id);
 
     /**
@@ -37,7 +39,8 @@ public interface TransactionRepo extends JpaRepository<Transaction, String> {
             "sum (t.amount) " +
             "from Transaction t " +
             "where t.senderId = :id " +
-            "and t.senderMoneyBearerKind = ru.bugmakers.enums.MoneyBearerKind.WALLET")
+            "and t.senderMoneyBearerKind = ru.bugmakers.enums.MoneyBearerKind.WALLET " +
+            "and t.status = ru.bugmakers.enums.Status.ACCEPTED")
     BigDecimal getDerivedMoney(@Param("id") Long id);
 
     /**
@@ -51,6 +54,8 @@ public interface TransactionRepo extends JpaRepository<Transaction, String> {
             "sum (t.amount) " +
             "from Transaction t " +
             "where t.recipientId = :id " +
+            "and t.recipientMoneyBearerKind = ru.bugmakers.enums.MoneyBearerKind.WALLET " +
+            "and t.status = ru.bugmakers.enums.Status.ACCEPTED " +
             "and t.date between :start and :finish")
     BigDecimal getReceivedMoneyForPeriod(@Param("id") Long id, @Param("start") LocalDateTime start, @Param("finish") LocalDateTime finish);
 
@@ -66,6 +71,7 @@ public interface TransactionRepo extends JpaRepository<Transaction, String> {
             "from Transaction t " +
             "where t.senderId = :id " +
             "and t.senderMoneyBearerKind = ru.bugmakers.enums.MoneyBearerKind.WALLET " +
+            "and t.status = ru.bugmakers.enums.Status.ACCEPTED " +
             "and t.date between :start and :finish")
     BigDecimal getDerivedMoneyForPeriod(@Param("id") Long id, @Param("start") LocalDateTime start, @Param("finish") LocalDateTime finish);
 

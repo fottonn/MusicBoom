@@ -1,5 +1,6 @@
 package ru.bugmakers.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.bugmakers.entity.Transaction;
@@ -75,6 +76,9 @@ public class ArtistFinanceManagementService {
     public void withdraw(User user, String amount) throws MbException {
         if (!amountValidation(amount, user)) {
             throw MbException.create(MbError.TRE01);
+        }
+        if (StringUtils.isBlank(user.getCardNumber())) {
+            throw MbException.create(MbError.TRE04);
         }
         Transaction transaction = new Transaction();
         transaction.setDate(LocalDateTime.now());
