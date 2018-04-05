@@ -124,6 +124,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     "/mapi/listener/**",
                     "/mapi/registereduser/**",
                     "/mapi/map.performers",
+                    "/mapi/artist.get",
+                    "/mapi/transaction",
                     "/logout"
             };
 
@@ -143,6 +145,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/mapi/registereduser/**").hasAnyAuthority(ARTIST.name(), LISTENER.name())
                     .antMatchers("/logout").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
                     .antMatchers("/mapi/map.performers").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
+                    .antMatchers("/mapi/artist.get").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
+                    .antMatchers("/mapi/transaction").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
                     .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()

@@ -21,6 +21,7 @@ public class RankPropsService {
     }
 
     public BigDecimal getFeeByRank(Rank rank) {
+        if (rank == null) rank = Rank.NEWBE;
         return rankPropsRepo.findByRank(rank).getFee();
     }
 }

@@ -8,7 +8,7 @@ import ru.bugmakers.dto.request.SessionDataRequest;
  */
 public class GetArtistRqMobile extends SessionDataRequest {
 
-    @JsonProperty("artist_id")
+    @JsonProperty("user_id")
     private String artistId;
 
     public String getArtistId() {

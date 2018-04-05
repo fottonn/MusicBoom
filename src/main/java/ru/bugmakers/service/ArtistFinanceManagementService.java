@@ -70,7 +70,6 @@ public class ArtistFinanceManagementService {
      *
      * @param user   - пользователь
      * @param amount - выводимая им сумма
-     * @return
      * @throws MbException
      */
     public void withdraw(User user, String amount) throws MbException {
