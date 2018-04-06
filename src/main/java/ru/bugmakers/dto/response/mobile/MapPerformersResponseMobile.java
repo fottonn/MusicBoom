@@ -1,25 +1,16 @@
 package ru.bugmakers.dto.response.mobile;
 
 import ru.bugmakers.dto.ArtistsLocation;
-import ru.bugmakers.enums.RsStatus;
-import ru.bugmakers.exceptions.MbException;
+import ru.bugmakers.dto.response.MbResponse;
 
 import java.util.List;
 
 /**
  * Created by Ayrat on 13.12.2017.
  */
-public class MapPerformersResponseMobile extends MbResponseToMobile {
+public class MapPerformersResponseMobile extends MbResponse {
 
     private List<ArtistsLocation> artists;
-
-    public MapPerformersResponseMobile(MbException e, RsStatus status) {
-        super(e, status);
-    }
-
-    public MapPerformersResponseMobile(RsStatus status) {
-        super(status);
-    }
 
     public List<ArtistsLocation> getArtists() {
         return artists;

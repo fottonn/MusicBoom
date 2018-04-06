@@ -8,11 +8,8 @@ import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.dto.request.RegistrationRequest;
 import ru.bugmakers.dto.response.MbResponse;
 import ru.bugmakers.dto.response.RegistrationResponse;
-import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.enums.SocialProvider;
 import ru.bugmakers.enums.UserType;
-import ru.bugmakers.exceptions.MbError;
-import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.validator.common.RegistrationRequestValidator;
 
 /**
@@ -36,46 +33,36 @@ public class RegistrationController extends MbController {
     }
 
     @PostMapping(params = "user_type")
-    public ResponseEntity<MbResponse> register(@RequestBody RegistrationRequest registrationRequest,
+    public ResponseEntity<MbResponse> register(@RequestBody RegistrationRequest rq,
                                                @RequestParam("user_type") String userType) {
-        RegistrationResponse registrationResponse;
+        RegistrationResponse rs;
         try {
-            registrationRequestValidator.validate(registrationRequest);
+            registrationRequestValidator.validate(rq);
             Registrator registrator = registratorCreator.getRegistrator();
-            UserDTO user = registrator.register(UserType.valueOf(userType.toUpperCase()), registrationRequest.getUser());
-            registrationResponse = new RegistrationResponse(RsStatus.SUCCESS);
-            registrationResponse.setUser(user);
-        } catch (MbException e) {
-            registrationResponse = new RegistrationResponse(e);
+            UserDTO user = registrator.register(UserType.valueOf(userType.toUpperCase()), rq.getUser());
+            rs = new RegistrationResponse();
+            rs.setUser(user);
         } catch (Exception e) {
-            registrationResponse = new RegistrationResponse(MbException.create(MbError.RGE08), RsStatus.ERROR);
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(registrationResponse);
+        return ResponseEntity.ok(rs);
     }
 
     @PostMapping(params = {"provider", "user_type"})
-    public ResponseEntity<MbResponse> socialRegister(@RequestBody RegistrationRequest registrationRequest,
+    public ResponseEntity<MbResponse> socialRegister(@RequestBody RegistrationRequest rq,
                                                      @RequestParam("user_type") String userType,
                                                      @RequestParam("provider") String provider) {
-        RegistrationResponse registrationResponse;
+        RegistrationResponse rs;
         try {
-            registrationRequestValidator.validate(registrationRequest);
+            registrationRequestValidator.validate(rq);
             Registrator registrator = registratorCreator.getRegistrator(SocialProvider.valueOf(provider.toUpperCase()));
-            UserDTO user = registrator.register(UserType.valueOf(userType.toUpperCase()), registrationRequest.getUser());
-            registrationResponse = new RegistrationResponse(RsStatus.SUCCESS);
-            registrationResponse.setUser(user);
-        } catch (MbException e) {
-            registrationResponse = new RegistrationResponse(e);
+            UserDTO user = registrator.register(UserType.valueOf(userType.toUpperCase()), rq.getUser());
+            rs = new RegistrationResponse();
+            rs.setUser(user);
         } catch (Exception e) {
-            registrationResponse = new RegistrationResponse(MbException.create(MbError.RGE08), RsStatus.ERROR);
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(registrationResponse);
-    }
-
-    @GetMapping(value = "/{uuid}")
-    public ResponseEntity<MbResponse> emailCheck(@PathVariable String uuid,
-                                                 @RequestParam("user_id") String userId) {
-        return ResponseEntity.ok(new MbResponse(RsStatus.SUCCESS));
+        return ResponseEntity.ok(rs);
     }
 
 }

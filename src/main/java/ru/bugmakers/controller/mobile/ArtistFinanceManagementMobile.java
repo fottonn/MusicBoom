@@ -11,10 +11,7 @@ import ru.bugmakers.config.principal.UserPrincipal;
 import ru.bugmakers.controller.MbController;
 import ru.bugmakers.dto.request.mobile.ArtistWithdrawMobileRq;
 import ru.bugmakers.dto.request.mobile.CardInfoRequestMobile;
-import ru.bugmakers.dto.response.mobile.ArtistEditingResponseMobile;
-import ru.bugmakers.dto.response.mobile.FinanceManagementResponseMobile;
-import ru.bugmakers.dto.response.mobile.MbResponseToMobile;
-import ru.bugmakers.enums.RsStatus;
+import ru.bugmakers.dto.response.MbResponse;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.service.ArtistFinanceManagementService;
@@ -39,22 +36,19 @@ public class ArtistFinanceManagementMobile extends MbController {
      *
      * @param user                  - пользователь
      * @param cardInfoRequestMobile - номер карточки
-     * @return
      */
     @PostMapping(value = "/card.attach")
-    public ResponseEntity<MbResponseToMobile> cardAttach(@AuthenticationPrincipal UserPrincipal user,
-                                                         @RequestBody CardInfoRequestMobile cardInfoRequestMobile) {
+    public ResponseEntity<MbResponse> cardAttach(@AuthenticationPrincipal UserPrincipal user,
+                                                 @RequestBody CardInfoRequestMobile cardInfoRequestMobile) {
         try {
             if (cardInfoRequestMobile.getCardNumber() == null) {
                 throw MbException.create(MbError.FDE01);
             }
             artistFinanceManagementService.attachCard(cardInfoRequestMobile.getCardNumber(), user.getUser());
-        } catch (MbException e) {
-            return ResponseEntity.ok(new FinanceManagementResponseMobile(e, RsStatus.ERROR));
         } catch (Exception e) {
-            return ResponseEntity.ok(new FinanceManagementResponseMobile(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
 
     }
 
@@ -65,8 +59,8 @@ public class ArtistFinanceManagementMobile extends MbController {
      * @param cardInfoRequestMobile - номер карточки
      */
     @PostMapping(value = "/card.update")
-    public ResponseEntity<MbResponseToMobile> cardUpdate(@AuthenticationPrincipal UserPrincipal user,
-                                                         @RequestBody CardInfoRequestMobile cardInfoRequestMobile) {
+    public ResponseEntity<MbResponse> cardUpdate(@AuthenticationPrincipal UserPrincipal user,
+                                                 @RequestBody CardInfoRequestMobile cardInfoRequestMobile) {
         return this.cardAttach(user, cardInfoRequestMobile);
     }
 
@@ -77,16 +71,13 @@ public class ArtistFinanceManagementMobile extends MbController {
      * @return - ответ на ПЛ
      */
     @PostMapping(value = "/card.detach")
-    public ResponseEntity<MbResponseToMobile> cardDetach(@AuthenticationPrincipal UserPrincipal user
-    ) {
+    public ResponseEntity<MbResponse> cardDetach(@AuthenticationPrincipal UserPrincipal user) {
         try {
             artistFinanceManagementService.detachCard(user.getUser());
-        } catch (MbException e) {
-            return ResponseEntity.ok(new FinanceManagementResponseMobile(e, RsStatus.ERROR));
         } catch (Exception e) {
-            return ResponseEntity.ok(new FinanceManagementResponseMobile(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
     }
 
     /**
@@ -96,15 +87,13 @@ public class ArtistFinanceManagementMobile extends MbController {
      * @return - ответ на ПЛ
      */
     @PostMapping(value = "/withdraw")
-    public ResponseEntity<MbResponseToMobile> withdraw(@AuthenticationPrincipal UserPrincipal user,
-                                                       @RequestBody ArtistWithdrawMobileRq rq) {
+    public ResponseEntity<MbResponse> withdraw(@AuthenticationPrincipal UserPrincipal user,
+                                               @RequestBody ArtistWithdrawMobileRq rq) {
         try {
             artistFinanceManagementService.withdraw(user.getUser(), rq.getSum());
-        } catch (MbException e) {
-            return ResponseEntity.ok(new FinanceManagementResponseMobile(e, RsStatus.ERROR));
         } catch (Exception e) {
-            return ResponseEntity.ok(new FinanceManagementResponseMobile(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(new ArtistEditingResponseMobile(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
     }
 }

@@ -11,12 +11,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import ru.bugmakers.config.principal.UserPrincipal;
 import ru.bugmakers.controller.MbController;
 import ru.bugmakers.dto.request.mobile.ListenerProfileMobileRq;
-import ru.bugmakers.dto.response.mobile.MbResponseToMobile;
-import ru.bugmakers.dto.response.web.MbResponseToWeb;
+import ru.bugmakers.dto.response.MbResponse;
 import ru.bugmakers.entity.Email;
 import ru.bugmakers.entity.User;
-import ru.bugmakers.enums.RsStatus;
-import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.service.ArtistProfileEditService;
 import ru.bugmakers.service.EmailService;
 import ru.bugmakers.service.UserService;
@@ -51,8 +48,8 @@ public class ListenerProfileMobile extends MbController {
     }
 
     @PostMapping(value = "/personal")
-    public ResponseEntity<MbResponseToMobile> personalEdit(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                           @RequestBody ListenerProfileMobileRq rq) {
+    public ResponseEntity<MbResponse> personalEdit(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                   @RequestBody ListenerProfileMobileRq rq) {
         User user = userPrincipal.getUser();
         try {
             user.setCity(ofNullable(rq.getCity()).orElse(user.getCity()));
@@ -66,35 +63,33 @@ public class ListenerProfileMobile extends MbController {
                 emailService.sendConfirmationEmail(user);
             }
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToMobile(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(new MbResponseToMobile(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
     }
 
 
     @PostMapping(value = "/card.attach")
-    public ResponseEntity<MbResponseToMobile> cardAttach(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                         @RequestBody ListenerProfileMobileRq rq) {
+    public ResponseEntity<MbResponse> cardAttach(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                 @RequestBody ListenerProfileMobileRq rq) {
 
         try {
             userService.updateUser(userPrincipal.getUser().withLinkedCard(Boolean.parseBoolean(rq.getIsAttached())));
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToMobile(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(new MbResponseToMobile(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
     }
 
     @PostMapping(value = "/avatar.change")
-    public ResponseEntity<MbResponseToWeb> changeArtistAvatar(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                              MultipartHttpServletRequest rq) {
+    public ResponseEntity<MbResponse> changeArtistAvatar(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                         MultipartHttpServletRequest rq) {
         try {
             artistProfileEditService.artistAvatarChange(userPrincipal.getUser(), MultipartUtils.findAvatarPart(rq));
-        } catch (MbException e) {
-            return ResponseEntity.ok(new MbResponseToWeb(e, RsStatus.ERROR));
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToWeb(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(new MbResponseToWeb(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
     }
 
 

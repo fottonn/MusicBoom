@@ -142,9 +142,6 @@ public class User {
     @Column(name = "linked_card")
     private boolean linkedCard = false;
 
-    @Column(name = "is_ordered")
-    private boolean ordered = false;
-
     @Column(name = "card_number")
     private String cardNumber;
 
@@ -447,14 +444,6 @@ public class User {
         this.linkedCard = linkedCard;
     }
 
-    public boolean isOrdered() {
-        return ordered;
-    }
-
-    public void setOrdered(boolean ordered) {
-        this.ordered = ordered;
-    }
-
     public Rank getRank() {
         return rank;
     }
@@ -634,11 +623,6 @@ public class User {
 
     public User withLinkedCard(boolean linkedCard) {
         this.linkedCard = linkedCard;
-        return this;
-    }
-
-    public User withOrdered(boolean ordered) {
-        this.ordered = ordered;
         return this;
     }
 

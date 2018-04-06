@@ -1,18 +1,10 @@
 package ru.bugmakers.dto.response.mobile;
 
-import ru.bugmakers.enums.RsStatus;
-import ru.bugmakers.exceptions.MbException;
+import ru.bugmakers.dto.response.MbResponse;
 
 /**
  * Created by Ayrat on 15.12.2017.
  */
-public class PerformanceStartResponseMobile extends MbResponseToMobile {
+public class PerformanceStartResponseMobile extends MbResponse {
 
-    public PerformanceStartResponseMobile(MbException e, RsStatus status) {
-        super(e, status);
-    }
-
-    public PerformanceStartResponseMobile(RsStatus status) {
-        super(status);
-    }
 }

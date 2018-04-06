@@ -13,7 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import ru.bugmakers.dto.common.AuthDTO;
 import ru.bugmakers.dto.response.MbResponse;
-import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.exceptions.MbAuthenticationException;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
@@ -48,7 +47,7 @@ public class JsonAuthenticationFilter extends AbstractAuthenticationProcessingFi
         setAuthenticationFailureHandler(((request, response, exception) -> {
             ObjectMapper mapper = new ObjectMapper();
             MbException mbException = ((MbAuthenticationException) exception).getMbException();
-            MbResponse mbResponse = new MbResponse(mbException, RsStatus.ERROR);
+            MbResponse mbResponse = MbResponse.error(mbException);
             String rs = mapper.writeValueAsString(mbResponse);
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             response.getWriter().write(rs);

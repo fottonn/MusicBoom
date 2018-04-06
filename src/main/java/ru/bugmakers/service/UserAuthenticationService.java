@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.bugmakers.dto.response.AuthenticationResponse;
 import ru.bugmakers.entity.User;
-import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.enums.UserType;
 import ru.bugmakers.mappers.converters.User2UserDtoConverter;
 import ru.bugmakers.repository.UserRepo;
@@ -37,32 +36,27 @@ public class UserAuthenticationService {
         if (id == null) return null;
         AuthenticationResponse response = null;
 
-        try {
-            Optional<User> userEntity = userRepo.findById(id);
+        Optional<User> userEntity = userRepo.findById(id);
 
-            if (userEntity.isPresent()) {
-                User user = userEntity.get();
-                UserType userType = user.getUserType();
-                if (userType != null) {
-                    response = new AuthenticationResponse(RsStatus.SUCCESS);
-                    switch (userType) {
-                        case ARTIST:
-                        case LISTENER:
-                            response.setUser(user2UserDtoConverter.convert(user));
-                            break;
-                        case ADMIN:
-                            //TODO возможно лучше вернуть стандартный успешный ответ вместо массива пользователей
-                            break;
-                        case OPERATOR:
-                            break;
-                    }
-
+        if (userEntity.isPresent()) {
+            User user = userEntity.get();
+            UserType userType = user.getUserType();
+            if (userType != null) {
+                response = new AuthenticationResponse();
+                switch (userType) {
+                    case ARTIST:
+                    case LISTENER:
+                        response.setUser(user2UserDtoConverter.convert(user));
+                        break;
+                    case ADMIN:
+                        //TODO возможно лучше вернуть стандартный успешный ответ вместо массива пользователей
+                        break;
+                    case OPERATOR:
+                        break;
                 }
-            }
-        } catch (Exception e) {
-            return null;
-        }
 
+            }
+        }
         return response;
     }
 }

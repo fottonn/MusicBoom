@@ -10,10 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.bugmakers.config.principal.UserPrincipal;
 import ru.bugmakers.controller.MbController;
 import ru.bugmakers.dto.request.web.FeedbackWebRq;
-import ru.bugmakers.dto.response.web.MbResponseToWeb;
+import ru.bugmakers.dto.response.MbResponse;
 import ru.bugmakers.entity.FeedBack;
 import ru.bugmakers.enums.FeedBackType;
-import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.service.FeedBackService;
 
 /**
@@ -31,32 +30,32 @@ public class FeedbackWeb extends MbController {
     }
 
     @PostMapping(value = "/artist")
-    public ResponseEntity<MbResponseToWeb> artistFeedback(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                          @RequestBody FeedbackWebRq rq) {
-        MbResponseToWeb rs;
+    public ResponseEntity<MbResponse> artistFeedback(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                     @RequestBody FeedbackWebRq rq) {
+        MbResponse rs;
         try {
             Long userId = userPrincipal.getUser().getId();
             FeedBackType feedBackType = FeedBackType.valueOf(rq.getType().toUpperCase());
             feedBackService.saveFeedBack(new FeedBack(userId, feedBackType, rq.getText()));
-            rs = new MbResponseToWeb(RsStatus.SUCCESS);
+            rs = MbResponse.success();
         } catch (Exception e) {
-            rs = new MbResponseToWeb(RsStatus.ERROR);
+            return ResponseEntity.ok(MbResponse.error(e));
         }
         return ResponseEntity.ok(rs);
 
     }
 
     @PostMapping(value = "/user")
-    public ResponseEntity<MbResponseToWeb> userFeedback(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                        @RequestBody FeedbackWebRq rq) {
-        MbResponseToWeb rs;
+    public ResponseEntity<MbResponse> userFeedback(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                   @RequestBody FeedbackWebRq rq) {
+        MbResponse rs;
         try {
             Long userId = userPrincipal.getUser().getId();
             FeedBackType feedBackType = FeedBackType.PROPOSAL;
             feedBackService.saveFeedBack(new FeedBack(userId, feedBackType, rq.getText()));
-            rs = new MbResponseToWeb(RsStatus.SUCCESS);
+            rs = MbResponse.success();
         } catch (Exception e) {
-            rs = new MbResponseToWeb(RsStatus.ERROR);
+            return ResponseEntity.ok(MbResponse.error(e));
         }
         return ResponseEntity.ok(rs);
     }

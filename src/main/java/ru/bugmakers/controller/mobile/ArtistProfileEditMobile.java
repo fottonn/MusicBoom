@@ -9,10 +9,8 @@ import ru.bugmakers.config.principal.UserPrincipal;
 import ru.bugmakers.controller.MbController;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.dto.request.mobile.ArtistEditRqMobile;
-import ru.bugmakers.dto.response.mobile.MbResponseToMobile;
+import ru.bugmakers.dto.response.MbResponse;
 import ru.bugmakers.entity.User;
-import ru.bugmakers.enums.RsStatus;
-import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.service.ArtistProfileEditService;
 import ru.bugmakers.utils.MultipartUtils;
 
@@ -32,137 +30,106 @@ public class ArtistProfileEditMobile extends MbController {
     }
 
     @PostMapping(value = "/personal")
-    public ResponseEntity<MbResponseToMobile> artistEditing(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                            @RequestBody ArtistEditRqMobile rq) {
+    public ResponseEntity<MbResponse> artistEditing(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                    @RequestBody ArtistEditRqMobile rq) {
         try {
             UserDTO userDTO = rq.getUserDTO();
             User user = userPrincipal.getUser();
             artistProfileEditService.artistProfileEdit(userDTO, user);
-        } catch (MbException e) {
-            return ResponseEntity.ok(new MbResponseToMobile(e, RsStatus.ERROR));
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToMobile(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(new MbResponseToMobile(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
     }
 
     @PostMapping(value = "/avatar.change")
-    public ResponseEntity<MbResponseToMobile> changeArtistAvatar(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                                 MultipartHttpServletRequest rq) {
+    public ResponseEntity<MbResponse> changeArtistAvatar(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                         MultipartHttpServletRequest rq) {
         try {
             artistProfileEditService.artistAvatarChange(userPrincipal.getUser(), MultipartUtils.findAvatarPart(rq));
-        } catch (MbException e) {
-            return ResponseEntity.ok(new MbResponseToMobile(e, RsStatus.ERROR));
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToMobile(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(new MbResponseToMobile(RsStatus.SUCCESS));
-    }
-
-    @PostMapping(value = "/phone.change")
-    public ResponseEntity<MbResponseToMobile> changeArtistPhone(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                                @RequestBody ArtistEditRqMobile rq) {
-        try {
-            artistProfileEditService.artistPhoneChange(userPrincipal.getUser(), rq.getPhoneNumber());
-        } catch (MbException e) {
-            return ResponseEntity.ok(new MbResponseToMobile(e, RsStatus.ERROR));
-        } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToMobile(RsStatus.ERROR));
-        }
-        return ResponseEntity.ok(new MbResponseToMobile(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
     }
 
     @PostMapping(value = "/password.change")
-    public ResponseEntity<MbResponseToMobile> changeArtistPassword(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                                   @RequestBody ArtistEditRqMobile rq) {
+    public ResponseEntity<MbResponse> changeArtistPassword(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                           @RequestBody ArtistEditRqMobile rq) {
         try {
             artistProfileEditService.artistPasswordChange(userPrincipal.getUser(), rq.getOldPassword(), rq.getNewPassword());
-        } catch (MbException e) {
-            return ResponseEntity.ok(new MbResponseToMobile(e, RsStatus.ERROR));
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToMobile(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(new MbResponseToMobile(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
     }
 
     @PostMapping(value = "/creativity.change")
-    public ResponseEntity<MbResponseToMobile> changeArtistCreativity(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                                     @RequestBody ArtistEditRqMobile rq) {
+    public ResponseEntity<MbResponse> changeArtistCreativity(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                             @RequestBody ArtistEditRqMobile rq) {
         try {
             artistProfileEditService.artistCreativityChange(userPrincipal.getUser(), rq.getCreativity());
-        } catch (MbException e) {
-            return ResponseEntity.ok(new MbResponseToMobile(e, RsStatus.ERROR));
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToMobile(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(new MbResponseToMobile(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
     }
 
     @PostMapping(value = "/instrument.change")
-    public ResponseEntity<MbResponseToMobile> changeArtistInstrument(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                                     @RequestBody ArtistEditRqMobile rq) {
+    public ResponseEntity<MbResponse> changeArtistInstrument(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                             @RequestBody ArtistEditRqMobile rq) {
         try {
             artistProfileEditService.artistInstrumentChange(userPrincipal.getUser(), rq.getInstrument());
-        } catch (MbException e) {
-            return ResponseEntity.ok(new MbResponseToMobile(e, RsStatus.ERROR));
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToMobile(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(new MbResponseToMobile(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
     }
 
     @GetMapping(value = "/genre.change")
-    public ResponseEntity<MbResponseToMobile> changeArtistGenre(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                                @RequestBody ArtistEditRqMobile rq) {
+    public ResponseEntity<MbResponse> changeArtistGenre(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                        @RequestBody ArtistEditRqMobile rq) {
         try {
             artistProfileEditService.artistGenreChange(userPrincipal.getUser(), rq.getGenre());
-        } catch (MbException e) {
-            return ResponseEntity.ok(new MbResponseToMobile(e, RsStatus.ERROR));
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToMobile(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(new MbResponseToMobile(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
     }
 
     @PostMapping(value = "/orderable.change")
-    public ResponseEntity<MbResponseToMobile> changeArtistSetOrderable(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                                       @RequestBody ArtistEditRqMobile rq) {
+    public ResponseEntity<MbResponse> changeArtistSetOrderable(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                               @RequestBody ArtistEditRqMobile rq) {
         try {
             artistProfileEditService.artistSetOrderableChange(userPrincipal.getUser(), rq.isOrderable());
-        } catch (MbException e) {
-            return ResponseEntity.ok(new MbResponseToMobile(e, RsStatus.ERROR));
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToMobile(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(new MbResponseToMobile(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
 
     }
 
     @GetMapping(value = "/photos.delete")
-    public ResponseEntity<MbResponseToMobile> artistDeletePhotos(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                                 @RequestBody ArtistEditRqMobile rq) {
+    public ResponseEntity<MbResponse> artistDeletePhotos(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                         @RequestBody ArtistEditRqMobile rq) {
         try {
             artistProfileEditService.artistDeletePhotos(userPrincipal.getUser(), rq.getPhotoIds());
-        } catch (MbException e) {
-            return ResponseEntity.ok(new MbResponseToMobile(e, RsStatus.ERROR));
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToMobile(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(new MbResponseToMobile(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
 
     }
 
     @PostMapping(value = "/photos.upload")
-    public ResponseEntity<MbResponseToMobile> artistUploadPhotos(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                                 MultipartHttpServletRequest rq) {
+    public ResponseEntity<MbResponse> artistUploadPhotos(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                         MultipartHttpServletRequest rq) {
         try {
             artistProfileEditService.artistUploadPhotos(userPrincipal.getUser(), MultipartUtils.findImageParts(rq));
-        } catch (MbException e) {
-            return ResponseEntity.ok(new MbResponseToMobile(e, RsStatus.ERROR));
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToMobile(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(new MbResponseToMobile(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
 
     }
 }

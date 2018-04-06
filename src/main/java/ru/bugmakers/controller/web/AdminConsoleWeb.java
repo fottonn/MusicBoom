@@ -12,11 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.bugmakers.controller.MbController;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.dto.request.web.*;
+import ru.bugmakers.dto.response.MbResponse;
 import ru.bugmakers.dto.response.web.ArtistListWebRs;
 import ru.bugmakers.dto.response.web.ArtistStatisticForAdminWebRs;
-import ru.bugmakers.dto.response.web.MbResponseToWeb;
 import ru.bugmakers.entity.User;
-import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.enums.UserType;
 import ru.bugmakers.mappers.converters.User2UserDtoConverter;
 import ru.bugmakers.mappers.enrichers.UserDTO2UserEnricher;
@@ -74,14 +73,14 @@ public class AdminConsoleWeb extends MbController {
     }
 
     @PostMapping(value = "/artist.list")
-    public ResponseEntity<MbResponseToWeb> getArtistList(@RequestBody ArtistListWebRq rq) {
+    public ResponseEntity<MbResponse> getArtistList(@RequestBody ArtistListWebRq rq) {
         ArtistListWebRs rs;
         try {
             int page = Integer.parseInt(rq.getPage()) - 1;
             int size = Integer.parseInt(rq.getSize());
             Page<User> users = userService.findAllUsersByUserType(UserType.ARTIST, PageRequest.of(page, size, Sort.by("id")));
             Page<UserDTO> artistsPage = users.map(user -> user2UserDtoConverter.convert(user));
-            rs = new ArtistListWebRs(RsStatus.SUCCESS);
+            rs = new ArtistListWebRs();
             rs.setArtists(artistsPage.getContent());
             rs.setPage(artistsPage.getNumber() + 1);
             rs.setPageSize(artistsPage.getSize());
@@ -89,63 +88,63 @@ public class AdminConsoleWeb extends MbController {
             rs.setTotalPages(artistsPage.getTotalPages());
             rs.setTotalArtists(artistsPage.getTotalElements());
         } catch (Exception e) {
-            rs = new ArtistListWebRs(RsStatus.ERROR);
+            return ResponseEntity.ok(MbResponse.error(e));
         }
         return ResponseEntity.ok(rs);
     }
 
     @PostMapping(value = "/artist.edit")
-    public ResponseEntity<MbResponseToWeb> editArtist(@RequestBody ArtistEditWebRq rq) {
+    public ResponseEntity<MbResponse> editArtist(@RequestBody ArtistEditWebRq rq) {
         try {
             User editedArtist = userService.findUserById(Long.valueOf(rq.getArtist().getId()));
             userDTO2UserEnricher.enrich(rq.getArtist(), editedArtist);
             userService.updateUser(editedArtist);
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToWeb(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(new MbResponseToWeb(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
     }
 
     @PostMapping(value = "/artist.block")
-    public ResponseEntity<MbResponseToWeb> blockArtist(@RequestBody ArtistBlockWebRq rq) {
+    public ResponseEntity<MbResponse> blockArtist(@RequestBody ArtistBlockWebRq rq) {
 
         try {
             User blockedArtist = userService.findUserById(Long.valueOf(rq.getArtistId()));
             blockedArtist.setEnabled(!rq.getBlock());
             userService.updateUser(blockedArtist);
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToWeb(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(new MbResponseToWeb(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
     }
 
     @PostMapping(value = "/artist.delete")
-    public ResponseEntity<MbResponseToWeb> deleteArtist(@RequestBody ArtistDeleteWebRq rq) {
+    public ResponseEntity<MbResponse> deleteArtist(@RequestBody ArtistDeleteWebRq rq) {
 
         try {
             userService.deleteUserById(Long.valueOf(rq.getArtist().getId()));
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToWeb(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(new MbResponseToWeb(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
     }
 
     @PostMapping(value = "/message.send")
-    public ResponseEntity<MbResponseToWeb> sendMessage(@RequestBody SendMessageWebRq rq) {
+    public ResponseEntity<MbResponse> sendMessage(@RequestBody SendMessageWebRq rq) {
 
         try {
             emailService.sendEmailToAllArtists(rq.getMessage(), rq.getSubject());
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToWeb(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(new MbResponseToWeb(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
     }
 
     @PostMapping(value = "/artist.stat")
-    public ResponseEntity<MbResponseToWeb> getArtistStatistic(@RequestBody ArtistStatisticWebRq rq) {
+    public ResponseEntity<MbResponse> getArtistStatistic(@RequestBody ArtistStatisticWebRq rq) {
         ArtistStatisticForAdminWebRs rs;
         try {
-            rs = new ArtistStatisticForAdminWebRs(RsStatus.SUCCESS);
+            rs = new ArtistStatisticForAdminWebRs();
             Long id = Long.valueOf(rq.getArtist().getId());
             rs.setId(String.valueOf(id));
             rs.setDonated(transactionService.getAllReceivedMoney(id));
@@ -153,16 +152,16 @@ public class AdminConsoleWeb extends MbController {
             rs.setBalance(transactionService.getCurrentBalance(id));
             rs.setShowTime(eventService.getTotalEventsTime(id));
         } catch (Exception e) {
-            rs = new ArtistStatisticForAdminWebRs(RsStatus.ERROR);
+            return ResponseEntity.ok(MbResponse.error(e));
         }
         return ResponseEntity.ok(rs);
     }
 
     @PostMapping(value = "/artist.stat.period")
-    public ResponseEntity<MbResponseToWeb> getArtistStatisticWithPeriod(@RequestBody ArtistStatisticWithPeriodWebRq rq) {
+    public ResponseEntity<MbResponse> getArtistStatisticWithPeriod(@RequestBody ArtistStatisticWithPeriodWebRq rq) {
         ArtistStatisticForAdminWebRs rs;
         try {
-            rs = new ArtistStatisticForAdminWebRs(RsStatus.SUCCESS);
+            rs = new ArtistStatisticForAdminWebRs();
             final Long id = Long.valueOf(rq.getArtist().getId());
             final LocalDateTime start = parseLocalDateTime(rq.getPeriod().getStart());
             final LocalDateTime end = parseLocalDateTime(rq.getPeriod().getEnd());
@@ -172,10 +171,9 @@ public class AdminConsoleWeb extends MbController {
             rs.setBalance(transactionService.getCurrentBalance(id));
             rs.setShowTime(eventService.getPeriodEventsTime(id, start, end));
         } catch (Exception e) {
-            rs = new ArtistStatisticForAdminWebRs(RsStatus.ERROR);
+            return ResponseEntity.ok(MbResponse.error(e));
         }
         return ResponseEntity.ok(rs);
     }
-
 
 }

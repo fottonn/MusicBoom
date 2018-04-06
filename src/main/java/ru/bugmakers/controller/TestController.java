@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.bugmakers.dto.response.MbResponse;
 import ru.bugmakers.entity.Email;
 import ru.bugmakers.entity.User;
-import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.service.EmailService;
 import ru.bugmakers.service.UserService;
 
@@ -47,7 +46,7 @@ public class TestController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ResponseEntity.ok(new MbResponse(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
     }
 
 

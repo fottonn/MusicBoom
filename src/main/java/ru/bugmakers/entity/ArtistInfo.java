@@ -1,7 +1,5 @@
 package ru.bugmakers.entity;
 
-import ru.bugmakers.enums.Genre;
-
 import javax.persistence.*;
 
 import static ru.bugmakers.entity.EntityConstants.ARTIST_INFO_GEN;
@@ -26,11 +24,10 @@ public class ArtistInfo {
     private String instrument;
 
     @Column(name = "genre")
-    @Enumerated(EnumType.STRING)
-    private Genre genre;
+    private String genre;
 
-    @Column(name = "is_ordered")
-    private Boolean isOrdered;
+    @Column(name = "orderable")
+    private boolean orderable = false;
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -60,20 +57,20 @@ public class ArtistInfo {
         this.instrument = instrument;
     }
 
-    public Genre getGenre() {
+    public String getGenre() {
         return genre;
     }
 
-    public void setGenre(Genre genre) {
+    public void setGenre(String genre) {
         this.genre = genre;
     }
 
-    public Boolean getOrdered() {
-        return isOrdered;
+    public boolean isOrderable() {
+        return orderable;
     }
 
-    public void setOrdered(Boolean ordered) {
-        isOrdered = ordered;
+    public void setOrderable(boolean orderable) {
+        this.orderable = orderable;
     }
 
     public User getUser() {
@@ -84,4 +81,3 @@ public class ArtistInfo {
         this.user = user;
     }
 }
-

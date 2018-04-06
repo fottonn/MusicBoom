@@ -9,9 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.bugmakers.controller.MbController;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.dto.request.mobile.ListenerMainPageMobileRq;
+import ru.bugmakers.dto.response.MbResponse;
 import ru.bugmakers.dto.response.mobile.FindArtistResponseMobile;
-import ru.bugmakers.dto.response.mobile.MbResponseToMobile;
-import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.enums.UserType;
 import ru.bugmakers.service.UserService;
 
@@ -32,16 +31,16 @@ public class ListenerMainPageMobile extends MbController {
     }
 
     @GetMapping(value = "/find.artist")
-    public ResponseEntity<MbResponseToMobile> findArtist(@RequestBody ListenerMainPageMobileRq rq) {
-        FindArtistResponseMobile findArtistResponseMobile;
+    public ResponseEntity<MbResponse> findArtist(@RequestBody ListenerMainPageMobileRq rq) {
+        FindArtistResponseMobile rs;
         try {
             List<UserDTO> artists = userService.findAllUsersByUserTypeAndByNicknameLikeValue(UserType.ARTIST, rq.getArtistAlias());
-            findArtistResponseMobile = new FindArtistResponseMobile(RsStatus.SUCCESS);
-            findArtistResponseMobile.setArtists(artists);
+            rs = new FindArtistResponseMobile();
+            rs.setArtists(artists);
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToMobile(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(findArtistResponseMobile);
+        return ResponseEntity.ok(rs);
     }
 
 }

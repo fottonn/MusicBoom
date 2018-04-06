@@ -12,10 +12,8 @@ import ru.bugmakers.config.principal.UserPrincipal;
 import ru.bugmakers.controller.MbController;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.dto.request.web.ArtistEditRqWeb;
-import ru.bugmakers.dto.response.web.MbResponseToWeb;
+import ru.bugmakers.dto.response.MbResponse;
 import ru.bugmakers.entity.User;
-import ru.bugmakers.enums.RsStatus;
-import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.service.ArtistProfileEditService;
 import ru.bugmakers.utils.MultipartUtils;
 
@@ -34,82 +32,70 @@ public class ArtistEditProfileWeb extends MbController {
     }
 
     @PostMapping(value = "/personal")
-    public ResponseEntity<MbResponseToWeb> artistProfileEdit(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                             @RequestBody ArtistEditRqWeb rq) {
+    public ResponseEntity<MbResponse> artistProfileEdit(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                        @RequestBody ArtistEditRqWeb rq) {
         try {
             UserDTO userDTO = rq.getUserDTO();
             User user = userPrincipal.getUser();
             artistProfileEditService.artistProfileEdit(userDTO, user);
-        } catch (MbException e) {
-            return ResponseEntity.ok(new MbResponseToWeb(e, RsStatus.ERROR));
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToWeb(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(new MbResponseToWeb(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
     }
 
     @PostMapping(value = "/avatar.change")
-    public ResponseEntity<MbResponseToWeb> changeArtistAvatar(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                              MultipartHttpServletRequest rq) {
+    public ResponseEntity<MbResponse> changeArtistAvatar(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                         MultipartHttpServletRequest rq) {
         try {
             artistProfileEditService.artistAvatarChange(userPrincipal.getUser(), MultipartUtils.findAvatarPart(rq));
-        } catch (MbException e) {
-            return ResponseEntity.ok(new MbResponseToWeb(e, RsStatus.ERROR));
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToWeb(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(new MbResponseToWeb(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
     }
 
     @PostMapping(value = "/phone.change")
-    public ResponseEntity<MbResponseToWeb> changePhoneNumber(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                             @RequestBody ArtistEditRqWeb rq) {
+    public ResponseEntity<MbResponse> changePhoneNumber(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                        @RequestBody ArtistEditRqWeb rq) {
         try {
             artistProfileEditService.artistPhoneChange(userPrincipal.getUser(), rq.getPhoneNumber());
-        } catch (MbException e) {
-            return ResponseEntity.ok(new MbResponseToWeb(e, RsStatus.ERROR));
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToWeb(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(new MbResponseToWeb(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
     }
 
     @PostMapping(value = "/password.change")
-    public ResponseEntity<MbResponseToWeb> changePassword(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                          @RequestBody ArtistEditRqWeb rq) {
+    public ResponseEntity<MbResponse> changePassword(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                     @RequestBody ArtistEditRqWeb rq) {
         try {
             artistProfileEditService.artistPasswordChange(userPrincipal.getUser(), rq.getOldPassword(), rq.getNewPassword());
-        } catch (MbException e) {
-            return ResponseEntity.ok(new MbResponseToWeb(e, RsStatus.ERROR));
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToWeb(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(new MbResponseToWeb(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
     }
 
     @PostMapping(value = "/photos.delete")
-    public ResponseEntity<MbResponseToWeb> deletePhotos(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                        @RequestBody ArtistEditRqWeb rq) {
+    public ResponseEntity<MbResponse> deletePhotos(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                   @RequestBody ArtistEditRqWeb rq) {
         try {
             artistProfileEditService.artistDeletePhotos(userPrincipal.getUser(), rq.getPhotoIds());
-        } catch (MbException e) {
-            return ResponseEntity.ok(new MbResponseToWeb(e, RsStatus.ERROR));
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToWeb(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(new MbResponseToWeb(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
     }
 
     @PostMapping(value = "/photos.upload")
-    public ResponseEntity<MbResponseToWeb> uploadPhotos(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                        MultipartHttpServletRequest rq) {
+    public ResponseEntity<MbResponse> uploadPhotos(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                   MultipartHttpServletRequest rq) {
         try {
             artistProfileEditService.artistUploadPhotos(userPrincipal.getUser(), MultipartUtils.findImageParts(rq));
-        } catch (MbException e) {
-            return ResponseEntity.ok(new MbResponseToWeb(e, RsStatus.ERROR));
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToWeb(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(new MbResponseToWeb(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
     }
 }

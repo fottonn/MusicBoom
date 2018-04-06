@@ -10,13 +10,11 @@ import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.entity.User;
-import ru.bugmakers.enums.Genre;
 import ru.bugmakers.enums.UserType;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.mappers.enrichers.UserDTO2UserEnricher;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Set;
 
@@ -197,7 +195,7 @@ public class ArtistProfileEditService {
      */
     public void artistGenreChange(User user, String genre) throws MbException {
         if (user == null) throw MbException.create(MbError.APE01);
-        user.getArtistInfo().setGenre(Genre.valueOf(genre.toUpperCase()));
+        user.getArtistInfo().setGenre(genre.toUpperCase());
         try {
             User savedUser = userService.updateUser(user);
             checkSavedUser(savedUser);
@@ -213,9 +211,9 @@ public class ArtistProfileEditService {
      * @param orderable заказываемость
      * @throws MbException ошибки при смене заказываемости
      */
-    public void artistSetOrderableChange(User user, Boolean orderable) throws MbException {
+    public void artistSetOrderableChange(User user, boolean orderable) throws MbException {
         if (user == null) throw MbException.create(MbError.APE01);
-        user.getArtistInfo().setOrdered(orderable);
+        user.getArtistInfo().setOrderable(orderable);
 
         try {
             User savedUser = userService.updateUser(user);
@@ -258,9 +256,9 @@ public class ArtistProfileEditService {
      *
      * @param user           текущий пользователь
      * @param multipartFiles набор файлов
-     * @throws MbException ошибки при сохранении файлов
+     * @throws Exception ошибки при сохранении файлов
      */
-    public void artistUploadPhotos(User user, Collection<MultipartFile> multipartFiles) throws MbException, IOException {
+    public void artistUploadPhotos(User user, Collection<MultipartFile> multipartFiles) throws Exception {
         if (user == null) throw MbException.create(MbError.APE01);
         if (CollectionUtils.isNotEmpty(multipartFiles)) {
             for (MultipartFile multipartFile : multipartFiles) {

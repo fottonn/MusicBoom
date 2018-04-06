@@ -1,6 +1,8 @@
 package ru.bugmakers.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.bugmakers.dto.common.ErrorDTO;
 import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.exceptions.MbError;
@@ -14,27 +16,46 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MbResponse implements Serializable {
 
-    private RsStatus status;
+    private static final Logger LOGGER = LoggerFactory.getLogger(MbResponse.class);
+
+    private RsStatus status = RsStatus.SUCCESS;
     private ErrorDTO error;
 
-    public MbResponse(MbException e, RsStatus status) {
-        if (e == null && status == RsStatus.ERROR) {
-            e = MbException.create(MbError.UNE01);
-        }
+    public MbResponse() {
+    }
 
-        if (status == null) {
-            status = RsStatus.ERROR;
-        }
-        this.error = e != null ? new ErrorDTO(e.getMessage()) : null;
+    private MbResponse(MbException e, RsStatus status) {
+        this.error = new ErrorDTO(e.getMessage());
         this.status = status;
     }
 
-    public MbResponse(RsStatus status) {
-        this(null, status);
+    private MbResponse(RsStatus status) {
+        this.status = status;
+        if (RsStatus.ERROR == status) {
+            this.error = new ErrorDTO(MbException.create(MbError.UNE01).getMessage());
+        }
     }
 
-    public MbResponse(MbException e) {
-        this(e, null);
+    private MbResponse(Exception e) {
+        this.status = RsStatus.ERROR;
+        if (e instanceof MbException) {
+            this.error = new ErrorDTO(e.getMessage());
+        } else {
+            LOGGER.error(e.getMessage(), e);
+            this.error = new ErrorDTO(MbException.create(MbError.UNE01).getMessage());
+        }
+    }
+
+    public static MbResponse success() {
+        return new MbResponse(RsStatus.SUCCESS);
+    }
+
+    public static MbResponse error(Exception e) {
+        return new MbResponse(e);
+    }
+
+    public static MbResponse unauth(MbException e) {
+        return new MbResponse(e, RsStatus.UNAUTHENTICATED);
     }
 
     public RsStatus getStatus() {

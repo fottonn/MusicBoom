@@ -7,9 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.bugmakers.controller.MbController;
-import ru.bugmakers.dto.response.web.MbResponseToWeb;
-import ru.bugmakers.enums.RsStatus;
-import ru.bugmakers.exceptions.MbException;
+import ru.bugmakers.dto.response.MbResponse;
 import ru.bugmakers.service.EmailService;
 
 /**
@@ -27,16 +25,14 @@ public class EmailConfirmWeb extends MbController {
     }
 
     @GetMapping(value = "/email/{code}")
-    public ResponseEntity<MbResponseToWeb> confirm(@PathVariable("code") String code) {
+    public ResponseEntity<MbResponse> confirm(@PathVariable("code") String code) {
 
-        MbResponseToWeb rs;
+        MbResponse rs;
         try {
             emailService.checkConfirmationCode(code);
-            rs = new MbResponseToWeb(RsStatus.SUCCESS);
-        } catch (MbException e) {
-            rs = new MbResponseToWeb(e, RsStatus.ERROR);
+            rs = MbResponse.success();
         } catch (Exception e) {
-            rs = new MbResponseToWeb(RsStatus.ERROR);
+            return ResponseEntity.ok(MbResponse.error(e));
         }
 
         return ResponseEntity.ok(rs);

@@ -1,26 +1,17 @@
 package ru.bugmakers.dto.response.web;
 
-import ru.bugmakers.enums.RsStatus;
-import ru.bugmakers.exceptions.MbException;
+import ru.bugmakers.dto.response.MbResponse;
 
 /**
  * Created by Ayrat on 25.12.2017.
  */
-public class ArtistStatisticForAdminWebRs extends MbResponseToWeb {
+public class ArtistStatisticForAdminWebRs extends MbResponse {
 
     private String id;
     private String donated;
     private String cashout;
     private String balance;
     private String showTime;
-
-    public ArtistStatisticForAdminWebRs(MbException e, RsStatus status) {
-        super(e, status);
-    }
-
-    public ArtistStatisticForAdminWebRs(RsStatus status) {
-        super(status);
-    }
 
     public String getId() {
         return id;

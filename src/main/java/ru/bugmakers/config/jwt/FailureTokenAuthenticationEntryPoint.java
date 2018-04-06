@@ -5,7 +5,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import ru.bugmakers.dto.response.MbResponse;
-import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
 
@@ -22,7 +21,7 @@ public class FailureTokenAuthenticationEntryPoint implements AuthenticationEntry
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         MbException exception = MbException.create(MbError.ACE01);
-        MbResponse mbResponse = new MbResponse(exception, RsStatus.UNAUTHENTICATED);
+        MbResponse mbResponse = MbResponse.unauth(exception);
         String rs = mapper.writeValueAsString(mbResponse);
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         response.getWriter().write(rs);

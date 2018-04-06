@@ -1,9 +1,9 @@
 import ch.qos.logback.core.util.FileSize
 
 def logPattern = "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
-def USER_HOME = System.getProperty('user.home')
-def BASE_PATH = "${USER_HOME}/logs/music_boom"
-println(USER_HOME)
+def USER_DIR = System.getProperty('user.dir')
+def BASE_PATH = "${USER_DIR}/log"
+//println(USER_DIR)
 
 appender("CONSOLE", ConsoleAppender) {
     encoder(PatternLayoutEncoder) {

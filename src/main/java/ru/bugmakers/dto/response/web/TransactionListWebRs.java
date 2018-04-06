@@ -1,12 +1,11 @@
 package ru.bugmakers.dto.response.web;
 
+import ru.bugmakers.dto.response.MbResponse;
 import ru.bugmakers.entity.Transaction;
-import ru.bugmakers.enums.RsStatus;
-import ru.bugmakers.exceptions.MbException;
 
 import java.util.List;
 
-public class TransactionListWebRs extends MbResponseToWeb {
+public class TransactionListWebRs extends MbResponse {
 
     private int page;
     private int pageSize;
@@ -14,14 +13,6 @@ public class TransactionListWebRs extends MbResponseToWeb {
     private int totalPages;
     private long totalTransaction;
     private List<Transaction> transactions;
-
-    public TransactionListWebRs(MbException e, RsStatus status) {
-        super(e, status);
-    }
-
-    public TransactionListWebRs(RsStatus status) {
-        super(status);
-    }
 
     public int getPage() {
         return page;

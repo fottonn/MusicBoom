@@ -31,7 +31,7 @@ public class UserDTO implements Serializable {
     private String vk;
     private String tlg;
     private String wapp;
-    private Boolean isOrdered;
+    private Boolean orderable;
     private String cardNumber;
     private String regDate;
     private String allEarnedMoney;
@@ -231,12 +231,12 @@ public class UserDTO implements Serializable {
         this.wapp = wapp;
     }
 
-    public Boolean getOrdered() {
-        return isOrdered;
+    public Boolean isOrderable() {
+        return orderable;
     }
 
-    public void setOrdered(Boolean ordered) {
-        isOrdered = ordered;
+    public void setOrderable(Boolean orderable) {
+        this.orderable = orderable;
     }
 
     public String getRegDate() {
@@ -339,6 +339,7 @@ public class UserDTO implements Serializable {
         this.cardNumber = cardNumber;
         return this;
     }
+
     public UserDTO withUserType(String userType) {
         this.userType = userType;
         return this;
@@ -449,8 +450,8 @@ public class UserDTO implements Serializable {
         return this;
     }
 
-    public UserDTO withIsOrdered(Boolean isOrdered) {
-        this.isOrdered = isOrdered;
+    public UserDTO withOrderable(Boolean orderable) {
+        this.orderable = orderable;
         return this;
     }
 

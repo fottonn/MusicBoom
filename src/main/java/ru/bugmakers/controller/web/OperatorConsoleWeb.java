@@ -1,21 +1,20 @@
 package ru.bugmakers.controller.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.bugmakers.config.principal.UserPrincipal;
 import ru.bugmakers.controller.MbController;
 import ru.bugmakers.dto.request.web.ApproveTransactionRequestWeb;
 import ru.bugmakers.dto.request.web.ClosedWithdrawListRequestWeb;
 import ru.bugmakers.dto.request.web.DispuedWithdrawListWeb;
 import ru.bugmakers.dto.request.web.OpenWithdrawListRequestWeb;
-import ru.bugmakers.dto.response.web.MbResponseToWeb;
+import ru.bugmakers.dto.response.MbResponse;
 import ru.bugmakers.dto.response.web.TransactionListWebRs;
-import ru.bugmakers.enums.RsStatus;
+import ru.bugmakers.entity.Transaction;
 import ru.bugmakers.enums.Status;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
@@ -36,7 +35,7 @@ public class OperatorConsoleWeb extends MbController {
 
 
     @PostMapping(value = "/getopenwithdrawlist")
-    private ResponseEntity<MbResponseToWeb> getOpenWithdrawList(@RequestBody OpenWithdrawListRequestWeb openWithdrawListRequestWeb) {
+    private ResponseEntity<MbResponse> getOpenWithdrawList(@RequestBody OpenWithdrawListRequestWeb openWithdrawListRequestWeb) {
         TransactionListWebRs rs;
         try {
             if (openWithdrawListRequestWeb.getPage() != null && openWithdrawListRequestWeb.getSize() != null) {
@@ -44,16 +43,14 @@ public class OperatorConsoleWeb extends MbController {
             } else {
                 throw MbException.create(MbError.CME05);
             }
-        } catch (MbException e) {
-            return ResponseEntity.ok(new MbResponseToWeb(e, RsStatus.ERROR));
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToWeb(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
         return ResponseEntity.ok(rs);
     }
 
     @PostMapping(value = "/getclosedwithdrawlist")
-    private ResponseEntity<MbResponseToWeb> getClosedWithdrawList(@RequestBody ClosedWithdrawListRequestWeb closedWithdrawListRequestWeb) {
+    private ResponseEntity<MbResponse> getClosedWithdrawList(@RequestBody ClosedWithdrawListRequestWeb closedWithdrawListRequestWeb) {
         TransactionListWebRs rs;
         try {
             if (closedWithdrawListRequestWeb.getPage() != null && closedWithdrawListRequestWeb.getSize() != null) {
@@ -61,15 +58,14 @@ public class OperatorConsoleWeb extends MbController {
             } else {
                 throw MbException.create(MbError.CME05);
             }
-        } catch (MbException e) {
-            return ResponseEntity.ok(new MbResponseToWeb(e, RsStatus.ERROR));
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToWeb(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
         return ResponseEntity.ok(rs);
     }
+
     @PostMapping(value = "/getdisputedwithdrawlist")
-    private ResponseEntity<MbResponseToWeb> getDisputedWithdrawList(@RequestBody DispuedWithdrawListWeb dispuedWithdrawListWeb) {
+    private ResponseEntity<MbResponse> getDisputedWithdrawList(@RequestBody DispuedWithdrawListWeb dispuedWithdrawListWeb) {
         TransactionListWebRs rs;
         try {
             if (dispuedWithdrawListWeb.getPage() != null && dispuedWithdrawListWeb.getSize() != null) {
@@ -77,23 +73,26 @@ public class OperatorConsoleWeb extends MbController {
             } else {
                 throw MbException.create(MbError.CME05);
             }
-        } catch (MbException e) {
-            return ResponseEntity.ok(new MbResponseToWeb(e, RsStatus.ERROR));
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToWeb(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
         return ResponseEntity.ok(rs);
     }
 
     private TransactionListWebRs getTransactionList(String page, String size, Status status) {
-        TransactionListWebRs rs;
-        rs = operatorService.getOpenWithdrawList(page, size, status);
+        Page<Transaction> transactions = operatorService.getOpenWithdrawList(page, size, status);
+        TransactionListWebRs rs = new TransactionListWebRs();
+        rs.setTransactions(transactions.getContent());
+        rs.setPage(transactions.getNumber() + 1);
+        rs.setPageSize(transactions.getSize());
+        rs.setTransactionCountInPage(transactions.getNumberOfElements());
+        rs.setTotalPages(transactions.getTotalPages());
+        rs.setTotalTransaction(transactions.getTotalElements());
         return rs;
     }
 
     @PostMapping(value = "/make")
-    private ResponseEntity<MbResponseToWeb> makeTransaction(@AuthenticationPrincipal UserPrincipal user,
-                                                            @RequestBody ApproveTransactionRequestWeb approveTransactionRequestWeb) {
+    private ResponseEntity<MbResponse> makeTransaction(@RequestBody ApproveTransactionRequestWeb approveTransactionRequestWeb) {
         try {
             if (approveTransactionRequestWeb.getTransactionRequest() != null &&
                     approveTransactionRequestWeb.getTransactionRequest().getTransactionId() != null) {
@@ -102,12 +101,10 @@ public class OperatorConsoleWeb extends MbController {
             } else {
                 throw MbException.create(MbError.CME05);
             }
-        } catch (MbException e) {
-            return ResponseEntity.ok(new MbResponseToWeb(e, RsStatus.ERROR));
         } catch (Exception e) {
-            return ResponseEntity.ok(new MbResponseToWeb(RsStatus.ERROR));
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(new MbResponseToWeb(RsStatus.SUCCESS));
+        return ResponseEntity.ok(MbResponse.success());
     }
 
 

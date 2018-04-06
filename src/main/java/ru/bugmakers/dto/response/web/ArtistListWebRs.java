@@ -1,15 +1,14 @@
 package ru.bugmakers.dto.response.web;
 
 import ru.bugmakers.dto.common.UserDTO;
-import ru.bugmakers.enums.RsStatus;
-import ru.bugmakers.exceptions.MbException;
+import ru.bugmakers.dto.response.MbResponse;
 
 import java.util.List;
 
 /**
  * Created by Ayrat on 25.12.2017.
  */
-public class ArtistListWebRs extends MbResponseToWeb {
+public class ArtistListWebRs extends MbResponse {
 
     private int page;
     private int pageSize;
@@ -17,14 +16,6 @@ public class ArtistListWebRs extends MbResponseToWeb {
     private int totalPages;
     private long totalArtists;
     private List<UserDTO> artists;
-
-    public ArtistListWebRs(MbException e, RsStatus status) {
-        super(e, status);
-    }
-
-    public ArtistListWebRs(RsStatus status) {
-        super(status);
-    }
 
     public int getPage() {
         return page;

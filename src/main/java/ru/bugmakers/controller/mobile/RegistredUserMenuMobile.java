@@ -10,10 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.bugmakers.config.principal.UserPrincipal;
 import ru.bugmakers.controller.MbController;
 import ru.bugmakers.dto.request.mobile.FeedBackRequestMobile;
-import ru.bugmakers.dto.response.mobile.MbResponseToMobile;
+import ru.bugmakers.dto.response.MbResponse;
 import ru.bugmakers.entity.FeedBack;
 import ru.bugmakers.enums.FeedBackType;
-import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.service.FeedBackService;
 
 /**
@@ -31,24 +30,20 @@ public class RegistredUserMenuMobile extends MbController {
     }
 
     @PostMapping(value = "/feedback.send")
-    public ResponseEntity<MbResponseToMobile> feedbackSend(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                           @RequestBody FeedBackRequestMobile rq) {
+    public ResponseEntity<MbResponse> feedbackSend(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                   @RequestBody FeedBackRequestMobile rq) {
 
-        MbResponseToMobile rs;
-
+        MbResponse rs;
         try {
-
             FeedBack feedBack = new FeedBack();
             feedBack.setUserId(userPrincipal.getUser().getId());
             feedBack.setFeedBackType(FeedBackType.valueOf(rq.getType().toUpperCase()));
             feedBack.setText(rq.getText());
             feedBackService.saveFeedBack(feedBack);
-            rs = new MbResponseToMobile(RsStatus.SUCCESS);
-
+            rs = MbResponse.success();
         } catch (Exception e) {
-            rs = new MbResponseToMobile(RsStatus.ERROR);
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-
         return ResponseEntity.ok(rs);
     }
 }

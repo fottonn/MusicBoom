@@ -10,7 +10,6 @@ import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.dto.response.AuthenticationResponse;
 import ru.bugmakers.dto.response.MbResponse;
 import ru.bugmakers.entity.User;
-import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.enums.SocialProvider;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
@@ -40,21 +39,24 @@ public class AuthenticationController extends MbController {
     public ResponseEntity<MbResponse> authenticate(@AuthenticationPrincipal UserPrincipal principal) {
 
         //если запрос добрался до этого места, значит аутентификация в JsonFilterAuthentication прошла успешно
-        AuthenticationResponse response = null;
-
-        if (principal != null) {
-            User currentUser = principal.getUser();
-            if (currentUser != null) response = userAuthenticationService.getResponseByUserType(currentUser.getId());
+        AuthenticationResponse rs = null;
+        try {
+            if (principal != null) {
+                User currentUser = principal.getUser();
+                if (currentUser != null) rs = userAuthenticationService.getResponseByUserType(currentUser.getId());
+            }
+            if (rs == null) throw MbException.create(MbError.AUE08);
+        } catch (MbException e) {
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        if (response == null) response = new AuthenticationResponse(MbException.create(MbError.AUE08), RsStatus.ERROR);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(rs);
     }
 
     @GetMapping(params = {"token", "provider", "social_id"})
     public ResponseEntity<MbResponse> socialAuthenticate(@RequestParam("token") String token,
                                                          @RequestParam("provider") String provider,
                                                          @RequestParam("social_id") String id) {
-        AuthenticationResponse response;
+        AuthenticationResponse rs;
         try {
             SocialProvider socialProvider;
             try {
@@ -64,13 +66,11 @@ public class AuthenticationController extends MbController {
             }
             Authenticator authenticator = authenticatorCreator.getAuthenticator(socialProvider);
             UserDTO user = authenticator.authenticate(token, id);
-            response = new AuthenticationResponse(RsStatus.SUCCESS);
-            response.setUser(user);
-        } catch (MbException e) {
-            response = new AuthenticationResponse(e, RsStatus.ERROR);
+            rs = new AuthenticationResponse();
+            rs.setUser(user);
         } catch (Exception e) {
-            response = new AuthenticationResponse(MbException.create(MbError.AUE07), RsStatus.ERROR);
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(rs);
     }
 }

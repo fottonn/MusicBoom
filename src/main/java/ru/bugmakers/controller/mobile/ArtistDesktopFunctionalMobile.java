@@ -11,13 +11,12 @@ import ru.bugmakers.config.principal.UserPrincipal;
 import ru.bugmakers.controller.MbController;
 import ru.bugmakers.dto.request.mobile.PerformanceStartRequestMobile;
 import ru.bugmakers.dto.request.mobile.PerformanceStartValidationRequestMobile;
+import ru.bugmakers.dto.response.MbResponse;
 import ru.bugmakers.dto.response.mobile.EndPerformanceResponseMobile;
-import ru.bugmakers.dto.response.mobile.MbResponseToMobile;
 import ru.bugmakers.dto.response.mobile.PerformanceStartResponseMobile;
 import ru.bugmakers.dto.response.mobile.ValidatePerformanceResponseMobile;
 import ru.bugmakers.entity.Event;
 import ru.bugmakers.entity.User;
-import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.localpers.entity.ActiveEvent;
@@ -68,8 +67,8 @@ public class ArtistDesktopFunctionalMobile extends MbController {
     }
 
     @PostMapping(value = "/performance.start")
-    public ResponseEntity<MbResponseToMobile> startPerformance(@AuthenticationPrincipal UserPrincipal principal,
-                                                               @RequestBody PerformanceStartRequestMobile rq) {
+    public ResponseEntity<MbResponse> startPerformance(@AuthenticationPrincipal UserPrincipal principal,
+                                                       @RequestBody PerformanceStartRequestMobile rq) {
         PerformanceStartResponseMobile rs;
         try {
             ActiveEvent activeEvent = new ActiveEvent(
@@ -79,16 +78,16 @@ public class ArtistDesktopFunctionalMobile extends MbController {
             activeEvent.setLat(Double.valueOf(rq.getLatitude()));
             activeEvent.setLng(Double.valueOf(rq.getLongitude()));
             activeEventService.saveActiveEvent(activeEvent);
-            rs = new PerformanceStartResponseMobile(RsStatus.SUCCESS);
-            } catch (Exception e) {
-                rs = new PerformanceStartResponseMobile(RsStatus.ERROR);
-            }
+            rs = new PerformanceStartResponseMobile();
+        } catch (Exception e) {
+            return ResponseEntity.ok(MbResponse.error(e));
+        }
         return ResponseEntity.ok(rs);
     }
 
     @PostMapping(value = "/performance.validation")
-    public ResponseEntity<MbResponseToMobile> validationPerformance(@AuthenticationPrincipal UserPrincipal principal,
-                                                                    @RequestBody PerformanceStartValidationRequestMobile rq) {
+    public ResponseEntity<MbResponse> validationPerformance(@AuthenticationPrincipal UserPrincipal principal,
+                                                            @RequestBody PerformanceStartValidationRequestMobile rq) {
         ValidatePerformanceResponseMobile rs;
 
         try {
@@ -104,17 +103,17 @@ public class ArtistDesktopFunctionalMobile extends MbController {
                     activeEvent.getBeginTime(),
                     LocalDateTime.now());
 
-            rs = new ValidatePerformanceResponseMobile(RsStatus.SUCCESS);
+            rs = new ValidatePerformanceResponseMobile();
             rs.setCurrentEarnedMoney(currentEarnedMoney);
 
         } catch (Exception e) {
-            rs = new ValidatePerformanceResponseMobile(RsStatus.ERROR);
+            return ResponseEntity.ok(MbResponse.error(e));
         }
         return ResponseEntity.ok(rs);
     }
 
     @PostMapping(value = "/performance.end")
-    public ResponseEntity<MbResponseToMobile> endPerformance(@AuthenticationPrincipal UserPrincipal principal) {
+    public ResponseEntity<MbResponse> endPerformance(@AuthenticationPrincipal UserPrincipal principal) {
         EndPerformanceResponseMobile rs;
         try {
             ActiveEvent activeEvent = activeEventService.getActiveEventByUserId(principal.getUser().getId());
@@ -130,12 +129,10 @@ public class ArtistDesktopFunctionalMobile extends MbController {
                     event.getStartDate(),
                     event.getEndDate());
 
-            rs = new EndPerformanceResponseMobile(RsStatus.SUCCESS);
+            rs = new EndPerformanceResponseMobile();
             rs.setEarnedMoney(earnedMoney);
-        } catch (MbException e) {
-            rs = new EndPerformanceResponseMobile(e, RsStatus.ERROR);
         } catch (Exception e) {
-            rs = new EndPerformanceResponseMobile(RsStatus.ERROR);
+            return ResponseEntity.ok(MbResponse.error(e));
         }
         return ResponseEntity.ok(rs);
     }

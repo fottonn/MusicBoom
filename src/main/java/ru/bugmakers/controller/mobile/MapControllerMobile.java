@@ -8,9 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.bugmakers.dto.ArtistsLocation;
 import ru.bugmakers.dto.request.mobile.MapPerformersRequest;
+import ru.bugmakers.dto.response.MbResponse;
 import ru.bugmakers.dto.response.mobile.MapPerformersResponseMobile;
-import ru.bugmakers.dto.response.mobile.MbResponseToMobile;
-import ru.bugmakers.enums.RsStatus;
 import ru.bugmakers.localpers.entity.ActiveEvent;
 import ru.bugmakers.localpers.service.ActiveEventService;
 import ru.bugmakers.mappers.converters.ActiveEvent2ArtistLocationConverter;
@@ -40,11 +39,10 @@ public class MapControllerMobile {
     }
 
     @PostMapping(value = "/map.performers")
-    public ResponseEntity<MbResponseToMobile> mapPerformers(@RequestBody MapPerformersRequest rq) {
+    public ResponseEntity<MbResponse> mapPerformers(@RequestBody MapPerformersRequest rq) {
 
         MapPerformersResponseMobile rs;
         try {
-
             double radius = Double.parseDouble(rq.getRadius());
             double lng = Double.parseDouble(rq.getLongitude());
             double lat = Double.parseDouble(rq.getLatitude());
@@ -56,14 +54,11 @@ public class MapControllerMobile {
             for (ActiveEvent ae : activeEvents) {
                 artists.add(activeEvent2ArtistLocationConverter.convert(ae));
             }
-
-            rs = new MapPerformersResponseMobile(RsStatus.SUCCESS);
+            rs = new MapPerformersResponseMobile();
             rs.setArtists(artists);
-
         } catch (Exception e) {
-            rs = new MapPerformersResponseMobile(RsStatus.ERROR);
+            return ResponseEntity.ok(MbResponse.error(e));
         }
-
         return ResponseEntity.ok(rs);
     }
 
