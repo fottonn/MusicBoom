@@ -2,6 +2,8 @@ package ru.bugmakers.service;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.cfg4j.provider.ConfigurationProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +25,9 @@ import java.util.Set;
  */
 @Service
 public class ArtistProfileEditService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ArtistProfileEditService.class);
+
     private PasswordEncoder passwordEncoder;
     private UserService userService;
     private UserDTO2UserEnricher userDTO2UserEnricher;
@@ -79,6 +84,7 @@ public class ArtistProfileEditService {
             User savedUser = userService.updateUser(user);
             checkSavedUser(savedUser);
         } catch (Exception e) {
+            LOGGER.error("", e);
             throw MbException.create(MbError.APE03);
         }
     }
@@ -98,6 +104,7 @@ public class ArtistProfileEditService {
             fileName = saveImagesService.saveFile(avatar, appConfigProvider.getProperty("app.image.path", String.class));
             Assert.notNull(fileName, "File name is null");
         } catch (Exception e) {
+            LOGGER.error("Avatar change failed", e);
             throw MbException.create(MbError.APE04);
         }
         user.setAvatar(fileName);
@@ -105,6 +112,7 @@ public class ArtistProfileEditService {
             User savedUser = userService.updateUser(user);
             checkSavedUser(savedUser);
         } catch (Exception e) {
+            LOGGER.error("Avatar change failed", e);
             throw MbException.create(MbError.APE03);
         }
     }
@@ -138,7 +146,7 @@ public class ArtistProfileEditService {
      */
     public void artistPasswordChange(User user, String oldPassword, String newPassword) throws MbException {
         if (user == null) throw MbException.create(MbError.APE01);
-        if (user.getPassword().equals(passwordEncoder.encode(oldPassword))) {
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
             throw MbException.create(MbError.APE05);
         }
         user.setPassword(passwordEncoder.encode(newPassword));
@@ -195,7 +203,7 @@ public class ArtistProfileEditService {
      */
     public void artistGenreChange(User user, String genre) throws MbException {
         if (user == null) throw MbException.create(MbError.APE01);
-        user.getArtistInfo().setGenre(genre.toUpperCase());
+        user.getArtistInfo().setGenre(genre);
         try {
             User savedUser = userService.updateUser(user);
             checkSavedUser(savedUser);

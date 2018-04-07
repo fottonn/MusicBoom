@@ -9,8 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartRequest;
 import ru.bugmakers.config.jwt.filter.CapturingRequestWrapper;
 import ru.bugmakers.config.jwt.filter.CapturingResponseWrapper;
 
@@ -19,16 +17,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.TransformerConfigurationException;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Map;
-
-import static ru.bugmakers.utils.MultipartUtils.findJsonPart;
 
 /**
  * Created by Ivan
@@ -44,11 +37,18 @@ public class LoggingFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         if (LOGGER.isDebugEnabled()) {
-            CapturingRequestWrapper capturingRequestWrapper = new CapturingRequestWrapper(request);
             CapturingResponseWrapper capturingResponseWrapper = new CapturingResponseWrapper(response);
-            logRequest(capturingRequestWrapper);
-            filterChain.doFilter(capturingRequestWrapper, capturingResponseWrapper);
-            logResponse(capturingRequestWrapper, capturingResponseWrapper);
+
+            if (request.getContentType() != null && request.getContentType().startsWith(MediaType.MULTIPART_FORM_DATA_VALUE)) {
+                logRequest(request);
+                filterChain.doFilter(request, capturingResponseWrapper);
+            } else {
+                CapturingRequestWrapper capturingRequestWrapper = new CapturingRequestWrapper(request);
+                logRequest(capturingRequestWrapper);
+                filterChain.doFilter(capturingRequestWrapper, capturingResponseWrapper);
+            }
+
+            logResponse(request, capturingResponseWrapper);
             response.getWriter().write(capturingResponseWrapper.getCaptureAsString());
         } else {
             filterChain.doFilter(request, response);
@@ -67,7 +67,10 @@ public class LoggingFilter extends OncePerRequestFilter {
         logRequestHeaders(request);
         if (request.getMethod().equalsIgnoreCase("POST")) {
             LOGGER.debug("ContentType:  {}", request.getContentType());
-            String json = getJson(request);
+            String json = null;
+            if (request.getContentType() == null || !request.getContentType().startsWith(MediaType.MULTIPART_FORM_DATA_VALUE)) {
+                json = getJson(request);
+            }
             if (!Strings.isNullOrEmpty(json)) {
                 LOGGER.debug("Json:" + LINE_SEPARATOR + json);
             }
@@ -141,22 +144,12 @@ public class LoggingFilter extends OncePerRequestFilter {
     private String getJson(HttpServletRequest request) {
         if (request == null) return EMPTY_STRING;
         String json;
-        JsonNode jsonNode = null;
-
         try {
-            if (request instanceof MultipartRequest) {
-                MultipartFile jsonPart = findJsonPart((MultipartRequest) request);
-                if (jsonPart != null) {
-                    jsonNode = OBJECT_MAPPER.readTree(new BufferedReader(new InputStreamReader(jsonPart.getInputStream(), StandardCharsets.UTF_8)));
-                }
-            } else {
-                jsonNode = OBJECT_MAPPER.readTree(request.getReader());
-            }
-            json = OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode);
+            JsonNode jsonNode = OBJECT_MAPPER.readTree(request.getReader());
+            json = OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode != null ? jsonNode : EMPTY_STRING);
         } catch (Exception e) {
             json = EMPTY_STRING;
         }
-
         return json;
     }
 

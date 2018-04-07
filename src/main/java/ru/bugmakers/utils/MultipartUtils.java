@@ -38,24 +38,6 @@ public class MultipartUtils {
     }
 
     /**
-     * Поиск части по названию
-     *
-     * @param request  запрос
-     * @param partName название части
-     * @return часть с назнванием partName
-     * @see MultipartFile
-     */
-    public static MultipartFile findByPartName(MultipartRequest request, String partName) {
-        if (request == null || StringUtils.isBlank(partName)) return null;
-        MultipartFile part = null;
-        Map<String, MultipartFile> parts = request.getFileMap();
-        if (!parts.isEmpty()) {
-            part = parts.get(partName);
-        }
-        return part;
-    }
-
-    /**
      * Поиск аватара
      *
      * @see MultipartUtils#findByPartName(MultipartRequest, String)
@@ -86,6 +68,24 @@ public class MultipartUtils {
             }
         }
         return CollectionUtils.isNotEmpty(imageParts) ? imageParts : null;
+    }
+
+    /**
+     * Поиск части по названию
+     *
+     * @param request  запрос
+     * @param partName название части
+     * @return часть с назнванием partName
+     * @see MultipartFile
+     */
+    private static MultipartFile findByPartName(MultipartRequest request, String partName) {
+        if (request == null || StringUtils.isBlank(partName)) return null;
+        MultipartFile part = null;
+        Map<String, MultipartFile> parts = request.getFileMap();
+        if (!parts.isEmpty()) {
+            part = parts.get(partName);
+        }
+        return part;
     }
 
     /**

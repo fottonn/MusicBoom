@@ -3,7 +3,10 @@ package ru.bugmakers.controller.mobile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import ru.bugmakers.config.principal.UserPrincipal;
 import ru.bugmakers.controller.MbController;
@@ -86,7 +89,7 @@ public class ArtistProfileEditMobile extends MbController {
         return ResponseEntity.ok(MbResponse.success());
     }
 
-    @GetMapping(value = "/genre.change")
+    @PostMapping(value = "/genre.change")
     public ResponseEntity<MbResponse> changeArtistGenre(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                         @RequestBody ArtistEditRqMobile rq) {
         try {
@@ -109,7 +112,7 @@ public class ArtistProfileEditMobile extends MbController {
 
     }
 
-    @GetMapping(value = "/photos.delete")
+    @PostMapping(value = "/photos.delete")
     public ResponseEntity<MbResponse> artistDeletePhotos(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                          @RequestBody ArtistEditRqMobile rq) {
         try {
