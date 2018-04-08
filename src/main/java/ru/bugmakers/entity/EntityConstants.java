@@ -19,6 +19,7 @@ class EntityConstants {
     static final String EMAIL_SEQ = "email_seq";
     static final String ARTIST_RATING_SEQ = "artist_rating_seq";
     static final String ARTIST_INFO_SEQ = "artist_info_seq";
+    static final String PHOTOS_SEQ = "photos_seq";
 
     /*Generators*/
     static final String USER_GEN = "user_gen";
@@ -28,5 +29,6 @@ class EntityConstants {
     static final String EMAIL_GEN = "email_gen";
     static final String ARTIST_RATING_GEN = "artist_rating_gen";
     static final String ARTIST_INFO_GEN = "artist_info_gen";
+    static final String PHOTOS_GEN = "photos_gen";
 
 }

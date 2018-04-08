@@ -8,8 +8,6 @@ import ru.bugmakers.entity.User;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
 
-import java.util.ArrayList;
-
 /**
  * Created by Ivan
  */
@@ -17,10 +15,22 @@ import java.util.ArrayList;
 public class ArtistInfoPageService {
 
     private UserService userService;
+    private PhotoService photoService;
+    private ImagesService imagesService;
 
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+
+    @Autowired
+    public void setPhotoService(PhotoService photoService) {
+        this.photoService = photoService;
+    }
+
+    @Autowired
+    public void setImagesService(ImagesService imagesService) {
+        this.imagesService = imagesService;
     }
 
     @Transactional
@@ -40,8 +50,8 @@ public class ArtistInfoPageService {
                 .withWapp(user.getWhatsappContact())
                 .withCityRating(user.getArtistRating() != null ? user.getArtistRating().getCityRatng() : null)
                 .withCountryRating(user.getArtistRating() != null ? user.getArtistRating().getCountryRating() : null)
-                .withAvatar(user.getAvatar()) //TODO имя или путь?
-                .withPhotos(new ArrayList<>(user.getPhotos())); //TODO имя или путь
+                .withAvatar(imagesService.fullImagePath(user.getAvatar()))
+                .withPhotos(photoService.getPhotosByUserId(id));
         return userDTO;
     }
 

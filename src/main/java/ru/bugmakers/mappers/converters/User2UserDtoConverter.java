@@ -1,15 +1,14 @@
 package ru.bugmakers.mappers.converters;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.bugmakers.dto.common.StatOfPerformanceDTO;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.service.EventService;
+import ru.bugmakers.service.PhotoService;
 import ru.bugmakers.service.TransactionService;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import static ru.bugmakers.utils.DateTimeFormatters.DATE_FORMATTER;
@@ -23,6 +22,7 @@ public class User2UserDtoConverter implements MbConverter<User, UserDTO> {
 
     private TransactionService transactionService;
     private EventService eventService;
+    private PhotoService photoService;
 
     @Autowired
     public void setTransactionService(TransactionService transactionService) {
@@ -32,6 +32,11 @@ public class User2UserDtoConverter implements MbConverter<User, UserDTO> {
     @Autowired
     public void setEventService(EventService eventService) {
         this.eventService = eventService;
+    }
+
+    @Autowired
+    public void setPhotoService(PhotoService photoService) {
+        this.photoService = photoService;
     }
 
     @Override
@@ -71,8 +76,7 @@ public class User2UserDtoConverter implements MbConverter<User, UserDTO> {
                 .withArtistContact(source.isContractConsent())
                 .withAvatar(source.getAvatar())
                 .withCardNumber(source.getCardNumber() != null ? getMappedCardNumber(source.getCardNumber()) : null)
-                .withPhotos(CollectionUtils.isNotEmpty(source.getPhotos()) ? new ArrayList<>(source.getPhotos()) : null);
-
+                .withPhotos(photoService.getPhotosByUserId(source.getId()));
     }
 
     private String getMappedCardNumber(String cardNumber) {

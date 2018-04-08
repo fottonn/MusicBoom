@@ -131,11 +131,6 @@ public class User {
     @OneToOne(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private ArtistRating artistRating;
 
-    @ElementCollection
-    @CollectionTable(name = "photos", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-    @Column(name = "photo")
-    private Set<String> photos;
-
     @Column(name = "avatar")
     private String avatar;
 
@@ -420,14 +415,6 @@ public class User {
         if (artistRating != null) artistRating.setUser(this);
     }
 
-    public Set<String> getPhotos() {
-        return photos;
-    }
-
-    public void setPhotos(Set<String> photos) {
-        this.photos = photos;
-    }
-
     public String getAvatar() {
         return avatar;
     }
@@ -608,11 +595,6 @@ public class User {
     public User withArtistRating(ArtistRating artistRating) {
         this.artistRating = artistRating;
         if (artistRating != null) artistRating.setUser(this);
-        return this;
-    }
-
-    public User withPhotos(Set<String> photos) {
-        this.photos = photos;
         return this;
     }
 

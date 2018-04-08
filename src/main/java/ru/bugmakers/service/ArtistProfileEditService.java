@@ -11,13 +11,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 import ru.bugmakers.dto.common.UserDTO;
+import ru.bugmakers.entity.Photo;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.UserType;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.mappers.enrichers.UserDTO2UserEnricher;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -31,9 +34,10 @@ public class ArtistProfileEditService {
     private PasswordEncoder passwordEncoder;
     private UserService userService;
     private UserDTO2UserEnricher userDTO2UserEnricher;
-    private SaveImagesService saveImagesService;
+    private ImagesService imagesService;
     private EmailService emailService;
     private ConfigurationProvider appConfigProvider;
+    private PhotoService photoService;
 
     @Autowired
     public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
@@ -51,8 +55,8 @@ public class ArtistProfileEditService {
     }
 
     @Autowired
-    public void setSaveImagesService(SaveImagesService saveImagesService) {
-        this.saveImagesService = saveImagesService;
+    public void setImagesService(ImagesService imagesService) {
+        this.imagesService = imagesService;
     }
 
     @Autowired
@@ -64,6 +68,11 @@ public class ArtistProfileEditService {
     @Qualifier("appConfigProvider")
     public void setAppConfigProvider(ConfigurationProvider appConfigProvider) {
         this.appConfigProvider = appConfigProvider;
+    }
+
+    @Autowired
+    public void setPhotoService(PhotoService photoService) {
+        this.photoService = photoService;
     }
 
     /**
@@ -101,7 +110,7 @@ public class ArtistProfileEditService {
         if (avatar == null) throw MbException.create(MbError.APE06);
         String fileName;
         try {
-            fileName = saveImagesService.saveFile(avatar, appConfigProvider.getProperty("app.image.path", String.class));
+            fileName = imagesService.saveFile(avatar, appConfigProvider.getProperty("app.image.path", String.class));
             Assert.notNull(fileName, "File name is null");
         } catch (Exception e) {
             LOGGER.error("Avatar change failed", e);
@@ -238,24 +247,12 @@ public class ArtistProfileEditService {
      * @param photoIds набор идентификаторов фотографий
      * @throws MbException ошибки при удалении фотографий
      */
-    public void artistDeletePhotos(User user, Set<String> photoIds) throws MbException {
+    public void artistDeletePhotos(User user, Set<String> photoIds) throws Exception {
         if (user == null) throw MbException.create(MbError.APE01);
         if (CollectionUtils.isEmpty(photoIds)) return;
-        Set<String> photos = user.getPhotos();
         if (CollectionUtils.isNotEmpty(photoIds)) {
-            for (String id : photoIds) {
-                boolean deleted = photos.remove(id);
-                if (deleted) {
-                    saveImagesService.removeFile(id, appConfigProvider.getProperty("app.image.path", String.class));
-                }
-            }
-            photos.removeAll(photoIds);
-            try {
-                User savedUser = userService.updateUser(user);
-                checkSavedUser(savedUser);
-            } catch (Exception e) {
-                throw MbException.create(MbError.APE03);
-            }
+            photoIds.forEach(photoId -> imagesService.removeFile(photoId, appConfigProvider.getProperty("app.image.path", String.class)));
+            photoService.deletePhotos(photoIds);
         }
     }
 
@@ -268,19 +265,14 @@ public class ArtistProfileEditService {
      */
     public void artistUploadPhotos(User user, Collection<MultipartFile> multipartFiles) throws Exception {
         if (user == null) throw MbException.create(MbError.APE01);
+        List<Photo> photos = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(multipartFiles)) {
             for (MultipartFile multipartFile : multipartFiles) {
-                String savedFile = saveImagesService.saveFile(multipartFile, appConfigProvider.getProperty("app.image.path", String.class));
-                user.getPhotos().add(savedFile);
+                String savedFile = imagesService.saveFile(multipartFile, appConfigProvider.getProperty("app.image.path", String.class));
+                photos.add(new Photo(savedFile, user.getId()));
             }
         }
-        try {
-            User savedUser = userService.updateUser(user);
-            checkSavedUser(savedUser);
-        } catch (Exception e) {
-            throw MbException.create(MbError.APE03);
-        }
-
+        photoService.savePhotos(photos);
     }
 
     private void checkSavedUser(User user) {
