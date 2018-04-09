@@ -255,7 +255,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             http
                     .csrf().disable()
-                    .anonymous().disable()
                     .authorizeRequests().anyRequest().permitAll()
                     .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

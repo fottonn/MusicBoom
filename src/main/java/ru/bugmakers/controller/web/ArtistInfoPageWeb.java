@@ -34,7 +34,7 @@ public class ArtistInfoPageWeb extends MbController {
     }
 
     @PostMapping(value = "/{id}")
-    public ResponseEntity<MbResponse> ArtistWebAuthentication(@PathVariable("id") String id) {
+    public ResponseEntity<MbResponse> artistWebAuthentication(@PathVariable("id") String id) {
         ArtistInfoResponseWeb rs;
         try {
             UserDTO userDTO = user2UserDtoConverter.convert(userService.findUserById(Long.parseLong(id)));

@@ -1,15 +1,11 @@
-package ru.bugmakers.dto.request.mobile;
-
-import ru.bugmakers.dto.request.SessionDataRequest;
+package ru.bugmakers.dto.request.web;
 
 /**
- * Created by Ayrat on 27.11.2017.
+ * Created by Ivan
  */
-
-public class TransactionRequestMobile extends SessionDataRequest {
+public class TransactionWebRq {
 
     private String recipientId;
-    private String senderId;
     private String sum;
     private String numberOfTransaction;
 
@@ -19,14 +15,6 @@ public class TransactionRequestMobile extends SessionDataRequest {
 
     public void setRecipientId(String recipientId) {
         this.recipientId = recipientId;
-    }
-
-    public String getSenderId() {
-        return senderId;
-    }
-
-    public void setSenderId(String senderId) {
-        this.senderId = senderId;
     }
 
     public String getSum() {
@@ -44,5 +32,6 @@ public class TransactionRequestMobile extends SessionDataRequest {
     public void setNumberOfTransaction(String numberOfTransaction) {
         this.numberOfTransaction = numberOfTransaction;
     }
+
 
 }
