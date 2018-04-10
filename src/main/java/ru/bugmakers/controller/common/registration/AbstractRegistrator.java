@@ -71,6 +71,7 @@ public abstract class AbstractRegistrator implements Registrator {
             user = userDtoToUserRegisterConverter.convert(userDto);
         } else {
             userDTO2UserEnricher.enrich(userDto, user);
+            user.setLogin(userDto.getPhoneNumber());
         }
         user.setUserType(userType);
         switch (userType) {
