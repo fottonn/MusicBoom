@@ -82,10 +82,21 @@ public class ListenerProfileMobile extends MbController {
     }
 
     @PostMapping(value = "/avatar.change")
-    public ResponseEntity<MbResponse> changeArtistAvatar(@AuthenticationPrincipal UserPrincipal userPrincipal,
-                                                         MultipartHttpServletRequest rq) {
+    public ResponseEntity<MbResponse> changeListenerAvatar(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                           MultipartHttpServletRequest rq) {
         try {
             artistProfileEditService.artistAvatarChange(userPrincipal.getUser(), MultipartUtils.findAvatarPart(rq));
+        } catch (Exception e) {
+            return ResponseEntity.ok(MbResponse.error(e));
+        }
+        return ResponseEntity.ok(MbResponse.success());
+    }
+
+    @PostMapping(value = "/password.change")
+    public ResponseEntity<MbResponse> changeListenerPassword(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                                             @RequestBody ListenerProfileMobileRq rq) {
+        try {
+            artistProfileEditService.artistPasswordChange(userPrincipal.getUser(), rq.getOldPassword(), rq.getNewPassword());
         } catch (Exception e) {
             return ResponseEntity.ok(MbResponse.error(e));
         }

@@ -17,6 +17,12 @@ public class ListenerProfileMobileRq extends SessionDataRequest {
 
     private String email;
 
+    @JsonProperty("old_password")
+    private String oldPassword;
+
+    @JsonProperty("new_password")
+    private String newPassword;
+
     public String getCountry() {
         return country;
     }
@@ -47,5 +53,21 @@ public class ListenerProfileMobileRq extends SessionDataRequest {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
 }
