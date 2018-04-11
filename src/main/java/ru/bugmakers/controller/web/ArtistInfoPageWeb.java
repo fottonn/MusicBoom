@@ -12,6 +12,8 @@ import ru.bugmakers.dto.response.MbResponse;
 import ru.bugmakers.dto.response.web.ArtistInfoResponseWeb;
 import ru.bugmakers.dto.response.web.ArtistListWebRs;
 import ru.bugmakers.entity.User;
+import ru.bugmakers.exceptions.MbError;
+import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.mappers.converters.User2UserDtoPublicConverter;
 import ru.bugmakers.service.UserService;
 
@@ -39,7 +41,9 @@ public class ArtistInfoPageWeb extends MbController {
     public ResponseEntity<MbResponse> artistById(@PathVariable("id") String id) {
         ArtistInfoResponseWeb rs;
         try {
-            UserDTO userDTO = user2UserDtoPublicConverter.convert(userService.findUserById(Long.parseLong(id)));
+            User userById = userService.findUserById(Long.parseLong(id));
+            if (userById == null) throw MbException.create(MbError.CME08);
+            UserDTO userDTO = user2UserDtoPublicConverter.convert(userById);
             rs = new ArtistInfoResponseWeb();
             rs.setUser(userDTO);
         } catch (Exception e) {
