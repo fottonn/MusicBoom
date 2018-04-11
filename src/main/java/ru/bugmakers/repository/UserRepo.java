@@ -31,7 +31,9 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
     boolean existsByPhone(String phone);
 
-    List<User> findDistinctByUserTypeAndNicknameLike(UserType userType, String nickname);
+    List<User> findDistinctByUserTypeAndNicknameContaining(UserType userType, String nickname);
 
     Page<User> findAllByUserType(UserType userType, Pageable pageable);
+
+    Page<User> findAllByCity(String city, Pageable pageable);
 }

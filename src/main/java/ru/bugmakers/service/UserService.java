@@ -90,10 +90,10 @@ public class UserService {
         final String[] array = Pattern.compile("[\\p{Punct}]").split(value);
         final List<String> values = new ArrayList<>();
         for (String s : array) {
-            if (s.length() > 2) values.add("%" + s.toUpperCase() + "%");
+            if (s.length() > 2) values.add(s);
         }
         final Map<Long, User> users = new HashMap<>();
-        values.forEach(s -> userRepo.findDistinctByUserTypeAndNicknameLike(userType, s).forEach(user -> users.putIfAbsent(user.getId(), user)));
+        values.forEach(s -> userRepo.findDistinctByUserTypeAndNicknameContaining(userType, s).forEach(user -> users.putIfAbsent(user.getId(), user)));
         users.values().forEach(user -> result.add(new UserDTO(String.valueOf(user.getId()), user.getNickname())));
         result.sort(Comparator.comparing(UserDTO::getNickname));
         return result;
@@ -103,7 +103,7 @@ public class UserService {
      * Постраничный поиск всех пользователей с типом {@code userType}
      *
      * @param userType тип пользователя
-         * @param pageable {@link Pageable}
+     * @param pageable {@link Pageable}
      * @return страница пользователей с типом {@code userType}
      */
     public Page<User> findAllUsersByUserType(final UserType userType, final Pageable pageable) {
@@ -117,5 +117,16 @@ public class UserService {
      */
     public void deleteUserById(Long id) {
         userRepo.deleteById(id);
+    }
+
+    /**
+     * Постраничный поиск всех пользователей из определенного города
+     *
+     * @param city     город
+     * @param pageable {@link Pageable}
+     * @return страница пользователей из определенного города
+     */
+    public Page<User> findAllUsersByCity(final String city, final Pageable pageable) {
+        return userRepo.findAllByCity(city, pageable);
     }
 }
