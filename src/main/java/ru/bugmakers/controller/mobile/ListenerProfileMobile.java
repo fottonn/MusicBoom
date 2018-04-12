@@ -55,7 +55,7 @@ public class ListenerProfileMobile extends MbController {
             user.setCity(ofNullable(rq.getCity()).orElse(user.getCity()));
             user.setCountry(ofNullable(rq.getCountry()).orElse(user.getCountry()));
             String email = rq.getEmail();
-            if (email != null && email.equalsIgnoreCase(user.getEmail() != null ? user.getEmail().getValue() : null)) {
+            if (email != null && !email.equalsIgnoreCase(user.getEmail() != null ? user.getEmail().getValue() : null)) {
                 user.setEmail(new Email(email));
             }
             user = userService.updateUser(user);
