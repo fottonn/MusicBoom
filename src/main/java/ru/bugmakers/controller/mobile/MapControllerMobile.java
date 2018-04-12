@@ -39,7 +39,7 @@ public class MapControllerMobile {
     }
 
     @PostMapping(value = "/map.performers")
-    public ResponseEntity<MbResponse> mapPerformers(@RequestBody MapPerformersRequest rq) {
+    public ResponseEntity<MbResponse> mapPerformersInRadius(@RequestBody MapPerformersRequest rq) {
 
         MapPerformersResponseMobile rs;
         try {

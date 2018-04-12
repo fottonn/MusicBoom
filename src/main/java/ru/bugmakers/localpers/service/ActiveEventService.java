@@ -34,6 +34,13 @@ public class ActiveEventService {
         return activeEventRepo.findById(userId).orElse(null);
     }
 
+    /**
+     * Все активные выступления в радиусе от текущей позиции
+     *
+     * @param curPosition текущая позиция
+     * @param radius      радиус в метрах
+     * @return активные выступления
+     */
     public List<ActiveEvent> getActiveEventsInRadius(GeoLocation curPosition, double radius) {
 
         GeoLocation[] boundCoor = curPosition.boundingCoordinates(radius);
@@ -43,5 +50,14 @@ public class ActiveEventService {
         Double lngMax = boundCoor[1].getDegLon();
 
         return activeEventRepo.findByLngBetweenAndLatBetweenOrderByUserId(lngMin, lngMax, latMin, latMax);
+    }
+
+    /**
+     * Все активные выступления во всём мире
+     *
+     * @return все активные выступления
+     */
+    public List<ActiveEvent> getAllActiveEvents() {
+        return activeEventRepo.findAll();
     }
 }
