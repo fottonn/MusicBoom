@@ -35,7 +35,7 @@ public class Email {
     }
 
     public Email(String value) {
-        this.value = value;
+        setValue(value);
     }
 
 
@@ -44,7 +44,7 @@ public class Email {
     }
 
     public void setValue(String value) {
-        this.value = value;
+        this.value = value != null ? value.toLowerCase() : null;
     }
 
     public boolean isEnabled() {

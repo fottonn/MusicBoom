@@ -146,7 +146,7 @@ public class EmailService {
         if (email != null) {
             email.setEnabled(true);
             email.setConfirmationCode(null);
-            emailRepo.save(email);
+            emailRepo.saveAndFlush(email);
         } else {
             throw MbException.create(MbError.CME07);
         }

@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface UserRepo extends JpaRepository<User, Long> {
 
-    User findByLoginIgnoreCase(String login);
+    User findByLogin(String login);
 
     User findByVkAuth_SocialId(String socialId);
 
@@ -21,19 +21,19 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
     User findByGoogleAuth_SocialId(String socialId);
 
-    User findByEmail(String email);
+    User findByEmail_Value(String email);
 
     User findByPhone(String phone);
 
-    boolean existsByEmail(String email);
+    boolean existsByEmail_Value(String email);
 
     boolean existsByLogin(String login);
 
     boolean existsByPhone(String phone);
 
-    List<User> findDistinctByUserTypeAndNicknameContaining(UserType userType, String nickname);
+    List<User> findDistinctByUserTypeAndNicknameContainingIgnoreCase(UserType userType, String nickname);
 
     Page<User> findAllByUserType(UserType userType, Pageable pageable);
 
-    Page<User> findAllByCity(String city, Pageable pageable);
+    Page<User> findAllByCityIgnoreCase(String city, Pageable pageable);
 }

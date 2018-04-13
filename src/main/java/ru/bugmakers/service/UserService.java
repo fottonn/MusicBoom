@@ -42,11 +42,11 @@ public class UserService {
     }
 
     public User findUserByEmail(String email) {
-        return userRepo.findByEmail(email);
+        return userRepo.findByEmail_Value(email.toLowerCase());
     }
 
     public User findUserByLogin(String login) {
-        return userRepo.findByLoginIgnoreCase(login);
+        return userRepo.findByLogin(login);
     }
 
     public User updateUser(User user) {
@@ -66,7 +66,7 @@ public class UserService {
     }
 
     public boolean isExistsByEmail(String email) {
-        return userRepo.existsByEmail(email);
+        return userRepo.existsByEmail_Value(email.toLowerCase());
     }
 
     public boolean isExistsByLogin(String login) {
@@ -93,7 +93,7 @@ public class UserService {
             if (s.length() > 2) values.add(s);
         }
         final Map<Long, User> users = new HashMap<>();
-        values.forEach(s -> userRepo.findDistinctByUserTypeAndNicknameContaining(userType, s).forEach(user -> users.putIfAbsent(user.getId(), user)));
+        values.forEach(s -> userRepo.findDistinctByUserTypeAndNicknameContainingIgnoreCase(userType, s).forEach(user -> users.putIfAbsent(user.getId(), user)));
         users.values().forEach(user -> result.add(new UserDTO(String.valueOf(user.getId()), user.getNickname())));
         result.sort(Comparator.comparing(UserDTO::getNickname));
         return result;
@@ -127,6 +127,6 @@ public class UserService {
      * @return страница пользователей из определенного города
      */
     public Page<User> findAllUsersByCity(final String city, final Pageable pageable) {
-        return userRepo.findAllByCity(city, pageable);
+        return userRepo.findAllByCityIgnoreCase(city, pageable);
     }
 }

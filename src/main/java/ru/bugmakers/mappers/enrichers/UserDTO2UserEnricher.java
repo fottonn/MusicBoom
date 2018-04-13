@@ -33,7 +33,7 @@ public class UserDTO2UserEnricher implements MBEnricher<UserDTO, User> {
         target.setName(ofNullable(source.getName()).orElse(target.getName()));
         target.setSurName(ofNullable(source.getSurname()).orElse(target.getSurName()));
         if (source.getEmail() != null) {
-            if (target.getEmail() == null || !target.getEmail().getValue().equals(source.getEmail()))
+            if (target.getEmail() == null || !source.getEmail().equalsIgnoreCase(target.getEmail().getValue()))
                 target.setEmail(new Email(source.getEmail()));
         }
         target.setPatronymic(ofNullable(source.getPatronymic()).orElse(target.getPatronymic()));
