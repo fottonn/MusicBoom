@@ -2,10 +2,7 @@ package ru.bugmakers.config;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -22,7 +19,6 @@ import java.util.Properties;
  * Created by Ivan
  */
 @Configuration
-@PropertySource("classpath:db.properties")
 @EnableJpaRepositories(
         basePackages = "ru.bugmakers.repository",
         entityManagerFactoryRef = "emf",
@@ -52,6 +48,19 @@ public class PersistConfig {
     private String lobNonContextualCreation;
     @Value("${hibernate.hbm2ddl.auto}")
     private String hbm2ddlAuto;
+
+    @Configuration
+    @PropertySource("classpath:db.properties")
+    @Profile("!dev")
+    static class PromProps {
+
+    }
+
+    @Configuration
+    @PropertySource("classpath:db_dev.properties")
+    @Profile("dev")
+    static class DevProps {
+    }
 
 
     @Bean
