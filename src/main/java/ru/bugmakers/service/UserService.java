@@ -126,7 +126,8 @@ public class UserService {
      * @param pageable {@link Pageable}
      * @return страница пользователей из определенного города
      */
-    public Page<User> findAllUsersByCity(final String city, final Pageable pageable) {
-        return userRepo.findAllByCityIgnoreCase(city, pageable);
+    public Page<User> findAllUsersByUserTypeAndByCity(final UserType userType, final String city, final Pageable pageable) {
+        return userRepo.findAllByUserTypeAndCityIgnoreCase(userType, city, pageable);
     }
+
 }

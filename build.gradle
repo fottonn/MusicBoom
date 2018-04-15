@@ -1,13 +1,30 @@
-group 'StreetPlay'
-version '1.0-SNAPSHOT'
+//group 'StreetPlay'
+//version '1.0-SNAPSHOT'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.bmuschko:gradle-cargo-plugin:2.3'
+    }
+}
 
 apply plugin: 'war'
 
 sourceCompatibility = 1.8
 
+war {
+    archiveName 'musicboom.war'
+}
+
 repositories {
     mavenCentral()
 }
+
+
+apply plugin: 'com.bmuschko.cargo'
 
 dependencies {
 
@@ -35,4 +52,22 @@ dependencies {
     compile 'org.cfg4j:cfg4j-core:4.4.1'
     compile 'org.codehaus.groovy:groovy-all:2.4.14'
 
+    cargo "org.codehaus.cargo:cargo-core-uberjar:1.6.7", "org.codehaus.cargo:cargo-ant:1.6.7"
+
+}
+
+cargo {
+    containerId = 'tomcat8x'
+    port = 8080
+
+    deployable {
+        file = file('build/libs/musicboom.war')
+        context = '/musicboom'
+    }
+
+    remote {
+        hostname = '78.24.220.229'
+        username = 'gradle'
+        password = '8E2HbgeCZ'
+    }
 }

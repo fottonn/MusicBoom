@@ -12,6 +12,7 @@ import ru.bugmakers.dto.response.MbResponse;
 import ru.bugmakers.dto.response.web.ArtistInfoResponseWeb;
 import ru.bugmakers.dto.response.web.ArtistListWebRs;
 import ru.bugmakers.entity.User;
+import ru.bugmakers.enums.UserType;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.mappers.converters.User2UserDtoPublicConverter;
@@ -58,7 +59,27 @@ public class ArtistInfoPageWeb extends MbController {
                                                     @RequestParam("size") int size) {
         ArtistListWebRs rs;
         try {
-            Page<User> users = userService.findAllUsersByCity(city, PageRequest.of(page - 1, size, Sort.by("id")));
+            Page<User> users = userService.findAllUsersByUserTypeAndByCity(UserType.ARTIST, city, PageRequest.of(page - 1, size, Sort.by("id")));
+            Page<UserDTO> artistsPage = users.map(user -> user2UserDtoPublicConverter.convert(user));
+            rs = new ArtistListWebRs();
+            rs.setArtists(artistsPage.getContent());
+            rs.setPage(artistsPage.getNumber() + 1);
+            rs.setPageSize(artistsPage.getSize());
+            rs.setArtistCountInPage(artistsPage.getNumberOfElements());
+            rs.setTotalPages(artistsPage.getTotalPages());
+            rs.setTotalArtists(artistsPage.getTotalElements());
+        } catch (Exception e) {
+            return ResponseEntity.ok(MbResponse.error(e));
+        }
+        return ResponseEntity.ok(rs);
+    }
+
+    @GetMapping(value = "artists", params = {"page", "size"})
+    public ResponseEntity<MbResponse> artistsByCity(@RequestParam("page") int page,
+                                                    @RequestParam("size") int size) {
+        ArtistListWebRs rs;
+        try {
+            Page<User> users = userService.findAllUsersByUserType(UserType.ARTIST, PageRequest.of(page - 1, size, Sort.by("id")));
             Page<UserDTO> artistsPage = users.map(user -> user2UserDtoPublicConverter.convert(user));
             rs = new ArtistListWebRs();
             rs.setArtists(artistsPage.getContent());

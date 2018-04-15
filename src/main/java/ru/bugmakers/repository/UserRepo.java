@@ -35,5 +35,6 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
     Page<User> findAllByUserType(UserType userType, Pageable pageable);
 
-    Page<User> findAllByCityIgnoreCase(String city, Pageable pageable);
+    Page<User> findAllByUserTypeAndCityIgnoreCase(UserType userType, String city, Pageable pageable);
+
 }

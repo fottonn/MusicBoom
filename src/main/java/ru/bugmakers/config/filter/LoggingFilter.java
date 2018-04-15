@@ -57,47 +57,66 @@ public class LoggingFilter extends OncePerRequestFilter {
     }
 
     private void logRequest(HttpServletRequest request) {
-        LOGGER.debug(EMPTY_STRING);
-        LOGGER.debug("+++++++++++++++++++++REQUEST_BEGIN++++++++++++++++++++");
-        LOGGER.debug("URL:      {}", request.getRequestURL());
-        LOGGER.debug("Method:   {}", request.getMethod());
-        LOGGER.debug("Params:");
-        logParams(request.getParameterMap());
-        LOGGER.debug("Headers:");
-        logRequestHeaders(request);
+        LOGGER.debug(new StringBuilder()
+                .append(LINE_SEPARATOR)
+                .append(LINE_SEPARATOR)
+                .append("+++++++++++++++++++++REQUEST_BEGIN++++++++++++++++++++").append(LINE_SEPARATOR)
+                .append(String.format("URL:      %s", request.getRequestURL())).append(LINE_SEPARATOR)
+                .append(String.format("Method:   %s", request.getMethod())).append(LINE_SEPARATOR)
+                .append("Params:").append(LINE_SEPARATOR)
+                .append(logParams(request.getParameterMap()))
+                .append("Headers:").append(LINE_SEPARATOR)
+                .append(logRequestHeaders(request))
+                .append(logPostParams(request)).append(LINE_SEPARATOR)
+                .append("++++++++++++++++++++++REQUEST_END+++++++++++++++++++++").append(LINE_SEPARATOR)
+                .toString()
+        );
+    }
+
+    private void logResponse(HttpServletRequest request, CapturingResponseWrapper response) {
+        LOGGER.debug(new StringBuilder()
+                .append(LINE_SEPARATOR)
+                .append(LINE_SEPARATOR)
+                .append("+++++++++++++++++++++RESPONSE_BEGIN++++++++++++++++++++").append(LINE_SEPARATOR)
+                .append(String.format("URL:      %s", request.getRequestURL())).append(LINE_SEPARATOR)
+                .append(String.format("Method:   %s", request.getMethod())).append(LINE_SEPARATOR)
+                .append("Params:").append(LINE_SEPARATOR)
+                .append(logParams(request.getParameterMap()))
+                .append("Headers:").append(LINE_SEPARATOR)
+                .append(logResponseHeaders(response))
+                .append(String.format("ContentType:  %s", response.getContentType())).append(LINE_SEPARATOR)
+                .append(logResponseContent(response)).append(LINE_SEPARATOR)
+                .append("++++++++++++++++++++++RESPONSE_END+++++++++++++++++++++").append(LINE_SEPARATOR)
+                .toString()
+        );
+    }
+
+    private String logResponseContent(CapturingResponseWrapper response) {
+        StringBuilder sb = new StringBuilder("Response:");
+        try {
+            sb.append(LINE_SEPARATOR).append(prettyPrintResponse(response));
+        } catch (Exception e) {
+            sb.append("Response content not available");
+        }
+        return sb.toString();
+    }
+
+    private String logPostParams(HttpServletRequest request) {
+        StringBuilder sb = new StringBuilder();
         if (request.getMethod().equalsIgnoreCase("POST")) {
-            LOGGER.debug("ContentType:  {}", request.getContentType());
+            sb.append(String.format("ContentType:  %s", request.getContentType()));
             String json = null;
             if (request.getContentType() == null || !request.getContentType().startsWith(MediaType.MULTIPART_FORM_DATA_VALUE)) {
                 json = getJson(request);
             }
             if (!Strings.isNullOrEmpty(json)) {
-                LOGGER.debug("Json:" + LINE_SEPARATOR + json);
+                sb
+                        .append("Json")
+                        .append(LINE_SEPARATOR)
+                        .append(json);
             }
         }
-        LOGGER.debug("++++++++++++++++++++++REQUEST_END+++++++++++++++++++++");
-        LOGGER.debug(EMPTY_STRING);
-    }
-
-    private void logResponse(HttpServletRequest request, CapturingResponseWrapper response) {
-
-        LOGGER.debug(EMPTY_STRING);
-        LOGGER.debug("+++++++++++++++++++++RESPONSE_BEGIN++++++++++++++++++++");
-        LOGGER.debug("URL:      {}", request.getRequestURL());
-        LOGGER.debug("Method:   {}", request.getMethod());
-        LOGGER.debug("Params:");
-        logParams(request.getParameterMap());
-        LOGGER.debug("Headers:");
-        logResponseHeaders(response);
-        LOGGER.debug("ContentType:  {}", response.getContentType());
-        try {
-            LOGGER.debug("Response:" + System.lineSeparator() + "{}", prettyPrintResponse(response));
-        } catch (Exception e) {
-            LOGGER.debug("Response content not available");
-        }
-        LOGGER.debug("++++++++++++++++++++++RESPONSE_END+++++++++++++++++++++");
-        LOGGER.debug(EMPTY_STRING);
-
+        return sb.toString();
     }
 
     private String prettyPrintResponse(CapturingResponseWrapper response) throws IOException, TransformerConfigurationException {
@@ -113,9 +132,12 @@ public class LoggingFilter extends OncePerRequestFilter {
         return rs;
     }
 
-    private void logParams(Map<String, String[]> parameterMap) {
-        if (Collections.isEmpty(parameterMap)) return;
-        parameterMap.forEach(((k, v) -> LOGGER.debug(String.format("          %s=%s", k, stringArrayToLine(v)))));
+    private String logParams(Map<String, String[]> parameterMap) {
+        StringBuilder sb = new StringBuilder();
+        if (!Collections.isEmpty(parameterMap)) {
+            parameterMap.forEach(((k, v) -> sb.append(String.format("          %s=%s", k, stringArrayToLine(v))).append(LINE_SEPARATOR)));
+        }
+        return sb.toString();
     }
 
     private String stringArrayToLine(String[] v) {
@@ -126,19 +148,29 @@ public class LoggingFilter extends OncePerRequestFilter {
         return sb.toString();
     }
 
-    private void logRequestHeaders(HttpServletRequest request) {
-        if (request == null || request.getHeaderNames() == null) return;
-        Enumeration<String> names = request.getHeaderNames();
-        while (names.hasMoreElements()) {
-            String header = names.nextElement();
-            LOGGER.debug(String.format("          %s: %s", header, request.getHeader(header)));
+    private String logRequestHeaders(HttpServletRequest request) {
+        StringBuilder sb = new StringBuilder();
+        if (request != null && request.getHeaderNames() != null) {
+            Enumeration<String> names = request.getHeaderNames();
+            while (names.hasMoreElements()) {
+                String header = names.nextElement();
+                sb.append(String.format("          %s: %s", header, request.getHeader(header))).append(LINE_SEPARATOR);
+            }
         }
+        return sb.toString();
     }
 
-    private void logResponseHeaders(CapturingResponseWrapper response) {
-        if (response == null || CollectionUtils.isEmpty(response.getHeaderNames())) return;
-        Collection<String> names = response.getHeaderNames();
-        names.forEach(header -> LOGGER.debug(String.format("          %s: %s", header, response.getHeader(header))));
+    private String logResponseHeaders(CapturingResponseWrapper response) {
+        StringBuilder sb = new StringBuilder();
+        if (response != null && CollectionUtils.isNotEmpty(response.getHeaderNames())) {
+            Collection<String> names = response.getHeaderNames();
+            names.forEach(header ->
+                    sb
+                            .append(String.format("          %s: %s", header, response.getHeader(header)))
+                            .append(LINE_SEPARATOR));
+
+        }
+        return sb.toString();
     }
 
     private String getJson(HttpServletRequest request) {
