@@ -15,10 +15,10 @@ public class SecurityInit extends AbstractSecurityWebApplicationInitializer {
 
     @Override
     protected void beforeSpringSecurityFilterChain(ServletContext servletContext) {
-        servletContext.addFilter("logging-filter", new LoggingFilter())
+        servletContext.addFilter("encoding-filter", new CharacterEncodingFilter(UTF_8.name(), true))
                 .addMappingForUrlPatterns(null, false, "/*");
 
-        servletContext.addFilter("encoding-filter", new CharacterEncodingFilter(UTF_8.name(), true))
+        servletContext.addFilter("logging-filter", new LoggingFilter())
                 .addMappingForUrlPatterns(null, false, "/*");
 
     }

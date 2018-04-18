@@ -146,4 +146,8 @@ public class TransactionService {
     public Page<Transaction> findAllTransactionByStatus(final Status status, final Pageable pageable) {
         return transactionRepo.findAllByStatus(status, pageable);
     }
+
+    public boolean isExistsByTransactionNumber(String number) {
+        return transactionRepo.existsByNumber(number);
+    }
 }

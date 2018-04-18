@@ -30,20 +30,9 @@ import java.util.List;
 @RequestMapping("/")
 public class AnonymousWeb {
 
-    private TransactionService transactionService;
-    private UserService userService;
+
     private ActiveEventService activeEventService;
     private ActiveEvent2ArtistLocationConverter activeEvent2ArtistLocationConverter;
-
-    @Autowired
-    public void setTransactionService(TransactionService transactionService) {
-        this.transactionService = transactionService;
-    }
-
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
 
     @Autowired
     public void setActiveEventService(ActiveEventService activeEventService) {
@@ -53,29 +42,6 @@ public class AnonymousWeb {
     @Autowired
     public void setActiveEvent2ArtistLocationConverter(ActiveEvent2ArtistLocationConverter activeEvent2ArtistLocationConverter) {
         this.activeEvent2ArtistLocationConverter = activeEvent2ArtistLocationConverter;
-    }
-
-    @PostMapping(value = "transaction")
-    public ResponseEntity<MbResponse> transaction(@RequestBody TransactionWebRq rq) {
-        MbResponse rs;
-        try {
-            if (!userService.isExistsById(Long.valueOf(rq.getRecipientId()))) {
-                throw MbException.create(MbError.CME08);
-            }
-            Transaction transaction = new Transaction();
-            transaction.setRecipientId(Long.valueOf(rq.getRecipientId()));
-            transaction.setSenderMoneyBearerKind(MoneyBearerKind.CARD);
-            transaction.setRecipientMoneyBearerKind(MoneyBearerKind.WALLET);
-            transaction.setAmount(new BigDecimal(rq.getSum()));
-            transaction.setNumber(rq.getNumberOfTransaction());
-            transaction.setDate(LocalDateTime.now());
-            transaction.setStatus(Status.ACCEPTED);
-            transactionService.saveTransaction(transaction);
-            rs = MbResponse.success();
-        } catch (Exception e) {
-            return ResponseEntity.ok(MbResponse.error(e));
-        }
-        return ResponseEntity.ok(rs);
     }
 
     @GetMapping("performers")

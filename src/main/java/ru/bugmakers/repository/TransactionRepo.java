@@ -90,4 +90,6 @@ public interface TransactionRepo extends JpaRepository<Transaction, String> {
      * @return - страница транзакций со статусом
      */
     Page<Transaction> findAllByStatus(Status status, Pageable pageable);
+
+    boolean existsByNumber(String number);
 }

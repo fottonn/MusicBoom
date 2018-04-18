@@ -85,6 +85,7 @@ public class LoggingFilter extends OncePerRequestFilter {
                 .append("Headers:").append(LINE_SEPARATOR)
                 .append(logResponseHeaders(response))
                 .append(String.format("ContentType:  %s", response.getContentType())).append(LINE_SEPARATOR)
+                .append(String.format("Status:  %d", response.getStatus())).append(LINE_SEPARATOR)
                 .append(logResponseContent(response)).append(LINE_SEPARATOR)
                 .append("++++++++++++++++++++++RESPONSE_END+++++++++++++++++++++").append(LINE_SEPARATOR)
                 .toString()
@@ -104,16 +105,16 @@ public class LoggingFilter extends OncePerRequestFilter {
     private String logPostParams(HttpServletRequest request) {
         StringBuilder sb = new StringBuilder();
         if (request.getMethod().equalsIgnoreCase("POST")) {
-            sb.append(String.format("ContentType:  %s", request.getContentType()));
-            String json = null;
+            sb.append(String.format("ContentType:  %s", request.getContentType())).append(LINE_SEPARATOR);
+            String body = null;
             if (request.getContentType() == null || !request.getContentType().startsWith(MediaType.MULTIPART_FORM_DATA_VALUE)) {
-                json = getJson(request);
+                body = getBody(request);
             }
-            if (!Strings.isNullOrEmpty(json)) {
+            if (!Strings.isNullOrEmpty(body)) {
                 sb
-                        .append("Json")
+                        .append("Body:")
                         .append(LINE_SEPARATOR)
-                        .append(json);
+                        .append(body);
             }
         }
         return sb.toString();
@@ -173,16 +174,22 @@ public class LoggingFilter extends OncePerRequestFilter {
         return sb.toString();
     }
 
-    private String getJson(HttpServletRequest request) {
+    private String getBody(HttpServletRequest request) {
         if (request == null) return EMPTY_STRING;
-        String json;
+        String body;
         try {
-            JsonNode jsonNode = OBJECT_MAPPER.readTree(request.getReader());
-            json = OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode != null ? jsonNode : EMPTY_STRING);
+            if (request.getContentType().startsWith(MediaType.APPLICATION_FORM_URLENCODED_VALUE)) {
+                StringBuilder sb = new StringBuilder();
+                request.getReader().lines().forEach(sb::append);
+                body = sb.toString();
+            } else {
+                JsonNode jsonNode = OBJECT_MAPPER.readTree(request.getReader());
+                body = OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode != null ? jsonNode : EMPTY_STRING);
+            }
         } catch (Exception e) {
-            json = EMPTY_STRING;
+            body = EMPTY_STRING;
         }
-        return json;
+        return body;
     }
 
 
