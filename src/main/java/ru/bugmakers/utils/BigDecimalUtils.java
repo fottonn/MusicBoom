@@ -29,7 +29,7 @@ public class BigDecimalUtils {
      * @return комиссия в рублях
      */
     public static BigDecimal fee(BigDecimal sum, BigDecimal fee) {
-        return sum.multiply(fee).divide(ONE_HUNDRED, 2, RoundingMode.DOWN);
+        return sum.multiply(fee).divide(ONE_HUNDRED, 2, RoundingMode.UP);
     }
 
 }

@@ -12,6 +12,7 @@ import ru.bugmakers.enums.UserType;
 import ru.bugmakers.repository.TransactionRepo;
 import ru.bugmakers.utils.BigDecimalUtils;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import static java.math.BigDecimal.ZERO;
@@ -122,16 +123,17 @@ public class TransactionService {
         if (recipient.getUserType() == UserType.ARTIST
                 && transaction.getRecipientMoneyBearerKind() == MoneyBearerKind.WALLET
                 && transaction.getSenderMoneyBearerKind() != MoneyBearerKind.WALLET) {
-            transaction.setAmount(BigDecimalUtils.withoutFee(transaction.getAmount(),
-                    rankPropsService.getFeeByRank(recipient.getRank())));
+            final BigDecimal fee = rankPropsService.getFeeByRank(recipient.getRank());
+            transaction.setAmount(BigDecimalUtils.withoutFee(transaction.getAmount(), fee));
+            transaction.setFee(BigDecimalUtils.fee(transaction.getAmount(), fee));
         }
         transactionRepo.saveAndFlush(transaction);
     }
 
     /**
-     * Метод по поиску транзакии по ID
+     * Метод поиска транзакии по ID
      * @param transactionId - id транзакции
-     * @return
+     * @return объект транзакции
      */
     public Transaction findTransactionById(String transactionId) {
         return transactionRepo.findById(transactionId).orElse(null);
