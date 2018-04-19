@@ -57,22 +57,9 @@ public class TransactionController {
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE
     )
-    public ResponseEntity transaction(HttpServletRequest rq) {
+    public ResponseEntity transaction(@RequestParam Map<String, String> map) {
 
         try {
-
-            Map<String, String> map = new HashMap<>();
-            StringBuilder sb = new StringBuilder();
-            rq.getReader().lines().forEach(sb::append);
-            String[] formParts = sb.toString().split(SEPARATOR);
-            for (String fp : formParts) {
-                String[] parts = fp.split("=");
-                if (parts.length == 2) {
-                    map.put(parts[0], parts[1]);
-                } else if (parts.length == 1) {
-                    map.put(parts[0], "");
-                }
-            }
 
             transactionRequestValidator.validate(map);
             Long recipientId = Long.valueOf(map.get(LABEL));

@@ -6,10 +6,7 @@ import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -17,16 +14,18 @@ import java.nio.charset.StandardCharsets;
  */
 public class CapturingRequestWrapper extends HttpServletRequestWrapper {
     private final byte[] body;
+    private final String characterEncoding;
 
     public CapturingRequestWrapper(HttpServletRequest request)
             throws IOException {
         super(request);
+        characterEncoding = request.getCharacterEncoding();
         body = StreamUtils.copyToByteArray(request.getInputStream());
     }
 
     @Override
-    public BufferedReader getReader() {
-        return new BufferedReader(new InputStreamReader(getInputStream(), StandardCharsets.UTF_8));
+    public BufferedReader getReader() throws UnsupportedEncodingException {
+        return new BufferedReader(new InputStreamReader(getInputStream(), characterEncoding));
     }
 
     @Override

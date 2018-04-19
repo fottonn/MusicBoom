@@ -39,7 +39,10 @@ public class LoggingFilter extends OncePerRequestFilter {
         if (LOGGER.isDebugEnabled()) {
             CapturingResponseWrapper capturingResponseWrapper = new CapturingResponseWrapper(response);
 
-            if (request.getContentType() != null && request.getContentType().startsWith(MediaType.MULTIPART_FORM_DATA_VALUE)) {
+            if (!request.getMethod().equalsIgnoreCase("POST")
+                    || request.getContentType() != null
+                    && (request.getContentType().startsWith(MediaType.MULTIPART_FORM_DATA_VALUE)
+                    || request.getContentType().startsWith(MediaType.APPLICATION_FORM_URLENCODED_VALUE))) {
                 logRequest(request);
                 filterChain.doFilter(request, capturingResponseWrapper);
             } else {
@@ -107,7 +110,8 @@ public class LoggingFilter extends OncePerRequestFilter {
         if (request.getMethod().equalsIgnoreCase("POST")) {
             sb.append(String.format("ContentType:  %s", request.getContentType())).append(LINE_SEPARATOR);
             String body = null;
-            if (request.getContentType() == null || !request.getContentType().startsWith(MediaType.MULTIPART_FORM_DATA_VALUE)) {
+            if (request.getContentType() == null
+                    || !(request.getContentType().startsWith(MediaType.MULTIPART_FORM_DATA_VALUE) && request.getContentType().startsWith(MediaType.APPLICATION_FORM_URLENCODED_VALUE))) {
                 body = getBody(request);
             }
             if (!Strings.isNullOrEmpty(body)) {
