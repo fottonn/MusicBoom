@@ -67,7 +67,11 @@ public class TransactionController {
             String[] formParts = sb.toString().split(SEPARATOR);
             for (String fp : formParts) {
                 String[] parts = fp.split("=");
-                map.put(parts[0], parts[1]);
+                if (parts.length == 2) {
+                    map.put(parts[0], parts[1]);
+                } else if (parts.length == 1) {
+                    map.put(parts[0], "");
+                }
             }
 
             transactionRequestValidator.validate(map);
