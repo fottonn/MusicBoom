@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import ru.bugmakers.entity.auth.FbAuth;
 import ru.bugmakers.entity.auth.GoogleAuth;
 import ru.bugmakers.entity.auth.VkAuth;
-import ru.bugmakers.enums.Rank;
-import ru.bugmakers.enums.Role;
-import ru.bugmakers.enums.Sex;
-import ru.bugmakers.enums.UserType;
+import ru.bugmakers.enums.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -62,9 +59,6 @@ public class User {
 
     @Column(name = "registration_date")
     private LocalDateTime registrationDate;
-
-    @Column(name = "public_name")
-    private String publicName;
 
     @OneToOne(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private Email email;
@@ -143,6 +137,10 @@ public class User {
     @Column(name = "rank")
     @Enumerated(EnumType.STRING)
     private Rank rank = Rank.NEWBE;
+
+    @Column(name = "name_representation", length = 20)
+    @Enumerated(EnumType.STRING)
+    private NameRepresentation nameRepresentation = NameRepresentation.NICKNAME;
 
     public User() {
     }
@@ -243,14 +241,6 @@ public class User {
         this.registrationDate = registrationDate;
     }
 
-    public String getPublicName() {
-        return publicName;
-    }
-
-    public void setPublicName(String publicName) {
-        this.publicName = publicName;
-    }
-
     public Email getEmail() {
         return email;
     }
@@ -293,7 +283,7 @@ public class User {
     }
 
     public void setRoles(Role... roles) {
-        this.roles = roles != null ? new HashSet<>(Arrays.asList(roles)) : null;
+        setRoles(roles != null ? new HashSet<>(Arrays.asList(roles)) : null);
     }
 
     public String getLogin() {
@@ -402,7 +392,9 @@ public class User {
     }
 
     public void setEvents(List<Event> events) {
-        if (events != null) events.forEach(event -> event.setUser(this));
+        if (events != null) events.forEach(event -> {
+            if (event != null) event.setUser(this);
+        });
         this.events = events;
     }
 
@@ -439,177 +431,176 @@ public class User {
         this.rank = rank;
     }
 
+    public NameRepresentation getNameRepresentation() {
+        return nameRepresentation;
+    }
+
+    public void setNameRepresentation(NameRepresentation nameRepresentation) {
+        this.nameRepresentation = nameRepresentation;
+    }
+
     public User withRegistered(boolean registered) {
-        this.registered = registered;
+        setRegistered(registered);
         return this;
     }
 
     public User withName(String name) {
-        this.name = name;
+        setName(name);
         return this;
     }
 
     public User withSurName(String surName) {
-        this.surName = surName;
+        setSurName(surName);
         return this;
     }
 
     public User withPatronymic(String patronymic) {
-        this.patronymic = patronymic;
+        setPatronymic(patronymic);
         return this;
     }
 
     public User withAboutMe(String aboutMe) {
-        this.aboutMe = aboutMe;
+        setAboutMe(aboutMe);
         return this;
     }
 
     public User withBirthDay(LocalDate birthDay) {
-        this.birthDay = birthDay;
+        setBirthDay(birthDay);
         return this;
     }
 
     public User withCountry(String country) {
-        this.country = country;
+        setCountry(country);
         return this;
     }
 
     public User withCity(String city) {
-        this.city = city;
+        setCity(city);
         return this;
     }
 
     public User withNickname(String nickname) {
-        this.nickname = nickname;
+        setNickname(nickname);
         return this;
     }
 
     public User withRegistrationDate(LocalDateTime registrationDate) {
-        this.registrationDate = registrationDate;
-        return this;
-    }
-
-    public User withPublicName(String publicName) {
-        this.publicName = publicName;
+        setRegistrationDate(registrationDate);
         return this;
     }
 
     public User withEmail(Email email) {
-        this.email = email;
-        if (email != null) email.setUser(this);
+        setEmail(email);
         return this;
     }
 
     public User withUserType(UserType userType) {
-        this.userType = userType;
+        setUserType(userType);
         return this;
     }
 
     public User withPhone(String phone) {
-        this.phone = phone;
+        setPhone(phone);
         return this;
     }
 
     public User withSex(Sex sex) {
-        this.sex = sex;
+        setSex(sex);
         return this;
     }
 
     public User withRoles(Set<Role> roles) {
-        this.roles = roles;
+        setRoles(roles);
         return this;
     }
 
     public User withLogin(String login) {
-        this.login = login;
+        setLogin(login);
         return this;
     }
 
     public User withPassword(String password) {
-        this.password = password;
+        setPassword(password);
         return this;
     }
 
     public User withEnabled(boolean enabled) {
-        this.enabled = enabled;
+        setEnabled(enabled);
         return this;
     }
 
     public User withVkAuth(VkAuth vkAuth) {
-        this.vkAuth = vkAuth;
-        if (vkAuth != null) vkAuth.setUser(this);
+        setVkAuth(vkAuth);
         return this;
     }
 
     public User withFbAuth(FbAuth fbAuth) {
-        this.fbAuth = fbAuth;
-        if (fbAuth != null) fbAuth.setUser(this);
+        setFbAuth(fbAuth);
         return this;
     }
 
     public User withGoogleAuth(GoogleAuth googleAuth) {
-        this.googleAuth = googleAuth;
-        if (googleAuth != null) googleAuth.setUser(this);
+        setGoogleAuth(googleAuth);
         return this;
     }
 
     public User withArtistInfo(ArtistInfo artistInfo) {
-        this.artistInfo = artistInfo;
-        if (artistInfo != null) artistInfo.setUser(this);
+        setArtistInfo(artistInfo);
         return this;
     }
 
     public User withVkContact(String vkContact) {
-        this.vkContact = vkContact;
+        setVkContact(vkContact);
         return this;
     }
 
     public User withTlgContact(String tlgContact) {
-        this.tlgContact = tlgContact;
+        setTlgContact(tlgContact);
         return this;
     }
 
     public User withWhatsappContact(String whatsappContact) {
-        this.whatsappContact = whatsappContact;
+        setWhatsappContact(whatsappContact);
         return this;
     }
 
     public User withPersonalDataConsent(boolean personalDataConsent) {
-        this.personalDataConsent = personalDataConsent;
+        setPersonalDataConsent(personalDataConsent);
         return this;
     }
 
     public User withContractConsent(boolean contractConsent) {
-        this.contractConsent = contractConsent;
+        setContractConsent(contractConsent);
         return this;
     }
 
     public User withEvents(List<Event> events) {
-        this.events = events;
-        if (events != null) events.forEach(event -> {
-            if (event != null) event.setUser(this);
-        });
+        setEvents(events);
         return this;
     }
 
     public User withArtistRating(ArtistRating artistRating) {
-        this.artistRating = artistRating;
-        if (artistRating != null) artistRating.setUser(this);
+        setArtistRating(artistRating);
         return this;
     }
 
     public User withAvatar(String avatar) {
-        this.avatar = avatar;
+        setAvatar(avatar);
         return this;
     }
 
     public User withLinkedCard(boolean linkedCard) {
-        this.linkedCard = linkedCard;
+        setLinkedCard(linkedCard);
         return this;
     }
 
     public User withRank(Rank rank) {
-        this.rank = rank;
+        setRank(rank);
+        return this;
+    }
+
+    public User withNameRepresentation(NameRepresentation nameRepresentation) {
+        setNameRepresentation(nameRepresentation);
         return this;
     }
 }

@@ -14,6 +14,7 @@ public class UserDTO implements Serializable {
     private String userType;
     private String password;
     private String id;
+    private String publicName;
     private String name;
     private String surname;
     private String patronymic;
@@ -46,6 +47,7 @@ public class UserDTO implements Serializable {
     private Boolean isArtistContract;
     private String avatar;
     private List<String> photos;
+    private String nameRepresentation;
 
     public UserDTO() {
     }
@@ -93,6 +95,14 @@ public class UserDTO implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getPublicName() {
+        return publicName;
+    }
+
+    public void setPublicName(String publicName) {
+        this.publicName = publicName;
     }
 
     public String getName() {
@@ -319,6 +329,14 @@ public class UserDTO implements Serializable {
         this.statOfPerformance = statOfPerformance;
     }
 
+    public String getNameRepresentation() {
+        return nameRepresentation;
+    }
+
+    public void setNameRepresentation(String nameRepresentation) {
+        this.nameRepresentation = nameRepresentation;
+    }
+
     public List<String> getPhotos() {
         return photos;
     }
@@ -507,6 +525,11 @@ public class UserDTO implements Serializable {
 
     public UserDTO withPhotos(List<String> photos) {
         this.photos = photos;
+        return this;
+    }
+
+    public UserDTO withPublicName(String publicName) {
+        setPublicName(publicName);
         return this;
     }
 }

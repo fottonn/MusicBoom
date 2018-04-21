@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.entity.Email;
 import ru.bugmakers.entity.User;
+import ru.bugmakers.enums.NameRepresentation;
 import ru.bugmakers.enums.Sex;
 
 import java.time.LocalDate;
@@ -42,11 +43,14 @@ public class UserDTO2UserEnricher implements MBEnricher<UserDTO, User> {
         target.setBirthDay(ofNullable(LocalDate.parse(source.getBirthday(), DATE_FORMATTER)).orElse(target.getBirthDay()));
         target.setCountry(ofNullable(source.getCountry()).orElse(target.getCountry()));
         target.setCity(ofNullable(source.getCity()).orElse(target.getCity()));
-        target.setPublicName(ofNullable(source.getNickname()).orElse(target.getPublicName()));
-        target.setSex(Arrays.stream(Sex.values()).anyMatch(sex -> sex.name().equals(source.getSex())) ? Sex.valueOf(source.getSex()) : Sex.NONE);
+        target.setSex(Arrays.stream(Sex.values()).anyMatch(sex -> sex.name().equalsIgnoreCase(source.getSex())) ?
+                Sex.valueOf(source.getSex().toUpperCase()) : target.getSex());
         target.setVkContact(ofNullable(source.getVk()).orElse(target.getVkContact()));
         target.setTlgContact(ofNullable(source.getTlg()).orElse(target.getTlgContact()));
         target.setWhatsappContact(ofNullable(source.getWapp()).orElse(target.getWhatsappContact()));
+        target.setNameRepresentation(Arrays.stream(NameRepresentation.values())
+                .anyMatch(nameRepresentation -> nameRepresentation.name().equalsIgnoreCase(source.getNameRepresentation())) ?
+                NameRepresentation.valueOf(source.getNameRepresentation().toUpperCase()) : target.getNameRepresentation());
         userDto2ArtistInfoEnricher.enrich(source, target.getArtistInfo());
     }
 

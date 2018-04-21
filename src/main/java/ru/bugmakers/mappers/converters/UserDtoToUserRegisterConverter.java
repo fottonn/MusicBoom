@@ -49,7 +49,6 @@ public class UserDtoToUserRegisterConverter implements MbConverter<UserDTO, User
                 .withCountry(source.getCountry())
                 .withCity(source.getCity())
                 .withRegistrationDate(LocalDateTime.now())
-                .withPublicName(source.getNickname())
                 .withArtistInfo(userDto2ArtistInfoConverter.convert(source))
                 .withVkContact(source.getVk())
                 .withTlgContact(source.getTlg())
