@@ -17,10 +17,11 @@ public class ArtistsLocation {
     public ArtistsLocation() {
     }
 
-    public ArtistsLocation(String artistId, String longitude, String latitude) {
+    public ArtistsLocation(String artistId, String longitude, String latitude, String iconUrl) {
         this.artistId = artistId;
         this.longitude = longitude;
         this.latitude = latitude;
+        this.iconUrl = iconUrl;
     }
 
     public String getArtistId() {

@@ -1,5 +1,6 @@
 package ru.bugmakers.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cfg4j.provider.ConfigurationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -42,7 +43,7 @@ public class ImagesService {
     }
 
     public String fullImagePath(String imageName) {
-        if (imageName == null) return null;
+        if (StringUtils.isBlank(imageName)) return null;
         String imageUrl = appConfigProvider.getProperty("url.image.path", String.class);
         return imageUrl + imageName;
     }
