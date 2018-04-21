@@ -1,6 +1,6 @@
 import ch.qos.logback.core.util.FileSize
 
-def logPattern = "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+def logPattern = "%d{dd.MM.yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
 def USER_DIR = System.getProperty('user.dir')
 def BASE_PATH = "${USER_DIR}/log"
 //println(USER_DIR)
