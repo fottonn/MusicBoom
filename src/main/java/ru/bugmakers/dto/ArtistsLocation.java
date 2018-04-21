@@ -1,10 +1,12 @@
 package ru.bugmakers.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by Ayrat on 13.12.2017.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ArtistsLocation {
 
     @JsonProperty("artist_id")
