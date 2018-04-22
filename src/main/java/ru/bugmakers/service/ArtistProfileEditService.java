@@ -251,7 +251,7 @@ public class ArtistProfileEditService {
         if (user == null) throw MbException.create(MbError.APE01);
         if (CollectionUtils.isEmpty(photoIds)) return;
         if (CollectionUtils.isNotEmpty(photoIds)) {
-            photoIds.forEach(photoId -> imagesService.removeFile(photoId, appConfigProvider.getProperty("app.image.path", String.class)));
+            photoIds.forEach(photoId -> imagesService.removeFile(photoId.substring(photoId.lastIndexOf("/") + 1), appConfigProvider.getProperty("app.image.path", String.class)));
             photoService.deletePhotos(photoIds);
         }
     }
