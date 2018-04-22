@@ -5,11 +5,9 @@ import org.cfg4j.provider.ConfigurationProviderBuilder;
 import org.cfg4j.source.ConfigurationSource;
 import org.cfg4j.source.context.filesprovider.ConfigFilesProvider;
 import org.cfg4j.source.files.FilesConfigurationSource;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.*;
 import org.springframework.context.annotation.ComponentScan.Filter;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -56,8 +54,19 @@ public class AppConfig implements WebMvcConfigurer {
     }
 
     @Bean
+    @Profile("!dev")
     public ConfigurationProvider appConfigProvider() throws IOException {
         URI config = new ClassPathResource("app_config.properties").getURI();
+        ConfigFilesProvider provider = () -> Collections.singletonList(Paths.get(config));
+        ConfigurationSource source = new FilesConfigurationSource(provider);
+        return new ConfigurationProviderBuilder().withConfigurationSource(source).build();
+    }
+
+    @Bean
+    @Profile("dev")
+    @Qualifier("appConfigProvider")
+    public ConfigurationProvider appConfigProviderDev() throws IOException {
+        URI config = new ClassPathResource("app_config_dev.properties").getURI();
         ConfigFilesProvider provider = () -> Collections.singletonList(Paths.get(config));
         ConfigurationSource source = new FilesConfigurationSource(provider);
         return new ConfigurationProviderBuilder().withConfigurationSource(source).build();

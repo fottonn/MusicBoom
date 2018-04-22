@@ -68,7 +68,8 @@ cargo {
     }
 
     remote {
-        hostname = '78.24.220.229'
+        protocol = 'https'
+        hostname = 'api.musboom.ru'
         username = 'gradle'
         password = '8E2HbgeCZ'
     }

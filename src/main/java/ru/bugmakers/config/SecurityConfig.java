@@ -1,5 +1,6 @@
 package ru.bugmakers.config;
 
+import org.cfg4j.provider.ConfigurationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -97,6 +98,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         private ProviderManager providerManager;
         private FailureTokenAuthenticationEntryPoint failureTokenAuthenticationEntryPoint;
         private MbLogoutSuccessHandler mbLogoutSuccessHandler;
+        private ConfigurationProvider appConfigProvider;
 
         @Autowired
         public void setProviderManager(ProviderManager providerManager) {
@@ -111,6 +113,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Autowired
         public void setMbLogoutSuccessHandler(MbLogoutSuccessHandler mbLogoutSuccessHandler) {
             this.mbLogoutSuccessHandler = mbLogoutSuccessHandler;
+        }
+
+        @Autowired
+        @Qualifier("appConfigProvider")
+        public void setAppConfigProvider(ConfigurationProvider appConfigProvider) {
+            this.appConfigProvider = appConfigProvider;
         }
 
         @Override
@@ -148,6 +156,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/mapi/artist.get").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
                     .antMatchers("/mapi/transaction").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
                     .and()
+                    .requiresChannel().anyRequest().requires(appConfigProvider.getProperty("spring.security.requires.channel", String.class))
+                    .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
                     .addFilterAfter(tokenAuthenticationFilter(), SecurityContextPersistenceFilter.class)
@@ -170,10 +180,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public static class JsonAuthenticationApiConfig extends WebSecurityConfigurerAdapter {
 
         private ProviderManager providerManager;
+        private ConfigurationProvider appConfigProvider;
 
         @Autowired
         public void setProviderManager(ProviderManager providerManager) {
             this.providerManager = providerManager;
+        }
+
+        @Autowired
+        @Qualifier("appConfigProvider")
+        public void setAppConfigProvider(ConfigurationProvider appConfigProvider) {
+            this.appConfigProvider = appConfigProvider;
         }
 
         @Override
@@ -183,6 +200,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .csrf().disable()
                     .requestMatchers()
                     .antMatchers(HttpMethod.POST, "/authentication")
+                    .and()
+                    .requiresChannel().anyRequest().requires(appConfigProvider.getProperty("spring.security.requires.channel", String.class))
                     .and()
                     .authorizeRequests()
                     .anyRequest().permitAll()
@@ -212,10 +231,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public static class SocialAuthenticationApiConfig extends WebSecurityConfigurerAdapter {
 
         private ProviderManager providerManager;
+        private ConfigurationProvider appConfigProvider;
 
         @Autowired
         public void setProviderManager(ProviderManager providerManager) {
             this.providerManager = providerManager;
+        }
+
+        @Autowired
+        @Qualifier("appConfigProvider")
+        public void setAppConfigProvider(ConfigurationProvider appConfigProvider) {
+            this.appConfigProvider = appConfigProvider;
         }
 
         @Override
@@ -226,6 +252,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .requestMatchers()
                     .antMatchers(HttpMethod.GET, "/authentication")
                     .antMatchers(HttpMethod.POST, "/registration")
+                    .and()
+                    .requiresChannel().anyRequest().requires(appConfigProvider.getProperty("spring.security.requires.channel", String.class))
                     .and()
                     .authorizeRequests()
                     .anyRequest().permitAll()
@@ -250,12 +278,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Configuration
     @Order(4)
     public static class PublicApiConfig extends WebSecurityConfigurerAdapter {
+
+        private ConfigurationProvider appConfigProvider;
+
+        @Autowired
+        @Qualifier("appConfigProvider")
+        public void setAppConfigProvider(ConfigurationProvider appConfigProvider) {
+            this.appConfigProvider = appConfigProvider;
+        }
+
         @Override
         protected void configure(HttpSecurity http) throws Exception {
 
             http
                     .csrf().disable()
                     .authorizeRequests().anyRequest().permitAll()
+                    .and()
+                    .requiresChannel().anyRequest().requires(appConfigProvider.getProperty("spring.security.requires.channel", String.class))
                     .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             ;
