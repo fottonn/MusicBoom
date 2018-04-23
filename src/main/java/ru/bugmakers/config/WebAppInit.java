@@ -1,10 +1,15 @@
 package ru.bugmakers.config;
 
+import org.springframework.util.Assert;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletRegistration;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
 
 /**
  * Created by Ivan
@@ -29,13 +34,30 @@ public class WebAppInit extends AbstractAnnotationConfigDispatcherServletInitial
     @Override
     protected void customizeRegistration(ServletRegistration.Dynamic registration) {
         int maxUploadSizeInMb = 5 * 1024 * 1024; // 5 MB
-        File uploadDir = new File(System.getProperty("user.dir") + "/temp");
-        uploadDir.getParentFile().mkdirs();
+        File uploadDir;
+        try {
+            uploadDir = new File(getUploadDir());
+        } catch (IOException e) {
+            throw new RuntimeException("Property 'multipart.temporary.upload.location' had not loaded", e);
+        }
+        Assert.isTrue(uploadDir.exists(), uploadDir.toString() + " - is not available");
         registration.setMultipartConfig(new MultipartConfigElement(
                 uploadDir.getAbsolutePath(),
                 maxUploadSizeInMb,
                 maxUploadSizeInMb * 5,
                 maxUploadSizeInMb / 2));
     }
+
+    private String getUploadDir() throws IOException {
+        Properties property = new Properties();
+        if ("dev".equalsIgnoreCase(System.getProperty("spring.profiles.active"))) {
+            property.load(getClass().getResourceAsStream("/app_config_dev.properties"));
+        } else {
+            property.load(getClass().getResourceAsStream("/app_config.properties"));
+        }
+
+        return property.getProperty("multipart.temporary.upload.location");
+    }
+
 
 }
