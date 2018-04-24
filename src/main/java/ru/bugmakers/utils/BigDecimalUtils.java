@@ -14,7 +14,7 @@ public class BigDecimalUtils {
      * Сумма за вычетом комиссии
      *
      * @param sum сумма
-     * @param fee комиссия в %
+     * @param fee наша комиссия в %
      * @return сумма за вычетом комиссии
      */
     public static BigDecimal withoutFee(BigDecimal sum, BigDecimal fee) {
@@ -25,11 +25,22 @@ public class BigDecimalUtils {
      * Вычисление комиссии в рублях
      *
      * @param sum сумма
-     * @param fee комиссия в %
+     * @param fee наша комиссия в %
      * @return комиссия в рублях
      */
     public static BigDecimal fee(BigDecimal sum, BigDecimal fee) {
         return sum.multiply(fee).divide(ONE_HUNDRED, 2, RoundingMode.UP);
     }
 
+    /**
+     * Наш доход от одной транзакции
+     *
+     * @param sum              сумма транзакции
+     * @param fee              наша комиссия в рублях
+     * @param paymentSystemFee комиссия платежной системы в %
+     * @return чистый доход (без комиссии платежной системы)
+     */
+    public static BigDecimal profit(BigDecimal sum, BigDecimal fee, BigDecimal paymentSystemFee) {
+        return fee.subtract(sum.multiply(paymentSystemFee).divide(ONE_HUNDRED, 2, RoundingMode.DOWN));
+    }
 }

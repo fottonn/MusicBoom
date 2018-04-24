@@ -1,6 +1,8 @@
 package ru.bugmakers.service;
 
+import org.cfg4j.provider.ConfigurationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,7 @@ public class TransactionService {
     private TransactionRepo transactionRepo;
     private RankPropsService rankPropsService;
     private UserService userService;
+    private ConfigurationProvider appConfigProvider;
 
     @Autowired
     public void setTransactionRepo(TransactionRepo transactionRepo) {
@@ -42,6 +45,12 @@ public class TransactionService {
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+
+    @Autowired
+    @Qualifier("appConfigProvider")
+    public void setAppConfigProvider(ConfigurationProvider appConfigProvider) {
+        this.appConfigProvider = appConfigProvider;
     }
 
     /**
@@ -61,7 +70,7 @@ public class TransactionService {
      * @return сумма выведенных пользователем денег, включая переведенные на кошельки других пользователей,
      * за всё время в формате ###.##
      */
-    public String  getAllDerivedMoney(Long userId) {
+    public String getAllDerivedMoney(Long userId) {
         return MONEY_FORMATTER.format(ofNullable(transactionRepo.getDerivedMoney(userId)).orElse(ZERO));
     }
 
@@ -112,7 +121,7 @@ public class TransactionService {
 
     /**
      * Сохранение транзакции в БД
-     *
+     * <p>
      * Если получатель денежных средств АРТИСТ, и перевод осуществляется на внутренний кошелек с других платежных
      * средств за исключением внутреннего кошелька, то вычитаем комиссию, установленную текущему артисту
      *
@@ -126,12 +135,17 @@ public class TransactionService {
             final BigDecimal fee = rankPropsService.getFeeByRank(recipient.getRank());
             transaction.setAmount(BigDecimalUtils.withoutFee(transaction.getAmount(), fee));
             transaction.setFee(BigDecimalUtils.fee(transaction.getAmount(), fee));
+            transaction.setProfit(BigDecimalUtils.profit(
+                    transaction.getAmount(),
+                    transaction.getFee(),
+                    appConfigProvider.getProperty("payment.system.fee", BigDecimal.class)));
         }
         transactionRepo.saveAndFlush(transaction);
     }
 
     /**
      * Метод поиска транзакии по ID
+     *
      * @param transactionId - id транзакции
      * @return объект транзакции
      */
@@ -141,7 +155,8 @@ public class TransactionService {
 
     /**
      * Метод который ищет все транзакции с определенным статусом
-     * @param status - статус транзакции {@link Status}
+     *
+     * @param status   - статус транзакции {@link Status}
      * @param pageable - информация о странице {@link Pageable}
      * @return - список транзакций
      */

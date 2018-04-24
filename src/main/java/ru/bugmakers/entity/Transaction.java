@@ -38,6 +38,9 @@ public class Transaction {
     @Column(name = "fee", scale = 2)
     private BigDecimal fee;
 
+    @Column(name = "profit", scale = 2)
+    private BigDecimal profit;
+
     @Column(name = "number")
     private String number;
 
@@ -106,6 +109,14 @@ public class Transaction {
 
     public void setFee(BigDecimal fee) {
         this.fee = fee;
+    }
+
+    public BigDecimal getProfit() {
+        return profit;
+    }
+
+    public void setProfit(BigDecimal profit) {
+        this.profit = profit;
     }
 
     public String getNumber() {
