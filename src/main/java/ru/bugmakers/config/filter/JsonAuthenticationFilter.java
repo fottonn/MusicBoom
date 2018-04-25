@@ -2,6 +2,7 @@ package ru.bugmakers.config.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -50,6 +51,7 @@ public class JsonAuthenticationFilter extends AbstractAuthenticationProcessingFi
             MbResponse mbResponse = MbResponse.error(mbException);
             String rs = mapper.writeValueAsString(mbResponse);
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+            response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
             response.getWriter().write(rs);
             response.flushBuffer();
         }));
