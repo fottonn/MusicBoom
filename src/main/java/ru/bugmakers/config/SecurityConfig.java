@@ -27,6 +27,7 @@ import ru.bugmakers.config.logout.MbLogoutSuccessHandler;
 
 import java.util.Arrays;
 
+import static org.springframework.http.HttpMethod.*;
 import static ru.bugmakers.enums.Role.*;
 
 /**
@@ -145,16 +146,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(URLS)
                     .and()
                     .authorizeRequests()
-                    .antMatchers("/webapi/admin/**").hasAuthority(ADMIN.name())
-                    .antMatchers("/webapi/artist/**").hasAuthority(ARTIST.name())
-                    .antMatchers("/webapi/operator/**").hasAuthority(OPERATOR.name())
-                    .antMatchers("/mapi/artist/**").hasAuthority(ARTIST.name())
-                    .antMatchers("/mapi/listener/**").hasAuthority(LISTENER.name())
-                    .antMatchers("/mapi/registereduser/**").hasAnyAuthority(ARTIST.name(), LISTENER.name())
-                    .antMatchers("/logout").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
-                    .antMatchers("/mapi/map.performers").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
-                    .antMatchers("/mapi/artist.get").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
-                    .antMatchers("/mapi/transaction").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
+                    .antMatchers(POST,"/webapi/admin/**").hasAuthority(ADMIN.name())
+                    .antMatchers(POST, "/webapi/artist/**").hasAuthority(ARTIST.name())
+                    .antMatchers(POST,"/webapi/operator/**").hasAuthority(OPERATOR.name())
+                    .antMatchers(POST,"/mapi/artist/**").hasAuthority(ARTIST.name())
+                    .antMatchers(POST,"/mapi/listener/**").hasAuthority(LISTENER.name())
+                    .antMatchers(POST,"/mapi/registereduser/**").hasAnyAuthority(ARTIST.name(), LISTENER.name())
+                    .antMatchers(POST,"/logout").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
+                    .antMatchers(POST,"/mapi/map.performers").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
+                    .antMatchers(POST,"/mapi/artist.get").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
+                    .antMatchers(POST,"/mapi/transaction").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
                     .and()
                     .requiresChannel().anyRequest().requires(appConfigProvider.getProperty("spring.security.requires.channel", String.class))
                     .and()
@@ -199,7 +200,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             http
                     .csrf().disable()
                     .requestMatchers()
-                    .antMatchers(HttpMethod.POST, "/authentication")
+                    .antMatchers(POST, "/authentication")
                     .and()
                     .requiresChannel().anyRequest().requires(appConfigProvider.getProperty("spring.security.requires.channel", String.class))
                     .and()
@@ -250,8 +251,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             http
                     .csrf().disable()
                     .requestMatchers()
-                    .antMatchers(HttpMethod.GET, "/authentication")
-                    .antMatchers(HttpMethod.POST, "/registration")
+                    .antMatchers(GET, "/authentication")
+                    .antMatchers(POST, "/registration")
                     .and()
                     .requiresChannel().anyRequest().requires(appConfigProvider.getProperty("spring.security.requires.channel", String.class))
                     .and()
