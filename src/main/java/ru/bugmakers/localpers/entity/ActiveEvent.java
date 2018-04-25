@@ -28,6 +28,9 @@ public class ActiveEvent {
     @Column(name = "end_time")
     private LocalDateTime endTime;
 
+    @Column(name = "last_update")
+    private LocalDateTime lastUpdate;
+
     public ActiveEvent() {
     }
 
@@ -36,6 +39,7 @@ public class ActiveEvent {
         this.lng = lng;
         this.lat = lat;
         this.beginTime = LocalDateTime.now();
+        this.lastUpdate = this.beginTime;
     }
 
     public Long getUserId() {
@@ -76,5 +80,13 @@ public class ActiveEvent {
 
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
+    }
+
+    public LocalDateTime getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(LocalDateTime lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 }

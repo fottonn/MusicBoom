@@ -10,7 +10,7 @@ import org.springframework.context.annotation.*;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
-import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.*;
 import org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -33,10 +33,10 @@ import java.util.concurrent.Executor;
  */
 @Configuration
 @ComponentScan(value = "ru.bugmakers", excludeFilters = @Filter(Configuration.class))
-@Import({SecurityConfig.class, PersistConfig.class, LocalPersistConfig.class})
+@Import({SecurityConfig.class, PersistConfig.class, LocalPersistConfig.class, ScheduleConfig.class})
 @EnableWebMvc
 @EnableAsync
-public class AppConfig implements WebMvcConfigurer {
+public class AppConfig implements WebMvcConfigurer, AsyncConfigurer{
 
     @Bean
     public RestTemplate restTemplate() {
@@ -82,8 +82,8 @@ public class AppConfig implements WebMvcConfigurer {
                 .build();
     }
 
-    @Bean
-    public Executor taskExecutor() {
+    @Override
+    public Executor getAsyncExecutor() {
         return new SimpleAsyncTaskExecutor();
     }
 
