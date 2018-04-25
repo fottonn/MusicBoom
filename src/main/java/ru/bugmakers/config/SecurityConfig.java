@@ -141,7 +141,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             http
                     .csrf().disable()
-                    .anonymous().disable()
                     .requestMatchers()
                     .antMatchers(URLS)
                     .and()
