@@ -15,6 +15,7 @@ public class EmailTextBuilder {
     private static final String NAME = "%NAME%";
     private static final String LAST_NAME = "%LASTNAME%";
     private static final String BODY = "%BODY%";
+    private static final String EMPTY = "";
 
     static {
         StringBuilder sb = new StringBuilder();
@@ -28,8 +29,8 @@ public class EmailTextBuilder {
 
     public static String build(String name, String lastName, String body) {
         return TEXT_TEMPLATE
-                .replaceAll(NAME, name)
-                .replaceAll(LAST_NAME, lastName)
+                .replaceAll(NAME, name != null ? name : EMPTY)
+                .replaceAll(LAST_NAME, lastName != null ? lastName : EMPTY)
                 .replace(BODY, body);
     }
 
