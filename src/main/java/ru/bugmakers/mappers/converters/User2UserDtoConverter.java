@@ -6,6 +6,7 @@ import ru.bugmakers.dto.common.StatOfPerformanceDTO;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.service.EventService;
+import ru.bugmakers.service.ImagesService;
 import ru.bugmakers.service.PhotoService;
 import ru.bugmakers.service.TransactionService;
 
@@ -23,6 +24,7 @@ public class User2UserDtoConverter implements MbConverter<User, UserDTO> {
     private TransactionService transactionService;
     private EventService eventService;
     private PhotoService photoService;
+    private ImagesService imagesService;
 
     @Autowired
     public void setTransactionService(TransactionService transactionService) {
@@ -37,6 +39,11 @@ public class User2UserDtoConverter implements MbConverter<User, UserDTO> {
     @Autowired
     public void setPhotoService(PhotoService photoService) {
         this.photoService = photoService;
+    }
+
+    @Autowired
+    public void setImagesService(ImagesService imagesService) {
+        this.imagesService = imagesService;
     }
 
     @Override
@@ -74,7 +81,7 @@ public class User2UserDtoConverter implements MbConverter<User, UserDTO> {
                 .withStatOfPerformance(getStatOfPerformance(source.getId()))
                 .withAllowOfPersonalData(source.isPersonalDataConsent())
                 .withArtistContact(source.isContractConsent())
-                .withAvatar(source.getAvatar())
+                .withAvatar(imagesService.fullImagePath(source.getAvatar()))
                 .withCardNumber(source.getCardNumber() != null ? getMappedCardNumber(source.getCardNumber()) : null)
                 .withPhotos(photoService.getPhotosByUserId(source.getId()));
     }
