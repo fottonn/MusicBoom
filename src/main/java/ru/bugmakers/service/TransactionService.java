@@ -133,10 +133,11 @@ public class TransactionService {
                 && transaction.getRecipientMoneyBearerKind() == MoneyBearerKind.WALLET
                 && transaction.getSenderMoneyBearerKind() != MoneyBearerKind.WALLET) {
             final BigDecimal fee = rankPropsService.getFeeByRank(recipient.getRank());
-            transaction.setAmount(BigDecimalUtils.withoutFee(transaction.getAmount(), fee));
-            transaction.setFee(BigDecimalUtils.fee(transaction.getAmount(), fee));
+            BigDecimal amount = new BigDecimal(transaction.getAmount().toString());
+            transaction.setAmount(BigDecimalUtils.withoutFee(amount, fee));
+            transaction.setFee(BigDecimalUtils.fee(amount, fee));
             transaction.setProfit(BigDecimalUtils.profit(
-                    transaction.getAmount(),
+                    amount,
                     transaction.getFee(),
                     appConfigProvider.getProperty("payment.system.fee", BigDecimal.class)));
         }
