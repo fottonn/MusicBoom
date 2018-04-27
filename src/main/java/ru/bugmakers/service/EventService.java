@@ -10,6 +10,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Optional;
 
 import static ru.bugmakers.utils.DecimalFormatters.HOURS_FORMATTER;
 import static ru.bugmakers.utils.DecimalFormatters.MONEY_FORMATTER;
@@ -76,6 +78,18 @@ public class EventService {
     }
 
     /**
+     * Общее время выступлений в текущем месяце
+     *
+     * @param userId идентификатор пользователя
+     * @return время выступлений в текущем месяце в часах
+     */
+    public String getHoursOfCurrentMonth(Long userId) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime monthStart = LocalDateTime.of(now.toLocalDate(), LocalTime.MIN);
+        return getPeriodEventsTime(userId, monthStart, LocalDateTime.now());
+    }
+
+    /**
      * Среднее количество заработанных денег в месяц за всё время
      *
      * @param userId идентификатор пользователя
@@ -95,6 +109,18 @@ public class EventService {
         } else {
             return String.valueOf(0);
         }
+    }
+
+    /**
+     * Количество денег, заработанных в текущем месяце
+     *
+     * @param userId идентификатор пользователя
+     * @return деньги, заработанные в текущем месяце в рублях
+     */
+    public String getMoneyOfCurrentMonth(Long userId) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime monthStart = LocalDateTime.of(now.toLocalDate(), LocalTime.MIN);
+        return getMoneyOfPeriod(userId, monthStart, now);
     }
 
     /**
@@ -131,7 +157,7 @@ public class EventService {
      * Общее время выступлений в часах за период
      *
      * @param userId идентификатор пользователя
-     * @param start  начало опериода
+     * @param start  начало периода
      * @param end    конец периода
      * @return время выступлений в часах за период
      */
@@ -139,8 +165,25 @@ public class EventService {
         if (userId == null) return null;
         if (start == null) start = eventRepo.getFirstStartDate(userId);
         if (end == null) end = eventRepo.getLastEndDate(userId);
-        BigDecimal duration = new BigDecimal(eventRepo.getAllEventDurationForPeriod(userId, start, end));
+        Long allEventDurationForPeriod = Optional.ofNullable(eventRepo.getAllEventDurationForPeriod(userId, start, end)).orElse(0L);
+        BigDecimal duration = new BigDecimal(allEventDurationForPeriod);
         BigDecimal hoursDuration = duration.divide(SIXTY, 1, RoundingMode.HALF_UP);
         return HOURS_FORMATTER.format(hoursDuration);
+    }
+
+    /**
+     * Количество заработанных денег за период
+     *
+     * @param userId идентификатор пользователя
+     * @param start начало периода
+     * @param end конец периода
+     * @return деньги заработанные за период в рублях
+     */
+    public String getMoneyOfPeriod(Long userId, LocalDateTime start, LocalDateTime end) {
+        if (userId == null) return null;
+        if (start == null) start = eventRepo.getFirstStartDate(userId);
+        if (end == null) end = eventRepo.getLastEndDate(userId);
+        BigDecimal receivedMoneyForPeriod = Optional.ofNullable(transactionRepo.getReceivedMoneyForPeriod(userId, start, end)).orElse(BigDecimal.ZERO);
+        return MONEY_FORMATTER.format(receivedMoneyForPeriod);
     }
 }

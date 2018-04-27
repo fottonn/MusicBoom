@@ -60,4 +60,13 @@ public class ActiveEventService {
     public List<ActiveEvent> getAllActiveEvents() {
         return activeEventRepo.findAll();
     }
+
+    /**
+     * Удаление активного выступления
+     *
+     * @param activeEvent выступление
+     */
+    public void deletActiveEvent(ActiveEvent activeEvent) {
+        activeEventRepo.delete(activeEvent);
+    }
 }

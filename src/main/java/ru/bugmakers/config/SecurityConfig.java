@@ -18,6 +18,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import ru.bugmakers.config.filter.JsonAuthenticationFilter;
 import ru.bugmakers.config.jwt.FailureTokenAuthenticationEntryPoint;
 import ru.bugmakers.config.jwt.TokenAuthenticationProvider;
@@ -77,6 +80,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 jsonAuthenticationProvider(),
                 tokenAuthenticationProvider()
         ));
+    }
+
+    //===================CORS
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     @Override

@@ -70,7 +70,7 @@ public class User2UserDtoConverter implements MbConverter<User, UserDTO> {
                 .withTlg(source.getTlgContact())
                 .withWapp(source.getWhatsappContact())
                 .withOrderable(source.getArtistInfo() != null && source.getArtistInfo().isOrderable())
-                .withRegDate(source.getRegistrationDate() != null ? source.getRegistrationDate().format(DATE_TIME_FORMATTER) : null)
+                .withRegDate(source.getRegistrationDate() != null ? source.getRegistrationDate().format(DATE_FORMATTER) : null)
                 .withAllEarnedMoney(transactionService.getAllReceivedMoney(source.getId()))
                 .withAllDerivedMoney(transactionService.getAllDerivedMoney(source.getId()))
                 .withCityRating(source.getArtistRating() != null ? source.getArtistRating().getCityRatng() : null)
@@ -100,8 +100,8 @@ public class User2UserDtoConverter implements MbConverter<User, UserDTO> {
         if (id == null) return null;
         return new StatOfPerformanceDTO(
                 eventService.getAllEvents(id),
-                eventService.getHoursOfMonth(id),
-                eventService.getMoneyOfMonth(id),
+                eventService.getHoursOfCurrentMonth(id),
+                eventService.getMoneyOfCurrentMonth(id),
                 eventService.getAverageEventTime(id));
     }
 

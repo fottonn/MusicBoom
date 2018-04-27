@@ -13,8 +13,7 @@ import static java.util.Optional.ofNullable;
 public class UserDto2ArtistInfoEnricher implements MBEnricher<UserDTO, ArtistInfo> {
     @Override
     public void enrich(UserDTO source, ArtistInfo target) {
-        if (source != null) {
-            if (target == null) target = new ArtistInfo();
+        if (source != null && target != null) {
             target.setOrderable(ofNullable(source.isOrderable()).orElse(target.isOrderable()));
             target.setCreativity(ofNullable(source.getCreativity()).orElse(target.getCreativity()));
             target.setGenre(ofNullable(source.getGenre()).orElse(target.getGenre()));

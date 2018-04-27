@@ -118,6 +118,7 @@ public class ArtistDesktopFunctionalMobile extends MbController {
         try {
             ActiveEvent activeEvent = activeEventService.getActiveEventByUserId(principal.getUser().getId());
             if (activeEvent == null) throw MbException.create(MbError.CME02);
+            activeEventService.deletActiveEvent(activeEvent);
             activeEvent.setEndTime(LocalDateTime.now());
             Event event = activeEvent2EventConverter.convert(activeEvent);
             User user = userService.findUserById(activeEvent.getUserId());

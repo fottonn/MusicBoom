@@ -14,6 +14,8 @@ import ru.bugmakers.service.EmailService;
 import ru.bugmakers.service.UserService;
 import ru.bugmakers.utils.SecurityContextUtils;
 
+import java.time.LocalDateTime;
+
 /**
  * Created by Ivan
  */
@@ -72,6 +74,7 @@ public abstract class AbstractRegistrator implements Registrator {
         } else {
             userDTO2UserEnricher.enrich(userDto, user);
             user.setLogin(userDto.getPhoneNumber());
+            user.setRegistrationDate(LocalDateTime.now());
         }
         user.setUserType(userType);
         switch (userType) {

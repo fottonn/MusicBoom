@@ -338,6 +338,7 @@ public class User {
     }
 
     public ArtistInfo getArtistInfo() {
+        if (artistInfo == null) artistInfo = new ArtistInfo();
         return artistInfo;
     }
 
