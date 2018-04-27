@@ -50,7 +50,7 @@ public class User2UserDtoConverter implements MbConverter<User, UserDTO> {
     public UserDTO convert(User source) {
         if (source == null) return null;
         return new UserDTO()
-                .withUserType(source.getUserType().name())
+                .withUserType(source.getUserType() != null ? source.getUserType().name() : null)
                 .withId(source.getId().toString())
                 .withName(source.getName())
                 .withSurname(source.getSurName())
