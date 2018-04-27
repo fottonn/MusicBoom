@@ -141,6 +141,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             http
                     .csrf().disable()
+                    .cors()
+                    .and()
                     .anonymous().disable()
                     .requestMatchers()
                     .antMatchers(URLS)
@@ -199,6 +201,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             http
                     .csrf().disable()
+                    .cors()
+                    .and()
                     .requestMatchers()
                     .antMatchers(POST, "/authentication")
                     .and()
@@ -250,6 +254,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             http
                     .csrf().disable()
+                    .cors()
+                    .and()
                     .requestMatchers()
                     .antMatchers(GET, "/authentication")
                     .antMatchers(POST, "/registration")
@@ -293,6 +299,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             http
                     .csrf().disable()
+                    .cors()
+                    .and()
                     .authorizeRequests().anyRequest().permitAll()
                     .and()
                     .requiresChannel().anyRequest().requires(appConfigProvider.getProperty("spring.security.requires.channel", String.class))
