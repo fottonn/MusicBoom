@@ -38,7 +38,13 @@ public class RegistrationController extends MbController {
         RegistrationResponse rs;
         try {
             registrationRequestValidator.validate(rq);
-            Registrator registrator = registratorCreator.getRegistrator();
+            SocialProvider provider;
+            try {
+                provider = SocialProvider.valueOf(rq.getProvider().toUpperCase());
+            } catch (Exception e) {
+                provider = null;
+            }
+            Registrator registrator = registratorCreator.getRegistrator(provider);
             UserDTO user = registrator.register(UserType.valueOf(userType.toUpperCase()), rq.getUser());
             rs = new RegistrationResponse();
             rs.setUser(user);
@@ -48,6 +54,8 @@ public class RegistrationController extends MbController {
         return ResponseEntity.ok(rs);
     }
 
+    //Не используем
+    @Deprecated
     @PostMapping(params = {"provider", "user_type"})
     public ResponseEntity<MbResponse> socialRegister(@RequestBody RegistrationRequest rq,
                                                      @RequestParam("user_type") String userType,

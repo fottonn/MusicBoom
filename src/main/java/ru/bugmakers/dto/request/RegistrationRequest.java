@@ -8,6 +8,7 @@ import ru.bugmakers.dto.common.UserDTO;
 public class RegistrationRequest {
 
     private UserDTO user;
+    private String provider;
 
     public UserDTO getUser() {
         return user;
@@ -15,5 +16,13 @@ public class RegistrationRequest {
 
     public void setUser(UserDTO user) {
         this.user = user;
+    }
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
     }
 }

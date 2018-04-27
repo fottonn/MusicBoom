@@ -48,6 +48,7 @@ public class UserDTO implements Serializable {
     private String avatar;
     private List<String> photos;
     private String nameRepresentation;
+    private boolean registered;
 
     public UserDTO() {
     }
@@ -353,6 +354,14 @@ public class UserDTO implements Serializable {
         this.cardNumber = cardNumber;
     }
 
+    public boolean isRegistered() {
+        return registered;
+    }
+
+    public void setRegistered(boolean registered) {
+        this.registered = registered;
+    }
+
     public UserDTO withCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
         return this;
@@ -530,6 +539,11 @@ public class UserDTO implements Serializable {
 
     public UserDTO withPublicName(String publicName) {
         setPublicName(publicName);
+        return this;
+    }
+
+    public UserDTO withRegistered(boolean registered) {
+        setRegistered(registered);
         return this;
     }
 }

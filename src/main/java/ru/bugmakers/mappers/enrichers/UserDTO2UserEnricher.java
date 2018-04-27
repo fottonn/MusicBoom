@@ -1,5 +1,6 @@
 package ru.bugmakers.mappers.enrichers;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.bugmakers.dto.common.UserDTO;
@@ -30,6 +31,7 @@ public class UserDTO2UserEnricher implements MBEnricher<UserDTO, User> {
     @Override
     public void enrich(UserDTO source, User target) {
 
+        target.setPhone(ofNullable(source.getPhoneNumber()).orElse(target.getPhone()));
         target.setCity(ofNullable(source.getCity()).orElse(target.getCity()));
         target.setName(ofNullable(source.getName()).orElse(target.getName()));
         target.setSurName(ofNullable(source.getSurname()).orElse(target.getSurName()));
@@ -40,7 +42,9 @@ public class UserDTO2UserEnricher implements MBEnricher<UserDTO, User> {
         target.setPatronymic(ofNullable(source.getPatronymic()).orElse(target.getPatronymic()));
         target.setAboutMe(ofNullable(source.getAboutMe()).orElse(target.getAboutMe()));
         target.setNickname(ofNullable(source.getNickname()).orElse(target.getNickname()));
-        target.setBirthDay(ofNullable(LocalDate.parse(source.getBirthday(), DATE_FORMATTER)).orElse(target.getBirthDay()));
+        if (StringUtils.isNotBlank(source.getBirthday())) {
+            target.setBirthDay(LocalDate.parse(source.getBirthday(), DATE_FORMATTER));
+        }
         target.setCountry(ofNullable(source.getCountry()).orElse(target.getCountry()));
         target.setCity(ofNullable(source.getCity()).orElse(target.getCity()));
         target.setSex(Arrays.stream(Sex.values()).anyMatch(sex -> sex.name().equalsIgnoreCase(source.getSex())) ?

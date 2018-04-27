@@ -18,24 +18,30 @@ public class RegistratorCreator {
         this.context = context;
     }
 
-    public Registrator getRegistrator() {
-        return context.getBeansOfType(Registrator.class).get("mbRegistrator");
-    }
-
     public Registrator getRegistrator(SocialProvider provider) {
         Registrator registrator = null;
-        switch (provider) {
-            case VK:
-                registrator = context.getBeansOfType(Registrator.class).get("vkRegistrator");
-                break;
-            case FB:
-                registrator = context.getBeansOfType(Registrator.class).get("fbRegistrator");
-                break;
-            case GOOGLE:
-                registrator = context.getBeansOfType(Registrator.class).get("googleRegistrator");
-                break;
+
+        if (provider != null) {
+            switch (provider) {
+                case VK:
+                    registrator = context.getBeansOfType(Registrator.class).get("vkRegistrator");
+                    break;
+                case FB:
+                    registrator = context.getBeansOfType(Registrator.class).get("fbRegistrator");
+                    break;
+                case GOOGLE:
+                    registrator = context.getBeansOfType(Registrator.class).get("googleRegistrator");
+                    break;
+            }
+        } else {
+            registrator = getDefaultRegistrator();
         }
+
         return registrator;
+    }
+
+    private Registrator getDefaultRegistrator() {
+        return context.getBeansOfType(Registrator.class).get("mbRegistrator");
     }
 
 

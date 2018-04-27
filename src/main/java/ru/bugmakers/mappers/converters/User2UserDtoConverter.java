@@ -83,7 +83,9 @@ public class User2UserDtoConverter implements MbConverter<User, UserDTO> {
                 .withArtistContact(source.isContractConsent())
                 .withAvatar(imagesService.fullImagePath(source.getAvatar()))
                 .withCardNumber(source.getCardNumber() != null ? getMappedCardNumber(source.getCardNumber()) : null)
-                .withPhotos(photoService.getPhotosByUserId(source.getId()));
+                .withPhotos(photoService.getPhotosByUserId(source.getId()))
+                .withRegistered(source.isRegistered())
+                ;
     }
 
     private String getMappedCardNumber(String cardNumber) {
