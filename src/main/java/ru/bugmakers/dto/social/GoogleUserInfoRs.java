@@ -13,6 +13,7 @@ import java.io.Serializable;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GoogleUserInfoRs implements Serializable {
 
+    @JsonProperty(value = "sub")
     private String id;
 
     public String getId() {

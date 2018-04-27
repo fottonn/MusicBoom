@@ -49,9 +49,9 @@ public class GoogleAuthenticator implements Authenticator {
                         .scheme(HTTPS)
                         .host(GOOGLE_API_HOST)
                         .addPathSegment("oauth2")
-                        .addPathSegment("v2")
-                        .addPathSegment("userinfo")
-                        .addQueryParameter("access_token", token)
+                        .addPathSegment("v3")
+                        .addPathSegment("tokeninfo")
+                        .addQueryParameter("id_token", token)
                         .build().uri();
         final GoogleUserInfoRs googleUserInfoRs = restTemplate.getForObject(googleGetUserInfoUrl, GoogleUserInfoRs.class);
 
