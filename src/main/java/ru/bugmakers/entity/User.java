@@ -9,7 +9,9 @@ import ru.bugmakers.enums.*;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import static ru.bugmakers.entity.EntityConstants.*;
 
@@ -118,9 +120,6 @@ public class User {
 
     @Column(name = "contract_consent")
     private boolean contractConsent = false;
-
-    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<Event> events;
 
     @OneToOne(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private ArtistRating artistRating;
@@ -387,18 +386,6 @@ public class User {
         this.contractConsent = contractConsent;
     }
 
-    public List<Event> getEvents() {
-        if (events == null) events = new ArrayList<>();
-        return events;
-    }
-
-    public void setEvents(List<Event> events) {
-        if (events != null) events.forEach(event -> {
-            if (event != null) event.setUser(this);
-        });
-        this.events = events;
-    }
-
     public ArtistRating getArtistRating() {
         return artistRating;
     }
@@ -572,11 +559,6 @@ public class User {
 
     public User withContractConsent(boolean contractConsent) {
         setContractConsent(contractConsent);
-        return this;
-    }
-
-    public User withEvents(List<Event> events) {
-        setEvents(events);
         return this;
     }
 

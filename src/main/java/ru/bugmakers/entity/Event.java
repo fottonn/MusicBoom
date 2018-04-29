@@ -52,9 +52,8 @@ public class Event {
     @Column(name = "lat")
     private Double lat;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "user_id")
+    private Long userId;
 
     public Long getId() {
         return id;
@@ -128,12 +127,12 @@ public class Event {
         this.lat = lat;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Long getEventDuration() {

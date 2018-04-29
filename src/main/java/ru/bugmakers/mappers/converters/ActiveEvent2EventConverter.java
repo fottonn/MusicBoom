@@ -16,6 +16,7 @@ public class ActiveEvent2EventConverter implements MbConverter<ActiveEvent, Even
         event.setLng(source.getLng());
         event.setStartDate(source.getBeginTime());
         event.setEndDate(source.getEndTime());
+        event.setUserId(source.getUserId());
         return event;
     }
 }

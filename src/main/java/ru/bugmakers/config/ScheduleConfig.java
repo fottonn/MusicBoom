@@ -2,30 +2,20 @@ package ru.bugmakers.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.SchedulingConfigurer;
-import org.springframework.scheduling.config.ScheduledTaskRegistrar;
-import org.springframework.scheduling.config.TriggerTask;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 /**
  * Created by Ivan
  */
 @Configuration
-@EnableScheduling
-public class ScheduleConfig implements SchedulingConfigurer {
-
-    @Override
-    public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
-        taskRegistrar.setScheduler(taskScheduler());
-//        taskRegistrar.addTriggerTask();
-    }
+public class ScheduleConfig {
 
     @Bean(destroyMethod = "shutdown")
-    public ExecutorService taskScheduler() {
-        return Executors.newScheduledThreadPool(10);
+    public ThreadPoolTaskScheduler eventsEndThreadPoolTaskScheduler() {
+        ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
+        scheduler.setPoolSize(1);
+        scheduler.setThreadNamePrefix("events-end-");
+        return scheduler;
     }
 
 }

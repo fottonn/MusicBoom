@@ -16,15 +16,12 @@ import ru.bugmakers.dto.response.mobile.EndPerformanceResponseMobile;
 import ru.bugmakers.dto.response.mobile.PerformanceStartResponseMobile;
 import ru.bugmakers.dto.response.mobile.ValidatePerformanceResponseMobile;
 import ru.bugmakers.entity.Event;
-import ru.bugmakers.entity.User;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.localpers.entity.ActiveEvent;
 import ru.bugmakers.localpers.service.ActiveEventService;
-import ru.bugmakers.mappers.converters.ActiveEvent2EventConverter;
-import ru.bugmakers.service.EventService;
+import ru.bugmakers.service.PerformanceService;
 import ru.bugmakers.service.TransactionService;
-import ru.bugmakers.service.UserService;
 
 import java.time.LocalDateTime;
 
@@ -36,10 +33,8 @@ import java.time.LocalDateTime;
 public class ArtistDesktopFunctionalMobile extends MbController {
 
     private ActiveEventService activeEventService;
-    private EventService eventService;
-    private UserService userService;
-    private ActiveEvent2EventConverter activeEvent2EventConverter;
     private TransactionService transactionService;
+    private PerformanceService performanceService;
 
     @Autowired
     public void setActiveEventService(ActiveEventService activeEventService) {
@@ -47,23 +42,13 @@ public class ArtistDesktopFunctionalMobile extends MbController {
     }
 
     @Autowired
-    public void setEventService(EventService eventService) {
-        this.eventService = eventService;
-    }
-
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    @Autowired
-    public void setActiveEvent2EventConverter(ActiveEvent2EventConverter activeEvent2EventConverter) {
-        this.activeEvent2EventConverter = activeEvent2EventConverter;
-    }
-
-    @Autowired
     public void setTransactionService(TransactionService transactionService) {
         this.transactionService = transactionService;
+    }
+
+    @Autowired
+    public void setPerformanceService(PerformanceService performanceService) {
+        this.performanceService = performanceService;
     }
 
     @PostMapping(value = "/performance.start")
@@ -71,11 +56,11 @@ public class ArtistDesktopFunctionalMobile extends MbController {
                                                        @RequestBody PerformanceStartRequestMobile rq) {
         PerformanceStartResponseMobile rs;
         try {
-            ActiveEvent activeEvent = new ActiveEvent(
+            activeEventService.startEvent(
                     principal.getUser().getId(),
                     Double.valueOf(rq.getLongitude()),
-                    Double.valueOf(rq.getLatitude()));
-            activeEventService.saveActiveEvent(activeEvent);
+                    Double.valueOf(rq.getLatitude())
+            );
             rs = new PerformanceStartResponseMobile();
         } catch (Exception e) {
             return ResponseEntity.ok(MbResponse.error(e));
@@ -117,18 +102,11 @@ public class ArtistDesktopFunctionalMobile extends MbController {
         try {
             ActiveEvent activeEvent = activeEventService.getActiveEventByUserId(principal.getUser().getId());
             if (activeEvent == null) throw MbException.create(MbError.CME02);
-            activeEventService.deletActiveEvent(activeEvent);
-            activeEvent.setEndTime(LocalDateTime.now());
-            Event event = activeEvent2EventConverter.convert(activeEvent);
-            User user = userService.findUserById(activeEvent.getUserId());
-            event.setUser(user);
-            event = eventService.saveEvent(event);
-
+            Event event = performanceService.performanceEnd(activeEvent);
             String earnedMoney = transactionService.getReceivedMoneyForPeriod(
-                    user.getId(),
+                    event.getUserId(),
                     event.getStartDate(),
                     event.getEndDate());
-
             rs = new EndPerformanceResponseMobile();
             rs.setEarnedMoney(earnedMoney);
         } catch (Exception e) {
