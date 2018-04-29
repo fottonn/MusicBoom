@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.bugmakers.dto.common.UserDTO;
+import ru.bugmakers.entity.ArtistInfo;
 import ru.bugmakers.entity.Email;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.NameRepresentation;
@@ -55,6 +56,8 @@ public class UserDTO2UserEnricher implements MBEnricher<UserDTO, User> {
         target.setNameRepresentation(Arrays.stream(NameRepresentation.values())
                 .anyMatch(nameRepresentation -> nameRepresentation.name().equalsIgnoreCase(source.getNameRepresentation())) ?
                 NameRepresentation.valueOf(source.getNameRepresentation().toUpperCase()) : target.getNameRepresentation());
+        ArtistInfo artistInfo = target.getArtistInfo();
+        artistInfo.setUser(target);
         userDto2ArtistInfoEnricher.enrich(source, target.getArtistInfo());
     }
 

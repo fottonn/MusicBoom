@@ -1,6 +1,8 @@
 package ru.bugmakers.controller.common.registration;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.Role;
@@ -15,6 +17,7 @@ import ru.bugmakers.service.UserService;
 import ru.bugmakers.utils.SecurityContextUtils;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 /**
  * Created by Ivan
@@ -27,6 +30,7 @@ public abstract class AbstractRegistrator implements Registrator {
     private User2UserDtoConverter user2UserDtoConverter;
     private UserDTO2UserEnricher userDTO2UserEnricher;
     private EmailService emailService;
+    private PasswordEncoder passwordEncoder;
 
 
     @Autowired
@@ -57,6 +61,11 @@ public abstract class AbstractRegistrator implements Registrator {
         this.emailService = emailService;
     }
 
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
     @Override
     public UserDTO register(UserType userType, UserDTO userDto) throws MbException {
 
@@ -75,6 +84,11 @@ public abstract class AbstractRegistrator implements Registrator {
             userDTO2UserEnricher.enrich(userDto, user);
             user.setLogin(userDto.getPhoneNumber());
             user.setRegistrationDate(LocalDateTime.now());
+            if (StringUtils.isNotBlank(userDto.getPassword())) {
+                user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            }
+            user.setPersonalDataConsent(Optional.ofNullable(userDto.getIsAgreementOfPersonalData()).orElse(false));
+            user.setContractConsent(Optional.ofNullable(userDto.getIsArtistContract()).orElse(false));
         }
         user.setUserType(userType);
         switch (userType) {

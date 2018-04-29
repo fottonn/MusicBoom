@@ -93,7 +93,7 @@ public class User2UserDtoConverter implements MbConverter<User, UserDTO> {
         for (int i = 4; i < 12; i++) {
             chars[i] = '*';
         }
-        return Arrays.toString(chars);
+        return new StringBuilder().append(chars).toString();
     }
 
     private StatOfPerformanceDTO getStatOfPerformance(Long id) {

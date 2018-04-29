@@ -167,7 +167,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(POST, "/webapi/artist/**").hasAuthority(ARTIST.name())
                     .antMatchers(POST,"/webapi/operator/**").hasAuthority(OPERATOR.name())
                     .antMatchers(POST,"/mapi/artist/**").hasAuthority(ARTIST.name())
-                    .antMatchers(POST,"/mapi/listener/**").hasAuthority(LISTENER.name())
+                    .antMatchers(POST,"/mapi/listener/**").hasAnyAuthority(LISTENER.name(), ARTIST.name())
                     .antMatchers(POST,"/mapi/registereduser/**").hasAnyAuthority(ARTIST.name(), LISTENER.name())
                     .antMatchers(POST,"/logout").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
                     .antMatchers(POST,"/mapi/map.performers").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())

@@ -50,7 +50,7 @@ public class PhotoService {
     @Transactional
     public void deletePhotos(Collection<String> photos) {
         if (CollectionUtils.isNotEmpty(photos)) {
-            photos.forEach(photo -> photoRepo.deleteByTitle(photo));
+            photos.forEach(photo -> photoRepo.deleteByTitle(photo.substring(photo.lastIndexOf("/") + 1)));
             photoRepo.flush();
         }
     }

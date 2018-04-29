@@ -44,6 +44,7 @@ public class ArtistFinanceManagementService {
      */
     public void attachCard(String cardNumber, User user) throws MbException {
         user.setCardNumber(cardNumber);
+        user.setLinkedCard(true);
         User savedUser = userService.saveUser(user);
         if (savedUser == null) {
             throw MbException.create(MbError.CME04);
@@ -59,6 +60,7 @@ public class ArtistFinanceManagementService {
      */
     public void detachCard(User user) throws MbException {
         user.setCardNumber(null);
+        user.setLinkedCard(false);
         User savedUser = userService.saveUser(user);
         if (savedUser == null) {
             throw MbException.create(MbError.CME04);
