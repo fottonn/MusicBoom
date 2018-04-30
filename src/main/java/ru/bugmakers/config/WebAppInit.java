@@ -6,8 +6,6 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletRegistration;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -33,7 +31,7 @@ public class WebAppInit extends AbstractAnnotationConfigDispatcherServletInitial
 
     @Override
     protected void customizeRegistration(ServletRegistration.Dynamic registration) {
-        int maxUploadSizeInMb = 5 * 1024 * 1024; // 5 MB
+        int maxUploadSizeInMb = 10 * 1024 * 1024; // 10 MB
         File uploadDir;
         try {
             uploadDir = new File(getUploadDir());

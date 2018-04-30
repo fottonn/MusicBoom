@@ -32,6 +32,6 @@ public class ActiveEvent2ArtistLocationConverter implements MbConverter<ActiveEv
                 String.valueOf(source.getUserId()),
                 String.valueOf(source.getLng()),
                 String.valueOf(source.getLat()),
-                imagesService.fullImagePath(userService.findUserById(source.getUserId()).getAvatar()));
+                imagesService.fullImagePath(userService.findUserById(source.getUserId()).getIcon()));
     }
 }

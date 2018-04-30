@@ -127,6 +127,9 @@ public class User {
     @Column(name = "avatar")
     private String avatar;
 
+    @Column(name = "icon")
+    private String icon;
+
     @Column(name = "linked_card")
     private boolean linkedCard = false;
 
@@ -401,6 +404,14 @@ public class User {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
     public boolean isLinkedCard() {
