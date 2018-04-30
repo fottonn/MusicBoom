@@ -15,8 +15,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Ayrat on 25.01.2018.
@@ -57,28 +55,16 @@ public class ImagesService {
     /**
      * Сохранение аватарки
      *
-     * Сохраняются 2 отмасштабированныx изображения: иконка и аватар
-     *
      * @param file файл изображения
      * @param rootPath корневой путь для сохранения изображений
-     * @return карта с полным путем аватарки и иконки
+     * @return полный путь изображения
      */
-    public Map<ImageType, String> saveAvatar(MultipartFile file, String rootPath) throws IOException {
-
-        Map<ImageType, String> images = new HashMap<>(2);
+    public String saveAvatar(MultipartFile file, String rootPath) throws IOException {
 
         final BufferedImage image = ImageIO.read(file.getInputStream());
-
         BufferedImage avatar = ImageUtils.resizeImage(image, ImageType.AVATAR);
-        BufferedImage icon = ImageUtils.resizeImage(image, ImageType.ICON);
+        return saveImage(avatar, rootPath);
 
-        String avatarName = saveImage(avatar, rootPath);
-        String iconName = saveImage(icon, rootPath);
-
-        images.put(ImageType.AVATAR, avatarName);
-        images.put(ImageType.ICON, iconName);
-
-        return images;
     }
 
     /**

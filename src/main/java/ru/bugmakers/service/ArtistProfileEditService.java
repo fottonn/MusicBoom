@@ -13,13 +13,15 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.entity.Photo;
 import ru.bugmakers.entity.User;
-import ru.bugmakers.enums.ImageType;
 import ru.bugmakers.enums.UserType;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.mappers.enrichers.UserDTO2UserEnricher;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Ayrat on 17.01.2018.
@@ -106,17 +108,15 @@ public class ArtistProfileEditService {
     public void artistAvatarChange(User user, MultipartFile avatar) throws MbException {
         if (user == null) throw MbException.create(MbError.APE01);
         if (avatar == null) throw MbException.create(MbError.APE06);
-        Map<ImageType, String> images;
+        String avatarName;
         try {
-            images = imagesService.saveAvatar(avatar, appConfigProvider.getProperty("app.image.path", String.class));
-            Assert.isTrue(images.containsKey(ImageType.AVATAR), "Avatar name is null!");
-            Assert.isTrue(images.containsKey(ImageType.ICON), "Icon name is null!");
+            avatarName = imagesService.saveAvatar(avatar, appConfigProvider.getProperty("app.image.path", String.class));
+            Assert.notNull(avatarName, "Avatar name is null!");
         } catch (Exception e) {
             LOGGER.error("Avatar change failed", e);
             throw MbException.create(MbError.APE04);
         }
-        user.setAvatar(images.get(ImageType.AVATAR));
-        user.setIcon(images.get(ImageType.ICON));
+        user.setAvatar(avatarName);
         try {
             User savedUser = userService.updateUser(user);
             checkSavedUser(savedUser);

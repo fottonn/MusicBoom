@@ -5,7 +5,6 @@ package ru.bugmakers.enums;
  */
 public enum ImageType {
 
-    ICON(200, 200),
     AVATAR(720, 592),
     PHOTO_W(1080, 720),
     PHOTO_H(720, 1080);
