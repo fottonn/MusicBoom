@@ -96,7 +96,7 @@ public class EmailService {
         } else if (!user.getEmail().isEnabled()) {
             throw MbException.create(MbError.SEE05);
         } else {
-            user.getEmail().setConfirmationCode(generatedValue);
+            user.setPasswordChangeCode(generatedValue);
             userService.updateUser(user);
         }
         String pswdRestoreLink =
@@ -104,7 +104,6 @@ public class EmailService {
                         .scheme(HTTPS)
                         .host(HOST)
                         .addPathSegment(RESTOREPASSWORD)
-                        .addQueryParameter(EMAIL, email)
                         .addQueryParameter(ID, user.getId().toString())
                         .addQueryParameter(CODE, generatedValue)
                         .build().toString();

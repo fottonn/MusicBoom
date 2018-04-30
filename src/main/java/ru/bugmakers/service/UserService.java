@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.UserType;
+import ru.bugmakers.exceptions.MbError;
+import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.repository.UserRepo;
 
 import java.util.*;
@@ -130,4 +133,17 @@ public class UserService {
         return userRepo.findAllByUserTypeAndCityIgnoreCase(userType, city, pageable);
     }
 
+    @Transactional
+    public void restorePassword(String password, String code, String userId) throws MbException {
+        User user = findUserById(Long.valueOf(userId));
+        if (user == null) {
+            throw MbException.create(MbError.CME03);
+        }
+        if (code.equals(user.getPasswordChangeCode())) {
+            user.setPassword(password);
+            user.setPasswordChangeCode(null);
+        } else {
+            throw MbException.create(MbError.PRE01);
+        }
+    }
 }

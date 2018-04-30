@@ -6,9 +6,10 @@ import org.springframework.web.bind.annotation.*;
 import ru.bugmakers.controller.MbController;
 import ru.bugmakers.dto.request.web.NewPasswordRequestWeb;
 import ru.bugmakers.dto.response.MbResponse;
-import ru.bugmakers.dto.response.web.ChangePasswordResponseWeb;
-import ru.bugmakers.dto.response.web.CodeFromEmailValidationResponseWeb;
+import ru.bugmakers.exceptions.MbError;
+import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.service.EmailService;
+import ru.bugmakers.service.UserService;
 
 /**
  * Created by Ayrat on 05.12.2017.
@@ -18,10 +19,16 @@ import ru.bugmakers.service.EmailService;
 public class RestorePasswordWeb extends MbController {
 
     private EmailService emailService;
+    private UserService userService;
 
     @Autowired
     public void setEmailService(EmailService emailService) {
         this.emailService = emailService;
+    }
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping(params = "email")
@@ -36,17 +43,20 @@ public class RestorePasswordWeb extends MbController {
         return ResponseEntity.ok(rs);
     }
 
-    @GetMapping(params = {"email", "id", "code"})
-    public ResponseEntity<MbResponse> chngPassword(@RequestParam("email") String email,
-                                                   @RequestParam("code") String code,
-                                                   @RequestParam("id") String userId) {
-        CodeFromEmailValidationResponseWeb codeFromEmailValidationResponseWeb = null;
-        return ResponseEntity.ok(codeFromEmailValidationResponseWeb);
-    }
+    @PostMapping()
+    public ResponseEntity<MbResponse> changePassword(@RequestBody NewPasswordRequestWeb rq) {
+        MbResponse rs;
 
-    @PostMapping(value = "/chngpassword")
-    public ResponseEntity<MbResponse> artistProfileEdit(@RequestBody NewPasswordRequestWeb newPasswordRequestWeb) {
-        ChangePasswordResponseWeb changePasswordResponseWeb = null;
-        return ResponseEntity.ok(changePasswordResponseWeb);
+        try {
+            if (!rq.getPassword().equals(rq.getConfirmPassword())) {
+                throw MbException.create(MbError.PRE02);
+            }
+            userService.restorePassword(rq.getPassword(), rq.getCode(), rq.getUserId());
+            rs = MbResponse.success();
+        } catch (Exception e) {
+            return ResponseEntity.ok(MbResponse.error(e));
+        }
+
+        return ResponseEntity.ok(rs);
     }
 }

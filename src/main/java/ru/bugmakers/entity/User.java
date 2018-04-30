@@ -91,6 +91,9 @@ public class User {
     @Column(name = "enabled", table = USER_LOGIN)
     private boolean enabled = true;
 
+    @Column(name = "password_change_code", table = USER_LOGIN)
+    private String passwordChangeCode;
+
     @JsonIgnore
     @OneToOne(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
     private VkAuth vkAuth;
@@ -307,6 +310,14 @@ public class User {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getPasswordChangeCode() {
+        return passwordChangeCode;
+    }
+
+    public void setPasswordChangeCode(String passwordChangeCode) {
+        this.passwordChangeCode = passwordChangeCode;
     }
 
     public VkAuth getVkAuth() {
