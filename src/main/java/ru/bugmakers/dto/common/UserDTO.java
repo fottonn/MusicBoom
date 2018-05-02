@@ -1,6 +1,7 @@
 package ru.bugmakers.dto.common;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.util.List;
@@ -47,6 +48,7 @@ public class UserDTO implements Serializable {
     private Boolean isArtistContract;
     private String avatar;
     private List<String> photos;
+    @JsonProperty("name_representation")
     private String nameRepresentation;
     private boolean registered;
 
