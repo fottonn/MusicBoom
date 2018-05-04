@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,7 +29,8 @@ import ru.bugmakers.config.logout.MbLogoutSuccessHandler;
 
 import java.util.Arrays;
 
-import static org.springframework.http.HttpMethod.*;
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
 import static ru.bugmakers.enums.Role.*;
 
 /**
@@ -150,7 +150,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     "/mapi/map.performers",
                     "/mapi/artist.get",
                     "/mapi/transaction",
-                    "/logout"
+                    "/logout",
+                    "/enter"
             };
 
 
@@ -173,6 +174,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(POST,"/mapi/map.performers").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
                     .antMatchers(POST,"/mapi/artist.get").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
                     .antMatchers(POST,"/mapi/transaction").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
+                    .antMatchers(POST,"/enter").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
                     .and()
                     .requiresChannel().anyRequest().requires(appConfigProvider.getProperty("spring.security.requires.channel", String.class))
                     .and()
