@@ -2,6 +2,7 @@ package ru.bugmakers.dto.common;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import ru.bugmakers.enums.NameRepresentation;
 
 import java.io.Serializable;
 import java.util.List;
@@ -546,6 +547,11 @@ public class UserDTO implements Serializable {
 
     public UserDTO withRegistered(boolean registered) {
         setRegistered(registered);
+        return this;
+    }
+
+    public UserDTO withNameRepresentation(NameRepresentation nameRepresentation) {
+        setNameRepresentation(nameRepresentation.name());
         return this;
     }
 }

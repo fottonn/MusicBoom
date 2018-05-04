@@ -5,15 +5,13 @@ import org.springframework.stereotype.Component;
 import ru.bugmakers.dto.common.StatOfPerformanceDTO;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.entity.User;
+import ru.bugmakers.enums.NameRepresentation;
 import ru.bugmakers.service.EventService;
 import ru.bugmakers.service.ImagesService;
 import ru.bugmakers.service.PhotoService;
 import ru.bugmakers.service.TransactionService;
 
-import java.util.Arrays;
-
 import static ru.bugmakers.utils.DateTimeFormatters.DATE_FORMATTER;
-import static ru.bugmakers.utils.DateTimeFormatters.DATE_TIME_FORMATTER;
 
 /**
  * Created by Ivan
@@ -85,6 +83,7 @@ public class User2UserDtoConverter implements MbConverter<User, UserDTO> {
                 .withCardNumber(source.getCardNumber() != null ? getMappedCardNumber(source.getCardNumber()) : null)
                 .withPhotos(photoService.getPhotosByUserId(source.getId()))
                 .withRegistered(source.isRegistered())
+                .withNameRepresentation(source.getNameRepresentation() != null ? source.getNameRepresentation() : NameRepresentation.NICKNAME)
                 ;
     }
 
