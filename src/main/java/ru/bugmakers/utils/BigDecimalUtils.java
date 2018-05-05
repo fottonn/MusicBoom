@@ -43,4 +43,15 @@ public class BigDecimalUtils {
     public static BigDecimal profit(BigDecimal sum, BigDecimal fee, BigDecimal paymentSystemFee) {
         return fee.subtract(sum.multiply(paymentSystemFee).divide(ONE_HUNDRED, 2, RoundingMode.DOWN));
     }
+
+    /**
+     * Бонус по реферальной программе
+     *
+     * @param amount сумма заработка реферала
+     * @param bonus бонус от заработка реферала в %
+     * @return бонус от заработка реферала в рублях
+     */
+    public static BigDecimal referrerBonus(BigDecimal amount, BigDecimal bonus) {
+        return amount.multiply(bonus).divide(ONE_HUNDRED, 2, RoundingMode.DOWN);
+    }
 }

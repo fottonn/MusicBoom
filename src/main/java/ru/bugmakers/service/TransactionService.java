@@ -123,7 +123,8 @@ public class TransactionService {
      * Сохранение транзакции в БД
      * <p>
      * Если получатель денежных средств АРТИСТ, и перевод осуществляется на внутренний кошелек с других платежных
-     * средств за исключением внутреннего кошелька, то вычитаем комиссию, установленную текущему артисту
+     * средств за исключением внутреннего кошелька, то вычитаем комиссию, установленную текущему артисту и, если этот
+     * артист является рефералом другого артиста, перечисляем рефереру бонус по реферальной программе.
      *
      * @param transaction транзакция
      */
@@ -131,7 +132,7 @@ public class TransactionService {
         User recipient = userService.findUserById(transaction.getRecipientId());
         if (recipient.getUserType() == UserType.ARTIST
                 && transaction.getRecipientMoneyBearerKind() == MoneyBearerKind.WALLET
-                && transaction.getSenderMoneyBearerKind() != MoneyBearerKind.WALLET) {
+                && transaction.getSenderMoneyBearerKind() == MoneyBearerKind.CARD) {
             final BigDecimal fee = rankPropsService.getFeeByRank(recipient.getRank());
             BigDecimal amount = new BigDecimal(transaction.getAmount().toString());
             transaction.setAmount(BigDecimalUtils.withoutFee(amount, fee));
@@ -140,6 +141,24 @@ public class TransactionService {
                     amount,
                     transaction.getFee(),
                     appConfigProvider.getProperty("payment.system.fee", BigDecimal.class)));
+            //если у артиста есть реферер и срок реферальной программы не истёк
+            if (recipient.getReferrer() != null && recipient.getRegistrationDate()
+                    .plusSeconds(appConfigProvider.getProperty("referral.program.duration", Long.class))
+                    .isAfter(LocalDateTime.now())) {
+                BigDecimal referrerBonus = BigDecimalUtils.referrerBonus(
+                        transaction.getAmount(),
+                        BigDecimal.valueOf(appConfigProvider.getProperty("referral.program.bonus", long.class)));
+                transaction.setReferrerBonus(referrerBonus);
+                transaction.setProfit(transaction.getProfit().subtract(referrerBonus));
+                Transaction referrerTransaction = new Transaction();
+                referrerTransaction.setAmount(referrerBonus);
+                referrerTransaction.setRecipientId(recipient.getReferrer().getId());
+                referrerTransaction.setSenderId(recipient.getId());
+                referrerTransaction.setRecipientMoneyBearerKind(MoneyBearerKind.WALLET);
+                referrerTransaction.setSenderMoneyBearerKind(MoneyBearerKind.REFERRAL);
+                referrerTransaction.setStatus(Status.ACCEPTED);
+                saveTransaction(referrerTransaction);
+            }
         }
         transactionRepo.saveAndFlush(transaction);
     }

@@ -38,6 +38,9 @@ public class Transaction {
     @Column(name = "fee", scale = 2)
     private BigDecimal fee;
 
+    @Column(name = "referrer_bonus", scale = 2)
+    private BigDecimal referrerBonus;
+
     @Column(name = "profit", scale = 2)
     private BigDecimal profit;
 
@@ -53,13 +56,14 @@ public class Transaction {
 
     public Transaction() {
         this.id = UuidGenerator.timeBasedUuidGenerate();
+        this.date = LocalDateTime.now();
     }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
+    protected void setId(String id) {
         this.id = id;
     }
 
@@ -111,6 +115,14 @@ public class Transaction {
         this.fee = fee;
     }
 
+    public BigDecimal getReferrerBonus() {
+        return referrerBonus;
+    }
+
+    public void setReferrerBonus(BigDecimal referrerBonus) {
+        this.referrerBonus = referrerBonus;
+    }
+
     public BigDecimal getProfit() {
         return profit;
     }
@@ -131,7 +143,7 @@ public class Transaction {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    protected void setDate(LocalDateTime date) {
         this.date = date;
     }
 

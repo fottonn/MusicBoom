@@ -15,6 +15,11 @@ public enum MoneyBearerKind {
     /**
      * Банковская карта
      */
-    CARD
+    CARD,
+
+    /**
+     * Реферальный бонус
+     */
+    REFERRAL
 
 }

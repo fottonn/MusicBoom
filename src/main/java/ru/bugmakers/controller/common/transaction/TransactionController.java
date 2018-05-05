@@ -3,9 +3,10 @@ package ru.bugmakers.controller.common.transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
-import ru.bugmakers.dto.response.MbResponse;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ru.bugmakers.entity.Transaction;
 import ru.bugmakers.enums.MoneyBearerKind;
 import ru.bugmakers.enums.Status;
@@ -15,13 +16,7 @@ import ru.bugmakers.service.TransactionService;
 import ru.bugmakers.service.UserService;
 import ru.bugmakers.validator.TransactionRequestValidator;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
-import java.nio.charset.Charset;
-import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Map;
 
 import static ru.bugmakers.validator.TransactionRequestValidator.*;
@@ -75,7 +70,6 @@ public class TransactionController {
                 transaction.setRecipientMoneyBearerKind(MoneyBearerKind.WALLET);
                 transaction.setAmount(new BigDecimal(map.get(AMOUNT)));
                 transaction.setNumber(operationId);
-                transaction.setDate(LocalDateTime.now());
                 transaction.setStatus(Status.ACCEPTED);
                 transactionService.saveTransaction(transaction);
             }

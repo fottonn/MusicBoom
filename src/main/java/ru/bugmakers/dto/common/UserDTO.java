@@ -52,6 +52,8 @@ public class UserDTO implements Serializable {
     @JsonProperty("name_representation")
     private String nameRepresentation;
     private boolean registered;
+    @JsonProperty("referrer_id")
+    private Long referrerId;
 
     public UserDTO() {
     }
@@ -365,6 +367,15 @@ public class UserDTO implements Serializable {
         this.registered = registered;
     }
 
+
+    public Long getReferrerId() {
+        return referrerId;
+    }
+
+    public void setReferrerId(Long referrerId) {
+        this.referrerId = referrerId;
+    }
+
     public UserDTO withCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
         return this;
@@ -552,6 +563,11 @@ public class UserDTO implements Serializable {
 
     public UserDTO withNameRepresentation(NameRepresentation nameRepresentation) {
         setNameRepresentation(nameRepresentation.name());
+        return this;
+    }
+
+    public UserDTO withReferrer(Long referrer) {
+        setReferrerId(referrer);
         return this;
     }
 }

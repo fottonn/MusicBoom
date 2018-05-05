@@ -12,7 +12,6 @@ import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.utils.UuidGenerator;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 /**
  * Created by Ayrat on 19.02.2018.
@@ -39,8 +38,6 @@ public class ArtistFinanceManagementService {
      *
      * @param cardNumber - номер карты
      * @param user       - пользователь
-     * @return
-     * @throws MbException
      */
     public void attachCard(String cardNumber, User user) throws MbException {
         user.setCardNumber(cardNumber);
@@ -55,8 +52,6 @@ public class ArtistFinanceManagementService {
      * Метод который позволяет открепить карту.
      *
      * @param user - пользователь
-     * @return
-     * @throws MbException
      */
     public void detachCard(User user) throws MbException {
         user.setCardNumber(null);
@@ -72,7 +67,6 @@ public class ArtistFinanceManagementService {
      *
      * @param user   - пользователь
      * @param amount - выводимая им сумма
-     * @throws MbException
      */
     public void withdraw(User user, String amount) throws MbException {
         if (!amountValidation(amount, user)) {
@@ -82,7 +76,6 @@ public class ArtistFinanceManagementService {
             throw MbException.create(MbError.TRE04);
         }
         Transaction transaction = new Transaction();
-        transaction.setDate(LocalDateTime.now());
         transaction.setNumber(UuidGenerator.timeBasedUuidGenerate());
         transaction.setRecipientId(user.getId());
         transaction.setSenderId(user.getId());

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.entity.Email;
 import ru.bugmakers.entity.User;
+import ru.bugmakers.service.UserService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,6 +22,7 @@ public class UserDtoToUserRegisterConverter implements MbConverter<UserDTO, User
 
     private PasswordEncoder passwordEncoder;
     private UserDto2ArtistInfoConverter userDto2ArtistInfoConverter;
+    private UserService userService;
 
     @Autowired
     public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
@@ -30,6 +32,11 @@ public class UserDtoToUserRegisterConverter implements MbConverter<UserDTO, User
     @Autowired
     public void setUserDto2ArtistInfoConverter(UserDto2ArtistInfoConverter userDto2ArtistInfoConverter) {
         this.userDto2ArtistInfoConverter = userDto2ArtistInfoConverter;
+    }
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
     @Override
@@ -54,6 +61,8 @@ public class UserDtoToUserRegisterConverter implements MbConverter<UserDTO, User
                 .withTlgContact(source.getTlg())
                 .withWhatsappContact(source.getWapp())
                 .withPersonalDataConsent(Optional.ofNullable(source.getIsAgreementOfPersonalData()).orElse(false))
-                .withContractConsent(Optional.ofNullable(source.getIsArtistContract()).orElse(false));
+                .withContractConsent(Optional.ofNullable(source.getIsArtistContract()).orElse(false))
+                .withReferrer(source.getReferrerId() != null ? userService.findUserById(source.getReferrerId()) : null)
+                ;
     }
 }

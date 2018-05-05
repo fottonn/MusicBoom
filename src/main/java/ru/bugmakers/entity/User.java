@@ -144,6 +144,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     private NameRepresentation nameRepresentation = NameRepresentation.NICKNAME;
 
+    @ManyToOne
+    @JoinColumn(name = "referrer")
+    private User referrer;
+
     public User() {
     }
 
@@ -438,6 +442,14 @@ public class User {
         this.nameRepresentation = nameRepresentation;
     }
 
+    public User getReferrer() {
+        return referrer;
+    }
+
+    public void setReferrer(User referrer) {
+        this.referrer = referrer;
+    }
+
     public User withRegistered(boolean registered) {
         setRegistered(registered);
         return this;
@@ -595,6 +607,11 @@ public class User {
 
     public User withNameRepresentation(NameRepresentation nameRepresentation) {
         setNameRepresentation(nameRepresentation);
+        return this;
+    }
+
+    public User withReferrer(User referrer) {
+        setReferrer(referrer);
         return this;
     }
 }

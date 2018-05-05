@@ -19,7 +19,6 @@ import ru.bugmakers.service.ArtistInfoPageService;
 import ru.bugmakers.service.TransactionService;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 /**
  * Created by Ayrat on 24.11.2017.
@@ -66,7 +65,6 @@ public class ArtistInfoPageMobile extends MbController {
             transaction.setRecipientMoneyBearerKind(MoneyBearerKind.WALLET);
             transaction.setAmount(new BigDecimal(rq.getSum()));
             transaction.setNumber(rq.getNumberOfTransaction());
-            transaction.setDate(LocalDateTime.now());
             transaction.setStatus(Status.ACCEPTED);
             transactionService.saveTransaction(transaction);
             rs = MbResponse.success();

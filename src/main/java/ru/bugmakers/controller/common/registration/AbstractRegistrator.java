@@ -56,6 +56,7 @@ public abstract class AbstractRegistrator implements Registrator {
     public void setUserDTO2UserEnricher(UserDTO2UserEnricher userDTO2UserEnricher) {
         this.userDTO2UserEnricher = userDTO2UserEnricher;
     }
+
     @Autowired
     public void setEmailService(EmailService emailService) {
         this.emailService = emailService;
@@ -89,6 +90,7 @@ public abstract class AbstractRegistrator implements Registrator {
             }
             user.setPersonalDataConsent(Optional.ofNullable(userDto.getIsAgreementOfPersonalData()).orElse(false));
             user.setContractConsent(Optional.ofNullable(userDto.getIsArtistContract()).orElse(false));
+            user.setReferrer(userDto.getReferrerId() != null ? userService.findUserById(userDto.getReferrerId()) : null);
         }
         user.setUserType(userType);
         switch (userType) {
