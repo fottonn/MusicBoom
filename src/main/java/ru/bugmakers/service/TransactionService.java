@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.bugmakers.entity.Transaction;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.MoneyBearerKind;
@@ -128,6 +129,7 @@ public class TransactionService {
      *
      * @param transaction транзакция
      */
+    @Transactional
     public void saveTransaction(Transaction transaction) {
         User recipient = userService.findUserById(transaction.getRecipientId());
         if (recipient.getUserType() == UserType.ARTIST
