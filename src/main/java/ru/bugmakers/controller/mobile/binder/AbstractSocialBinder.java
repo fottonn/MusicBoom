@@ -23,7 +23,7 @@ public abstract class AbstractSocialBinder implements SocialBinder {
         this.socialIdChecker = socialIdChecker;
     }
 
-    public SocialIdChecker getSocialIdChecker() {
+    protected SocialIdChecker getSocialIdChecker() {
         return socialIdChecker;
     }
 
