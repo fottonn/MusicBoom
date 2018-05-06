@@ -1,11 +1,8 @@
 package ru.bugmakers.controller.common.authentication;
 
-import okhttp3.HttpUrl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 import ru.bugmakers.dto.common.UserDTO;
-import ru.bugmakers.dto.social.VkUserInfoRs;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.entity.auth.VkAuth;
 import ru.bugmakers.exceptions.MbError;
@@ -14,8 +11,7 @@ import ru.bugmakers.exceptions.MbUnregException;
 import ru.bugmakers.mappers.converters.User2UserDtoConverter;
 import ru.bugmakers.service.UserService;
 import ru.bugmakers.utils.SecurityContextUtils;
-
-import java.net.URI;
+import ru.bugmakers.utils.SocialIdChecker;
 
 /**
  * Created by Ivan
@@ -23,14 +19,9 @@ import java.net.URI;
 @Component
 public class VkAuthenticator implements Authenticator {
 
-    private RestTemplate restTemplate;
     private UserService userService;
     private User2UserDtoConverter user2UserDtoConverter;
-
-    @Autowired
-    public void setRestTemplate(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
+    private SocialIdChecker socialIdChecker;
 
     @Autowired
     public void setUserService(UserService userService) {
@@ -42,6 +33,11 @@ public class VkAuthenticator implements Authenticator {
         this.user2UserDtoConverter = user2UserDtoConverter;
     }
 
+    @Autowired
+    public void setSocialIdChecker(SocialIdChecker socialIdChecker) {
+        this.socialIdChecker = socialIdChecker;
+    }
+
     @Override
     public UserDTO authenticate(String token, String id) throws MbException {
 
@@ -50,7 +46,7 @@ public class VkAuthenticator implements Authenticator {
             throw MbUnregException.create(MbError.AUE18);
         }
 
-        if (!isValidVkId(token, id)) {
+        if (!socialIdChecker.isValidVkId(token, id)) {
             throw MbException.create(MbError.AUE16);
         }
 
@@ -69,7 +65,7 @@ public class VkAuthenticator implements Authenticator {
             throw MbUnregException.create(MbError.AUE18);
         }
 
-        if (!isValidVkId(token, id)) {
+        if (!socialIdChecker.isValidVkId(token, id)) {
             throw MbException.create(MbError.AUE16);
         }
 
@@ -84,24 +80,4 @@ public class VkAuthenticator implements Authenticator {
         return user2UserDtoConverter.convert(user);
     }
 
-    private boolean isValidVkId(String token, String id) {
-        boolean isValid = true;
-        final URI vkGetUserInfoUrl =
-                new HttpUrl.Builder()
-                        .scheme(HTTPS)
-                        .host(VK_API_HOST)
-                        .addPathSegment("method")
-                        .addPathSegment("users.get")
-                        .addQueryParameter("user_ids", id)
-                        .addQueryParameter("access_token", token)
-                        .addQueryParameter("v", VK_API_VERSION)
-                        .build().uri();
-        final VkUserInfoRs vkUserInfoRs = restTemplate.getForObject(vkGetUserInfoUrl, VkUserInfoRs.class);
-
-        if (vkUserInfoRs == null || vkUserInfoRs.getVkUserInfo() == null || vkUserInfoRs.getVkUserInfo().getId() == null
-                || !vkUserInfoRs.getVkUserInfo().getId().equals(id)) {
-            isValid = false;
-        }
-        return isValid;
-    }
 }

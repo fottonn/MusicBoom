@@ -1,11 +1,8 @@
 package ru.bugmakers.controller.common.authentication;
 
-import okhttp3.HttpUrl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 import ru.bugmakers.dto.common.UserDTO;
-import ru.bugmakers.dto.social.FbUserInfoRs;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.entity.auth.FbAuth;
 import ru.bugmakers.exceptions.MbError;
@@ -14,8 +11,7 @@ import ru.bugmakers.exceptions.MbUnregException;
 import ru.bugmakers.mappers.converters.User2UserDtoConverter;
 import ru.bugmakers.service.UserService;
 import ru.bugmakers.utils.SecurityContextUtils;
-
-import java.net.URI;
+import ru.bugmakers.utils.SocialIdChecker;
 
 /**
  * Created by Ivan
@@ -23,14 +19,9 @@ import java.net.URI;
 @Component
 public class FbAuthenticator implements Authenticator {
 
-    private RestTemplate restTemplate;
     private User2UserDtoConverter user2UserDtoConverter;
     private UserService userService;
-
-    @Autowired
-    public void setRestTemplate(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
+    private SocialIdChecker socialIdChecker;
 
     @Autowired
     public void setUser2UserDtoConverter(User2UserDtoConverter user2UserDtoConverter) {
@@ -42,6 +33,11 @@ public class FbAuthenticator implements Authenticator {
         this.userService = userService;
     }
 
+    @Autowired
+    public void setSocialIdChecker(SocialIdChecker socialIdChecker) {
+        this.socialIdChecker = socialIdChecker;
+    }
+
     @Override
     public UserDTO authenticate(String token, String id) throws MbException {
 
@@ -50,7 +46,7 @@ public class FbAuthenticator implements Authenticator {
             throw MbUnregException.create(MbError.AUE18);
         }
 
-        if (!isValidFbId(token, id)) {
+        if (!socialIdChecker.isValidFbId(token, id)) {
             throw MbException.create(MbError.AUE16);
         }
 
@@ -69,7 +65,7 @@ public class FbAuthenticator implements Authenticator {
             throw MbUnregException.create(MbError.AUE18);
         }
 
-        if (!isValidFbId(token, id)) {
+        if (!socialIdChecker.isValidFbId(token, id)) {
             throw MbException.create(MbError.AUE16);
         }
 
@@ -82,23 +78,5 @@ public class FbAuthenticator implements Authenticator {
         }
 
         return user2UserDtoConverter.convert(user);
-    }
-
-    private boolean isValidFbId(String token, String id) {
-        boolean isValid = true;
-        final URI fbGetUserInfoUrl =
-                new HttpUrl.Builder()
-                        .scheme(HTTPS)
-                        .host(FB_GRAF_HOST)
-                        .addPathSegment("me")
-                        .addQueryParameter("access_token", token)
-                        .addQueryParameter("fields", "id")
-                        .build().uri();
-        final FbUserInfoRs fbUserInfoRs = restTemplate.getForObject(fbGetUserInfoUrl, FbUserInfoRs.class);
-
-        if (fbUserInfoRs == null || fbUserInfoRs.getId() == null || !fbUserInfoRs.getId().equals(id)) {
-            isValid = false;
-        }
-        return isValid;
     }
 }
