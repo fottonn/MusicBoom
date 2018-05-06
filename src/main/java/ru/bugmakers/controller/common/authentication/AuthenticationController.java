@@ -13,6 +13,7 @@ import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.SocialProvider;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
+import ru.bugmakers.exceptions.MbUnregException;
 import ru.bugmakers.service.UserAuthenticationService;
 
 /**
@@ -68,6 +69,33 @@ public class AuthenticationController extends MbController {
             UserDTO user = authenticator.authenticate(token, id);
             rs = new AuthenticationResponse();
             rs.setUser(user);
+        } catch (MbUnregException e) {
+            return ResponseEntity.ok(MbResponse.unreg(e));
+        } catch (Exception e) {
+            return ResponseEntity.ok(MbResponse.error(e));
+        }
+        return ResponseEntity.ok(rs);
+    }
+
+    @GetMapping(params = {"token", "provider", "social_id", "phone_number"})
+    public ResponseEntity<MbResponse> checkPhoneAndAuthenticate(@RequestParam("token") String token,
+                                                                @RequestParam("provider") String provider,
+                                                                @RequestParam("social_id") String id,
+                                                                @RequestParam("phone_number") String phoneNumber) {
+        AuthenticationResponse rs;
+        try {
+            SocialProvider socialProvider;
+            try {
+                socialProvider = SocialProvider.valueOf(provider.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw MbException.create(MbError.AUE15);
+            }
+            Authenticator authenticator = authenticatorCreator.getAuthenticator(socialProvider);
+            UserDTO user = authenticator.authenticate(token, id, phoneNumber);
+            rs = new AuthenticationResponse();
+            rs.setUser(user);
+        } catch (MbUnregException e) {
+            return ResponseEntity.ok(MbResponse.unreg(e));
         } catch (Exception e) {
             return ResponseEntity.ok(MbResponse.error(e));
         }

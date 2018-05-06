@@ -23,4 +23,6 @@ public interface Authenticator {
 
     UserDTO authenticate(String token, String id) throws MbException;
 
+    UserDTO authenticate(String token, String id, String phone) throws MbException;
+
 }

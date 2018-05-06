@@ -9,20 +9,20 @@ public class MbException extends Exception {
     private String title;
     private String description;
 
-    private MbException() {
+    protected MbException() {
     }
 
-    private MbException(String code, String title, String description) {
+    protected MbException(String code, String title, String description) {
         this.code = code;
         this.title = title;
         this.description = description;
     }
 
-    private MbException(String title, String description) {
+    protected MbException(String title, String description) {
         this(null, title, description);
     }
 
-    private MbException(MbError mbError) {
+    protected MbException(MbError mbError) {
         this.code = mbError.getCode();
         this.title = mbError.getTitle();
         this.description = mbError.getMessage();

@@ -10,6 +10,7 @@ import ru.bugmakers.entity.User;
 import ru.bugmakers.entity.auth.VkAuth;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
+import ru.bugmakers.exceptions.MbUnregException;
 import ru.bugmakers.mappers.converters.User2UserDtoConverter;
 import ru.bugmakers.service.UserService;
 import ru.bugmakers.utils.SecurityContextUtils;
@@ -44,6 +45,47 @@ public class VkAuthenticator implements Authenticator {
     @Override
     public UserDTO authenticate(String token, String id) throws MbException {
 
+        User user = userService.findUserByVkSocialId(id);
+        if (user == null) {
+            throw MbUnregException.create(MbError.AUE18);
+        }
+
+        if (!isValidVkId(token, id)) {
+            throw MbException.create(MbError.AUE16);
+        }
+
+        if (user.isRegistered()) {
+            SecurityContextUtils.setAuthentication(user);
+        }
+
+        return user2UserDtoConverter.convert(user);
+    }
+
+    @Override
+    public UserDTO authenticate(String token, String id, String phone) throws MbException {
+
+        User user = userService.findUserByPhone(phone);
+        if (user == null) {
+            throw MbUnregException.create(MbError.AUE18);
+        }
+
+        if (!isValidVkId(token, id)) {
+            throw MbException.create(MbError.AUE16);
+        }
+
+        VkAuth vkAuth = new VkAuth(id);
+        user.setVkAuth(vkAuth);
+        user = userService.saveUser(user);
+
+        if (user.isRegistered()) {
+            SecurityContextUtils.setAuthentication(user);
+        }
+
+        return user2UserDtoConverter.convert(user);
+    }
+
+    private boolean isValidVkId(String token, String id) {
+        boolean isValid = true;
         final URI vkGetUserInfoUrl =
                 new HttpUrl.Builder()
                         .scheme(HTTPS)
@@ -56,23 +98,10 @@ public class VkAuthenticator implements Authenticator {
                         .build().uri();
         final VkUserInfoRs vkUserInfoRs = restTemplate.getForObject(vkGetUserInfoUrl, VkUserInfoRs.class);
 
-        User user;
-        if (vkUserInfoRs != null && vkUserInfoRs.getVkUserInfo() != null && vkUserInfoRs.getVkUserInfo().getId() != null
-                && vkUserInfoRs.getVkUserInfo().getId().equals(id)) {
-            user = userService.findUserByVkSocialId(id);
-            if (user == null) {
-                user = new User();
-                user.setVkAuth(new VkAuth(id));
-                user = userService.saveUser(user);
-            }
-        } else {
-            throw MbException.create(MbError.AUE16);
+        if (vkUserInfoRs == null || vkUserInfoRs.getVkUserInfo() == null || vkUserInfoRs.getVkUserInfo().getId() == null
+                || !vkUserInfoRs.getVkUserInfo().getId().equals(id)) {
+            isValid = false;
         }
-
-        if (user.isRegistered()) {
-            SecurityContextUtils.setAuthentication(user);
-        }
-
-        return user2UserDtoConverter.convert(user);
+        return isValid;
     }
 }

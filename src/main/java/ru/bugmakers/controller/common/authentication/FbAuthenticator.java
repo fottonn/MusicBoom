@@ -10,6 +10,7 @@ import ru.bugmakers.entity.User;
 import ru.bugmakers.entity.auth.FbAuth;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
+import ru.bugmakers.exceptions.MbUnregException;
 import ru.bugmakers.mappers.converters.User2UserDtoConverter;
 import ru.bugmakers.service.UserService;
 import ru.bugmakers.utils.SecurityContextUtils;
@@ -44,6 +45,47 @@ public class FbAuthenticator implements Authenticator {
     @Override
     public UserDTO authenticate(String token, String id) throws MbException {
 
+        User user = userService.findUserByFbSocialId(id);
+        if (user == null) {
+            throw MbUnregException.create(MbError.AUE18);
+        }
+
+        if (!isValidFbId(token, id)) {
+            throw MbException.create(MbError.AUE16);
+        }
+
+        if (user.isRegistered()) {
+            SecurityContextUtils.setAuthentication(user);
+        }
+
+        return user2UserDtoConverter.convert(user);
+    }
+
+    @Override
+    public UserDTO authenticate(String token, String id, String phone) throws MbException {
+
+        User user = userService.findUserByPhone(phone);
+        if (user == null) {
+            throw MbUnregException.create(MbError.AUE18);
+        }
+
+        if (!isValidFbId(token, id)) {
+            throw MbException.create(MbError.AUE16);
+        }
+
+        FbAuth fbAuth = new FbAuth(id);
+        user.setFbAuth(fbAuth);
+        user = userService.saveUser(user);
+
+        if (user.isRegistered()) {
+            SecurityContextUtils.setAuthentication(user);
+        }
+
+        return user2UserDtoConverter.convert(user);
+    }
+
+    private boolean isValidFbId(String token, String id) {
+        boolean isValid = true;
         final URI fbGetUserInfoUrl =
                 new HttpUrl.Builder()
                         .scheme(HTTPS)
@@ -54,21 +96,9 @@ public class FbAuthenticator implements Authenticator {
                         .build().uri();
         final FbUserInfoRs fbUserInfoRs = restTemplate.getForObject(fbGetUserInfoUrl, FbUserInfoRs.class);
 
-        User user;
-        if (fbUserInfoRs != null && fbUserInfoRs.getId() != null && fbUserInfoRs.getId().equals(id)) {
-            user = userService.findUserByFbSocialId(id);
-            if (user == null) {
-                user = new User();
-                user.setFbAuth(new FbAuth(id));
-                user = userService.saveUser(user);
-            }
-        } else {
-            throw MbException.create(MbError.AUE16);
+        if (fbUserInfoRs == null || fbUserInfoRs.getId() == null || !fbUserInfoRs.getId().equals(id)) {
+            isValid = false;
         }
-
-        if (user.isRegistered()) {
-            SecurityContextUtils.setAuthentication(user);
-        }
-        return user2UserDtoConverter.convert(user);
+        return isValid;
     }
 }
