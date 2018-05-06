@@ -3,6 +3,8 @@ package ru.bugmakers.controller.common.authentication;
 import org.springframework.stereotype.Component;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.entity.auth.FbAuth;
+import ru.bugmakers.exceptions.MbError;
+import ru.bugmakers.exceptions.MbException;
 
 /**
  * Created by Ivan
@@ -25,5 +27,12 @@ public class FbAuthenticator extends AbstractAuthenticator {
         FbAuth fbAuth = new FbAuth(id);
         user.setFbAuth(fbAuth);
         return user;
+    }
+
+    @Override
+    protected void checkExistsSocialId(String id) throws MbException {
+        if (getUserService().isExistsByFbSocialId(id)) {
+            throw MbException.create(MbError.RGE11);
+        }
     }
 }

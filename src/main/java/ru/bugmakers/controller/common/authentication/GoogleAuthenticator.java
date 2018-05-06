@@ -3,6 +3,8 @@ package ru.bugmakers.controller.common.authentication;
 import org.springframework.stereotype.Component;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.entity.auth.GoogleAuth;
+import ru.bugmakers.exceptions.MbError;
+import ru.bugmakers.exceptions.MbException;
 
 /**
  * Created by Ivan
@@ -25,6 +27,13 @@ public class GoogleAuthenticator extends AbstractAuthenticator {
         GoogleAuth googleAuth = new GoogleAuth(id);
         user.setGoogleAuth(googleAuth);
         return user;
+    }
+
+    @Override
+    protected void checkExistsSocialId(String id) throws MbException {
+        if (getUserService().isExistsByGoogleSocialId(id)) {
+            throw MbException.create(MbError.RGE12);
+        }
     }
 
 }

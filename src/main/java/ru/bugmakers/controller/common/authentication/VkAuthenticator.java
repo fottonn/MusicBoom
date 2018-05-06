@@ -3,6 +3,8 @@ package ru.bugmakers.controller.common.authentication;
 import org.springframework.stereotype.Component;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.entity.auth.VkAuth;
+import ru.bugmakers.exceptions.MbError;
+import ru.bugmakers.exceptions.MbException;
 
 /**
  * Created by Ivan
@@ -25,6 +27,13 @@ public class VkAuthenticator extends AbstractAuthenticator {
         VkAuth vkAuth = new VkAuth(id);
         user.setVkAuth(vkAuth);
         return user;
+    }
+
+    @Override
+    protected void checkExistsSocialId(String id) throws MbException {
+        if (getUserService().isExistsByVkSocialId(id)) {
+            throw MbException.create(MbError.RGE10);
+        }
     }
 
 }

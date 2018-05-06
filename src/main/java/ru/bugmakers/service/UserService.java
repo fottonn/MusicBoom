@@ -80,6 +80,18 @@ public class UserService {
         return userRepo.existsByPhone(phone);
     }
 
+    public boolean isExistsByVkSocialId(String socialId) {
+        return userRepo.existsByVkAuth_SocialId(socialId);
+    }
+
+    public boolean isExistsByFbSocialId(String socialId) {
+        return userRepo.existsByFbAuth_SocialId(socialId);
+    }
+
+    public boolean isExistsByGoogleSocialId(String socialId) {
+        return userRepo.existsByGoogleAuth_SocialId(socialId);
+    }
+
     /**
      * Поиск всех пользователей, {@code nickname} которых содержит {@code value}, и тип {@code userType}
      *

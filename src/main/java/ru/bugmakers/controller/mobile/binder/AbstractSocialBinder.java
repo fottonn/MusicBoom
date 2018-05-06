@@ -18,6 +18,10 @@ public abstract class AbstractSocialBinder implements SocialBinder {
         this.userService = userService;
     }
 
+    protected UserService getUserService() {
+        return userService;
+    }
+
     @Autowired
     public void setSocialIdChecker(SocialIdChecker socialIdChecker) {
         this.socialIdChecker = socialIdChecker;
@@ -33,10 +37,16 @@ public abstract class AbstractSocialBinder implements SocialBinder {
         if (!isValidSocialId(token, socialId)) {
             throw MbException.create(MbError.AUE16);
         }
+
+        //проверяем socialId на наличие в базе
+        checkExistsSocialId(socialId);
+
         userService.saveUser(setSocialAuth(user, socialId));
     }
 
     protected abstract User setSocialAuth(User user, String socialId);
 
     protected abstract boolean isValidSocialId(String token, String socialId);
+
+    protected abstract void checkExistsSocialId(final String id) throws MbException;
 }

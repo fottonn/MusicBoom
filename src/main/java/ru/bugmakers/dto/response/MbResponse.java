@@ -58,8 +58,8 @@ public class MbResponse implements Serializable {
         return new MbResponse(e, RsStatus.UNAUTHENTICATED);
     }
 
-    public static MbResponse unreg(MbException e) {
-        return new MbResponse(e, RsStatus.UNREGISTERED);
+    public static MbResponse unreg() {
+        return new MbResponse(RsStatus.UNREGISTERED);
     }
 
     public RsStatus getStatus() {

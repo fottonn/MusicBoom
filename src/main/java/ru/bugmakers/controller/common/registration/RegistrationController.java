@@ -45,7 +45,7 @@ public class RegistrationController extends MbController {
                 provider = null;
             }
             Registrator registrator = registratorCreator.getRegistrator(provider);
-            UserDTO user = registrator.register(UserType.valueOf(userType.toUpperCase()), rq.getUser());
+            UserDTO user = registrator.register(UserType.valueOf(userType.toUpperCase()), rq.getUser(), rq.getSocialId(), rq.getToken());
             rs = new RegistrationResponse();
             rs.setUser(user);
         } catch (Exception e) {
@@ -64,7 +64,7 @@ public class RegistrationController extends MbController {
         try {
             registrationRequestValidator.validate(rq);
             Registrator registrator = registratorCreator.getRegistrator(SocialProvider.valueOf(provider.toUpperCase()));
-            UserDTO user = registrator.register(UserType.valueOf(userType.toUpperCase()), rq.getUser());
+            UserDTO user = registrator.register(UserType.valueOf(userType.toUpperCase()), rq.getUser(), rq.getSocialId(), rq.getToken());
             rs = new RegistrationResponse();
             rs.setUser(user);
         } catch (Exception e) {

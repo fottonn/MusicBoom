@@ -47,8 +47,6 @@ public abstract class AbstractAuthenticator implements Authenticator{
             throw MbUnregException.create(MbError.AUE18);
         }
 
-
-
         if (!isValidSocialId(token, id)) {
             throw MbException.create(MbError.AUE16);
         }
@@ -71,6 +69,9 @@ public abstract class AbstractAuthenticator implements Authenticator{
             throw MbException.create(MbError.AUE16);
         }
 
+        //проверяем socialId на наличие в базе
+        checkExistsSocialId(id);
+
         user = userService.saveUser(setSocialAuth(user, id));
 
         if (user.isRegistered()) {
@@ -85,4 +86,7 @@ public abstract class AbstractAuthenticator implements Authenticator{
     protected abstract boolean isValidSocialId(String token, String id);
 
     protected abstract User setSocialAuth(User user, String id);
+
+    protected abstract void checkExistsSocialId(final String id) throws MbException;
+
 }

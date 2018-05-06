@@ -10,5 +10,5 @@ import ru.bugmakers.exceptions.MbException;
  */
 public interface Registrator {
     @Transactional
-    UserDTO register(UserType userType, UserDTO userDto) throws MbException;
+    UserDTO register(UserType userType, UserDTO userDto, String socialId, String token) throws MbException;
 }

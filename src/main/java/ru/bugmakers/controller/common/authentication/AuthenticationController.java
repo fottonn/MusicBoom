@@ -70,7 +70,7 @@ public class AuthenticationController extends MbController {
             rs = new AuthenticationResponse();
             rs.setUser(user);
         } catch (MbUnregException e) {
-            return ResponseEntity.ok(MbResponse.unreg(e));
+            return ResponseEntity.ok(MbResponse.unreg());
         } catch (Exception e) {
             return ResponseEntity.ok(MbResponse.error(e));
         }
@@ -95,7 +95,7 @@ public class AuthenticationController extends MbController {
             rs = new AuthenticationResponse();
             rs.setUser(user);
         } catch (MbUnregException e) {
-            return ResponseEntity.ok(MbResponse.unreg(e));
+            return ResponseEntity.ok(MbResponse.unreg());
         } catch (Exception e) {
             return ResponseEntity.ok(MbResponse.error(e));
         }

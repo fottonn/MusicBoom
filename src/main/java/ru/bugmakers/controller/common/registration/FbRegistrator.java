@@ -1,9 +1,9 @@
 package ru.bugmakers.controller.common.registration;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.bugmakers.entity.User;
+import ru.bugmakers.entity.auth.FbAuth;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
 
@@ -15,11 +15,21 @@ import ru.bugmakers.exceptions.MbException;
 public class FbRegistrator extends AbstractRegistrator {
 
     @Override
-    public User checkUserBySocial(Long id) throws MbException {
-        User user = getUserService().findUserById(id);
-        if (user == null || user.getFbAuth() == null || StringUtils.isBlank(user.getFbAuth().getSocialId())) {
-            throw MbException.create(MbError.RGE06);
+    protected boolean isValidSocialId(String token, String socialId) {
+        return getSocialIdChecker().isValidFbId(token, socialId);
+    }
+
+    @Override
+    protected void checkExistsSocialId(String id) throws MbException {
+        if (getUserService().isExistsByFbSocialId(id)) {
+            throw MbException.create(MbError.RGE11);
         }
+    }
+
+    @Override
+    protected User setSocialAuth(User user, String id) {
+        FbAuth fbAuth = new FbAuth(id);
+        user.setFbAuth(fbAuth);
         return user;
     }
 }

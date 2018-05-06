@@ -31,6 +31,10 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
     boolean existsByPhone(String phone);
 
+    boolean existsByVkAuth_SocialId(String socialId);
+    boolean existsByFbAuth_SocialId(String socialId);
+    boolean existsByGoogleAuth_SocialId(String socialId);
+
     List<User> findDistinctByUserTypeAndNicknameContainingIgnoreCase(UserType userType, String nickname);
 
     Page<User> findAllByUserType(UserType userType, Pageable pageable);
