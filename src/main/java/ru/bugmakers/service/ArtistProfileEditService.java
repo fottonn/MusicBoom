@@ -105,7 +105,7 @@ public class ArtistProfileEditService {
      * @param avatar файл аватара
      * @throws MbException ошибки при попытке сохранить/изменить аватар
      */
-    public void artistAvatarChange(User user, MultipartFile avatar) throws MbException {
+    public String artistAvatarChange(User user, MultipartFile avatar) throws MbException {
         if (user == null) throw MbException.create(MbError.APE01);
         if (avatar == null) throw MbException.create(MbError.APE06);
         String avatarName;
@@ -120,6 +120,7 @@ public class ArtistProfileEditService {
         try {
             User savedUser = userService.updateUser(user);
             checkSavedUser(savedUser);
+            return imagesService.fullImagePath(avatarName);
         } catch (Exception e) {
             LOGGER.error("Avatar change failed", e);
             throw MbException.create(MbError.APE03);
@@ -263,16 +264,19 @@ public class ArtistProfileEditService {
      * @param multipartFiles набор файлов
      * @throws Exception ошибки при сохранении файлов
      */
-    public void artistUploadPhotos(User user, Collection<MultipartFile> multipartFiles) throws Exception {
+    public List<String> artistUploadPhotos(User user, Collection<MultipartFile> multipartFiles) throws Exception {
         if (user == null) throw MbException.create(MbError.APE01);
         List<Photo> photos = new ArrayList<>();
+        List<String> photosUrl = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(multipartFiles)) {
             for (MultipartFile multipartFile : multipartFiles) {
                 String savedFile = imagesService.savePhoto(multipartFile, appConfigProvider.getProperty("app.image.path", String.class));
+                photosUrl.add(imagesService.fullImagePath(savedFile));
                 photos.add(new Photo(savedFile, user.getId()));
             }
         }
         photoService.savePhotos(photos);
+        return photosUrl;
     }
 
     private void checkSavedUser(User user) {

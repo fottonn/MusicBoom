@@ -13,9 +13,12 @@ import ru.bugmakers.controller.MbController;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.dto.request.web.ArtistEditRqWeb;
 import ru.bugmakers.dto.response.MbResponse;
+import ru.bugmakers.dto.response.web.PhotosUploadArtistWebRs;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.service.ArtistProfileEditService;
 import ru.bugmakers.utils.MultipartUtils;
+
+import java.util.List;
 
 /**
  * Created by Ayrat on 27.11.2017.
@@ -91,11 +94,13 @@ public class ArtistEditProfileWeb extends MbController {
     @PostMapping(value = "/photos.upload")
     public ResponseEntity<MbResponse> uploadPhotos(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                    MultipartHttpServletRequest rq) {
+        PhotosUploadArtistWebRs rs;
         try {
-            artistProfileEditService.artistUploadPhotos(userPrincipal.getUser(), MultipartUtils.findImageParts(rq));
+            List<String> artistUploadPhotos = artistProfileEditService.artistUploadPhotos(userPrincipal.getUser(), MultipartUtils.findImageParts(rq));
+            rs = new PhotosUploadArtistWebRs(artistUploadPhotos);
         } catch (Exception e) {
             return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(MbResponse.success());
+        return ResponseEntity.ok(rs);
     }
 }
