@@ -42,8 +42,8 @@ public class SocialIdChecker {
                         .scheme(HTTPS)
                         .host(VK_API_HOST)
                         .addPathSegment("method")
-                        .addPathSegment("users.get")
-                        .addQueryParameter("user_ids", id)
+                        .addPathSegment("secure.checkToken")
+                        .addQueryParameter("token", token)
                         .addQueryParameter("access_token", token)
                         .addQueryParameter("v", VK_API_VERSION)
                         .build().uri();
@@ -51,8 +51,7 @@ public class SocialIdChecker {
         try {
             final VkUserInfoRs vkUserInfoRs = restTemplate.getForObject(vkGetUserInfoUrl, VkUserInfoRs.class);
             Assert.notNull(vkUserInfoRs, "Response from vk.com server is null!");
-            Assert.notNull(vkUserInfoRs.getVkUserInfo(), "Response from vk.com server is null!");
-            if (!id.equals(vkUserInfoRs.getVkUserInfo().getId())) {
+            if (vkUserInfoRs.getVkUserInfo() == null || !id.equals(vkUserInfoRs.getVkUserInfo().getId())) {
                 isValid = false;
             }
         } catch (Exception e) {

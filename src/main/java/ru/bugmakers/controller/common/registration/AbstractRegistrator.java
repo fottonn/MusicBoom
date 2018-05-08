@@ -49,6 +49,7 @@ public abstract class AbstractRegistrator implements Registrator {
         this.emailService = emailService;
     }
 
+    @Autowired
     public void setSocialIdChecker(SocialIdChecker socialIdChecker) {
         this.socialIdChecker = socialIdChecker;
     }

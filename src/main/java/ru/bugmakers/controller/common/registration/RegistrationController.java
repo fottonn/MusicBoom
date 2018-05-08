@@ -10,6 +10,8 @@ import ru.bugmakers.dto.response.MbResponse;
 import ru.bugmakers.dto.response.RegistrationResponse;
 import ru.bugmakers.enums.SocialProvider;
 import ru.bugmakers.enums.UserType;
+import ru.bugmakers.exceptions.MbError;
+import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.validator.common.RegistrationRequestValidator;
 
 /**
@@ -39,11 +41,16 @@ public class RegistrationController extends MbController {
         try {
             registrationRequestValidator.validate(rq);
             SocialProvider provider;
+
             try {
                 provider = SocialProvider.valueOf(rq.getProvider().toUpperCase());
-            } catch (Exception e) {
+                if (rq.getSocialId() == null) {
+                    throw MbException.create(MbError.RGE13);
+                }
+            } catch (IllegalArgumentException e) {
                 provider = null;
             }
+
             Registrator registrator = registratorCreator.getRegistrator(provider);
             UserDTO user = registrator.register(UserType.valueOf(userType.toUpperCase()), rq.getUser(), rq.getSocialId(), rq.getToken());
             rs = new RegistrationResponse();
