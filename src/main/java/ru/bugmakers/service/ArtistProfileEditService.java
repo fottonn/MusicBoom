@@ -288,9 +288,11 @@ public class ArtistProfileEditService {
      * @param user текущий пользователь
      */
     public void artistAvatarDelete(User user) {
-        imagesService.removeFile(user.getAvatar(), appConfigProvider.getProperty("app.image.path", String.class));
-        user.setAvatar(null);
-        User updatedUser = userService.updateUser(user);
-        checkSavedUser(updatedUser);
+        if (user.getAvatar() != null) {
+            imagesService.removeFile(user.getAvatar(), appConfigProvider.getProperty("app.image.path", String.class));
+            user.setAvatar(null);
+            User updatedUser = userService.updateUser(user);
+            checkSavedUser(updatedUser);
+        }
     }
 }
