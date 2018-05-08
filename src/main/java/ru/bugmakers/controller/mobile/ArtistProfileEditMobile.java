@@ -75,6 +75,16 @@ public class ArtistProfileEditMobile extends MbController {
         return ResponseEntity.ok(MbResponse.success());
     }
 
+    @PostMapping(value = "/avatar.delete")
+    public ResponseEntity<MbResponse> deleteAvatar(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        try {
+            artistProfileEditService.artistAvatarDelete(userPrincipal.getUser());
+        } catch (Exception e) {
+            return ResponseEntity.ok(MbResponse.error(e));
+        }
+        return ResponseEntity.ok(MbResponse.success());
+    }
+
     @PostMapping(value = "/creativity.change")
     public ResponseEntity<MbResponse> changeArtistCreativity(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                              @RequestBody ArtistEditRqMobile rq) {

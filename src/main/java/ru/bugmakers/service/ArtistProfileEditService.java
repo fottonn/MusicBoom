@@ -282,4 +282,15 @@ public class ArtistProfileEditService {
     private void checkSavedUser(User user) {
         Assert.notNull(user, "SavedUser is null");
     }
+
+    /**
+     * Метод удаления аватара
+     * @param user текущий пользователь
+     */
+    public void artistAvatarDelete(User user) {
+        imagesService.removeFile(user.getAvatar(), appConfigProvider.getProperty("app.image.path", String.class));
+        user.setAvatar(null);
+        User updatedUser = userService.updateUser(user);
+        checkSavedUser(updatedUser);
+    }
 }

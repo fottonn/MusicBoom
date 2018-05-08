@@ -58,6 +58,16 @@ public class ArtistEditProfileWeb extends MbController {
         return ResponseEntity.ok(MbResponse.success());
     }
 
+    @PostMapping(value = "/avatar.delete")
+    public ResponseEntity<MbResponse> deleteAvatar(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        try {
+            artistProfileEditService.artistAvatarDelete(userPrincipal.getUser());
+        } catch (Exception e) {
+            return ResponseEntity.ok(MbResponse.error(e));
+        }
+        return ResponseEntity.ok(MbResponse.success());
+    }
+
     @PostMapping(value = "/phone.change")
     public ResponseEntity<MbResponse> changePhoneNumber(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                         @RequestBody ArtistEditRqWeb rq) {
