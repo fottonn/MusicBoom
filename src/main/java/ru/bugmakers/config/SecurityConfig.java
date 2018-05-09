@@ -160,7 +160,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .and()
                     .anonymous().disable()
                     .requestMatchers()
-                    .antMatchers(URLS)
+                    .antMatchers(POST, URLS)
                     .and()
                     .authorizeRequests()
                     .antMatchers(POST, "/webapi/admin/**").hasAuthority(ADMIN.name())
@@ -330,17 +330,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
 
-            final String[] URLS = {
-                    "/enter"
-            };
-
             http
                     .csrf().disable()
                     .cors()
                     .and()
                     .anonymous().disable()
                     .requestMatchers()
-                    .antMatchers(URLS)
+                    .antMatchers(POST, "/enter")
                     .and()
                     .authorizeRequests()
                     .antMatchers(POST, "/enter").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
