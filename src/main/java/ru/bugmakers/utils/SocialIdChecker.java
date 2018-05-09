@@ -9,7 +9,8 @@ import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 import ru.bugmakers.dto.social.FbUserInfoRs;
 import ru.bugmakers.dto.social.GoogleUserInfoRs;
-import ru.bugmakers.dto.social.VkUserInfoRs;
+import ru.bugmakers.dto.social.VkAccessTokenRs;
+import ru.bugmakers.dto.social.VkCheckTokenRs;
 
 import java.net.URI;
 
@@ -23,6 +24,10 @@ public class SocialIdChecker {
     //vk
     private static final String VK_API_HOST = "api.vk.com";
     private static final String VK_API_VERSION = "5.69";
+    private static final String VK_CLIENT_ID = "6387565";
+    private static final String VK_CLIENT_SECRET = "ppL7EUvRYz3AcAtc3Z45";
+    private static final String VK_GRANT_TYPE = "client_credentials";
+
     //facebook
     private static final String FB_GRAF_HOST = "graph.facebook.com";
     //google
@@ -37,21 +42,42 @@ public class SocialIdChecker {
 
     public boolean isValidVkId(String token, String id) {
         boolean isValid = true;
-        final URI vkGetUserInfoUrl =
+
+        final URI vkGetAccessTokenUrl =
                 new HttpUrl.Builder()
                         .scheme(HTTPS)
                         .host(VK_API_HOST)
-                        .addPathSegment("method")
-                        .addPathSegment("secure.checkToken")
-                        .addQueryParameter("token", token)
-                        .addQueryParameter("access_token", token)
+                        .addPathSegment("oauth")
+                        .addPathSegment("access_token")
                         .addQueryParameter("v", VK_API_VERSION)
+                        .addQueryParameter("client_id", VK_CLIENT_ID)
+                        .addQueryParameter("client_secret", VK_CLIENT_SECRET)
+                        .addQueryParameter("grant_type", VK_GRANT_TYPE)
                         .build().uri();
 
+
         try {
-            final VkUserInfoRs vkUserInfoRs = restTemplate.getForObject(vkGetUserInfoUrl, VkUserInfoRs.class);
-            Assert.notNull(vkUserInfoRs, "Response from vk.com server is null!");
-            if (vkUserInfoRs.getVkUserInfo() == null || !id.equals(vkUserInfoRs.getVkUserInfo().getId())) {
+
+            final VkAccessTokenRs vkAccessTokenRs = restTemplate.getForObject(vkGetAccessTokenUrl, VkAccessTokenRs.class);
+            Assert.notNull(vkAccessTokenRs, String.format("Response from %s is null!", vkGetAccessTokenUrl.toString()));
+            Assert.notNull(vkAccessTokenRs.getAccessToken(), "Access token is null!");
+
+            final URI vkGetUserInfoUrl =
+                    new HttpUrl.Builder()
+                            .scheme(HTTPS)
+                            .host(VK_API_HOST)
+                            .addPathSegment("method")
+                            .addPathSegment("secure.checkToken")
+                            .addQueryParameter("token", token)
+                            .addQueryParameter("client_secret", VK_CLIENT_SECRET)
+                            .addQueryParameter("access_token", vkAccessTokenRs.getAccessToken())
+                            .addQueryParameter("v", VK_API_VERSION)
+                            .build().uri();
+
+            final VkCheckTokenRs vkCheckTokenRs = restTemplate.getForObject(vkGetUserInfoUrl, VkCheckTokenRs.class);
+            Assert.notNull(vkCheckTokenRs, String.format("Response from %s is null!", vkGetAccessTokenUrl.toString()));
+            Assert.isTrue("1".equals(vkCheckTokenRs.getSuccess()), String.format("Response from %s is not success!", vkGetUserInfoUrl.toString()));
+            if (vkCheckTokenRs.getUserId() == null || !id.equals(vkCheckTokenRs.getUserId())) {
                 isValid = false;
             }
         } catch (Exception e) {
