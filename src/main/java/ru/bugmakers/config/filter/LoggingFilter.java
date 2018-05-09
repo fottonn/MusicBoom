@@ -16,7 +16,6 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.transform.TransformerConfigurationException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -124,7 +123,7 @@ public class LoggingFilter extends OncePerRequestFilter {
         return sb.toString();
     }
 
-    private String prettyPrintResponse(CapturingResponseWrapper response) throws IOException, TransformerConfigurationException {
+    private String prettyPrintResponse(CapturingResponseWrapper response) throws IOException {
         String rs = EMPTY_STRING;
         String contentType = response.getContentType();
         if (contentType != null) {
@@ -189,6 +188,12 @@ public class LoggingFilter extends OncePerRequestFilter {
             } else {
                 JsonNode jsonNode = OBJECT_MAPPER.readTree(request.getReader());
                 body = OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode != null ? jsonNode : EMPTY_STRING);
+                final String password = "\"password\"";
+                if (body.contains(password)) {
+                    int start = body.indexOf("\"", body.indexOf(password) + password.length());
+                    int finish = body.indexOf("\"", start + 1);
+                    body = new StringBuilder(body).replace(start + 1, finish, "******").toString();
+                }
             }
         } catch (Exception e) {
             body = EMPTY_STRING;
