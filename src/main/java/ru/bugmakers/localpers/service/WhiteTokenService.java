@@ -31,4 +31,8 @@ public class WhiteTokenService {
     public WhiteToken saveWhiteToken(WhiteToken whiteToken) {
         return whiteTokenRepo.saveAndFlush(whiteToken);
     }
+
+    public void deleteWhiteToken(String token) {
+        whiteTokenRepo.deleteWhiteTokenByToken(token);
+    }
 }
