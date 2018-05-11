@@ -162,7 +162,7 @@ public class ActiveEventService {
      * @param userId идентификатор пользователя
      * @return признак активного выступления
      */
-    public boolean isExistEventByUserId(Long userId) {
+    public boolean isExistsEventByUserId(Long userId) {
         return activeEventRepo.existsById(userId);
     }
 }

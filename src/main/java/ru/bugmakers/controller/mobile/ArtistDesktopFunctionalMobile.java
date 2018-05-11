@@ -123,7 +123,7 @@ public class ArtistDesktopFunctionalMobile extends MbController {
 
         try {
 
-            if (activeEventService.isExistEventByUserId(principal.getUser().getId())) {
+            if (activeEventService.isExistsEventByUserId(principal.getUser().getId())) {
                 rs = MbResponse.success();
             } else {
                 throw MbException.create(MbError.CME02);
