@@ -155,4 +155,14 @@ public class ActiveEventService {
             activeEventsSchedule = threadPoolTaskScheduler.schedule(performanceEndTask, performanceEndTrigger);
         }
     }
+
+    /**
+     * Проверка на существование активного выступления
+     *
+     * @param userId идентификатор пользователя
+     * @return признак активного выступления
+     */
+    public boolean isExistEventByUserId(Long userId) {
+        return activeEventRepo.existsById(userId);
+    }
 }
