@@ -29,14 +29,12 @@ public class EmailService {
     private static final String CONFIRMATION_SUBJECT = "Подтверждение email";
     private static final String PSWD_RESTORE_SUBJECT = "Восстановление пароля";
     private static final String HOST = "www.musboom.ru";
-    private static final String WEBAPI = "webapi";
-    private static final String EMAIL = "email";
-    private static final String CONFIRMATION = "confirmation";
-    private static final String ACTIVATE = "activate";
     private static final String HTTPS = "https";
     private static final String CODE = "code";
     private static final String ID = "id";
-    private static final String RESTOREPASSWORD = "restorepassword";
+    private static final String SHARP = "#";
+    private static final String FINISH_RECOVER = "finish_recover";
+    private static final String FINISH_REGISTRATION = "finish_registration";
 
     private EmailSender emailSender;
     private UserService userService;
@@ -61,7 +59,6 @@ public class EmailService {
      * Метод валидации email
      *
      * @param user пользователь
-     * @throws MbException
      */
 
     public void sendConfirmationEmail(User user) throws MbException {
@@ -79,7 +76,8 @@ public class EmailService {
                 new HttpUrl.Builder()
                         .scheme(HTTPS)
                         .host(HOST)
-                        .addPathSegment(ACTIVATE)
+                        .addPathSegment(SHARP)
+                        .addPathSegment(FINISH_REGISTRATION)
                         .addPathSegment(generatedValue)
                         .build().toString();
 
@@ -103,7 +101,8 @@ public class EmailService {
                 new HttpUrl.Builder()
                         .scheme(HTTPS)
                         .host(HOST)
-                        .addPathSegment(RESTOREPASSWORD)
+                        .addPathSegment(SHARP)
+                        .addPathSegment(FINISH_RECOVER)
                         .addQueryParameter(ID, user.getId().toString())
                         .addQueryParameter(CODE, generatedValue)
                         .build().toString();
