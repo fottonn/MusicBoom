@@ -84,6 +84,7 @@ public class EmailService {
         if (user == null) {
             throw MbException.create(MbError.SEE04);
         } else if (!user.getEmail().isEnabled()) {
+            sendConfirmationEmail(user);
             throw MbException.create(MbError.SEE05);
         } else {
             user.setPasswordChangeCode(generatedValue);
