@@ -1,7 +1,6 @@
 package ru.bugmakers.service;
 
 import com.google.common.base.Strings;
-import okhttp3.HttpUrl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +34,8 @@ public class EmailService {
     private static final String SHARP = "#";
     private static final String FINISH_RECOVER = "finish_recover";
     private static final String FINISH_REGISTRATION = "finish_registration";
+    private static final String CONFIRM_LINK = "https://www.musboom.ru/#/finish_registration/";
+    private static final String RESTORE_LINK = "https://www.musboom.ru/#/finish_recover";
 
     private EmailSender emailSender;
     private UserService userService;
@@ -71,16 +72,7 @@ public class EmailService {
             throw MbException.create(MbError.SEE02);
         }
         String email = user.getEmail().getValue();
-
-        String confirmLink =
-                new HttpUrl.Builder()
-                        .scheme(HTTPS)
-                        .host(HOST)
-                        .addPathSegment(SHARP)
-                        .addPathSegment(FINISH_REGISTRATION)
-                        .addPathSegment(generatedValue)
-                        .build().toString();
-
+        String confirmLink = new StringBuilder(CONFIRM_LINK).append(generatedValue).toString();
         String messageText = EmailTextBuilder.confirmBuild(user.getName(), user.getSurName(), confirmLink);
         emailSender.send(email, CONFIRMATION_SUBJECT, messageText);
     }
@@ -97,16 +89,12 @@ public class EmailService {
             user.setPasswordChangeCode(generatedValue);
             userService.updateUser(user);
         }
-        String pswdRestoreLink =
-                new HttpUrl.Builder()
-                        .scheme(HTTPS)
-                        .host(HOST)
-                        .addPathSegment(SHARP)
-                        .addPathSegment(FINISH_RECOVER)
-                        .addQueryParameter(ID, user.getId().toString())
-                        .addQueryParameter(CODE, generatedValue)
-                        .build().toString();
 
+        String pswdRestoreLink =
+                new StringBuilder(RESTORE_LINK).append("?")
+                        .append(ID).append("=").append(user.getId().toString()).append("&")
+                        .append(CODE).append("=").append(generatedValue)
+                        .toString();
         String messageText = EmailTextBuilder.pswdRestoreBuild(user.getName(), user.getSurName(), pswdRestoreLink);
         emailSender.send(email, PSWD_RESTORE_SUBJECT, messageText);
     }
