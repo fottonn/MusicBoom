@@ -10,7 +10,7 @@ buildscript {
 
 apply plugin: 'war'
 
-def ver = '0.0.2-SNAPSHOT'
+def ver = '0.1.0-SNAPSHOT'
 
 group = 'ru.musboom'
 version = ver
