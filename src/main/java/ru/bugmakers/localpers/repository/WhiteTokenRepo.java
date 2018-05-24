@@ -8,4 +8,6 @@ import ru.bugmakers.localpers.entity.WhiteToken;
  */
 public interface WhiteTokenRepo extends JpaRepository<WhiteToken, Long> {
 
+    void deleteWhiteTokenByToken(String token);
+
 }

@@ -87,7 +87,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -150,8 +150,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     "/mapi/map.performers",
                     "/mapi/artist.get",
                     "/mapi/transaction",
-                    "/logout",
-                    "/enter"
+                    "/logout"
             };
 
 
@@ -161,20 +160,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .and()
                     .anonymous().disable()
                     .requestMatchers()
-                    .antMatchers(URLS)
+                    .antMatchers(POST, URLS)
                     .and()
                     .authorizeRequests()
-                    .antMatchers(POST,"/webapi/admin/**").hasAuthority(ADMIN.name())
+                    .antMatchers(POST, "/webapi/admin/**").hasAuthority(ADMIN.name())
                     .antMatchers(POST, "/webapi/artist/**").hasAuthority(ARTIST.name())
-                    .antMatchers(POST,"/webapi/operator/**").hasAuthority(OPERATOR.name())
-                    .antMatchers(POST,"/mapi/artist/**").hasAuthority(ARTIST.name())
-                    .antMatchers(POST,"/mapi/listener/**").hasAnyAuthority(LISTENER.name(), ARTIST.name())
-                    .antMatchers(POST,"/mapi/registereduser/**").hasAnyAuthority(ARTIST.name(), LISTENER.name())
-                    .antMatchers(POST,"/logout").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
-                    .antMatchers(POST,"/mapi/map.performers").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
-                    .antMatchers(POST,"/mapi/artist.get").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
-                    .antMatchers(POST,"/mapi/transaction").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
-                    .antMatchers(POST,"/enter").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
+                    .antMatchers(POST, "/webapi/operator/**").hasAuthority(OPERATOR.name())
+                    .antMatchers(POST, "/mapi/artist/**").hasAuthority(ARTIST.name())
+                    .antMatchers(POST, "/mapi/listener/**").hasAnyAuthority(LISTENER.name(), ARTIST.name())
+                    .antMatchers(POST, "/mapi/registereduser/**").hasAnyAuthority(ARTIST.name(), LISTENER.name())
+                    .antMatchers(POST, "/logout").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
+                    .antMatchers(POST, "/mapi/map.performers").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
+                    .antMatchers(POST, "/mapi/artist.get").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
+                    .antMatchers(POST, "/mapi/transaction").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
                     .and()
                     .requiresChannel().anyRequest().requires(appConfigProvider.getProperty("spring.security.requires.channel", String.class))
                     .and()
@@ -301,6 +299,75 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Configuration
     @Order(4)
+    public static class EnterApiConfig extends WebSecurityConfigurerAdapter {
+
+        private ProviderManager providerManager;
+        private FailureTokenAuthenticationEntryPoint failureTokenAuthenticationEntryPoint;
+        private MbLogoutSuccessHandler mbLogoutSuccessHandler;
+        private ConfigurationProvider appConfigProvider;
+
+        @Autowired
+        public void setProviderManager(ProviderManager providerManager) {
+            this.providerManager = providerManager;
+        }
+
+        @Autowired
+        public void setFailureTokenAuthenticationEntryPoint(FailureTokenAuthenticationEntryPoint failureTokenAuthenticationEntryPoint) {
+            this.failureTokenAuthenticationEntryPoint = failureTokenAuthenticationEntryPoint;
+        }
+
+        @Autowired
+        public void setMbLogoutSuccessHandler(MbLogoutSuccessHandler mbLogoutSuccessHandler) {
+            this.mbLogoutSuccessHandler = mbLogoutSuccessHandler;
+        }
+
+        @Autowired
+        @Qualifier("appConfigProvider")
+        public void setAppConfigProvider(ConfigurationProvider appConfigProvider) {
+            this.appConfigProvider = appConfigProvider;
+        }
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+
+            http
+                    .csrf().disable()
+                    .cors()
+                    .and()
+                    .anonymous().disable()
+                    .requestMatchers()
+                    .antMatchers(POST, "/enter")
+                    .and()
+                    .authorizeRequests()
+                    .antMatchers(POST, "/enter").hasAnyAuthority(ARTIST.name(), LISTENER.name(), OPERATOR.name(), ADMIN.name())
+                    .and()
+                    .requiresChannel().anyRequest().requires(appConfigProvider.getProperty("spring.security.requires.channel", String.class))
+                    .and()
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .and()
+                    .addFilterAfter(tokenAuthenticationIncludeFilter(), SecurityContextPersistenceFilter.class)
+                    .addFilterAfter(tokenAuthenticationFilter(), TokenAuthenticationIncludeFilter.class)
+                    .exceptionHandling()
+                    .authenticationEntryPoint(failureTokenAuthenticationEntryPoint)
+                    .and()
+                    .logout().logoutUrl("/logout").logoutSuccessHandler(mbLogoutSuccessHandler)
+            ;
+        }
+
+        @Bean
+        public TokenAuthenticationCheckFilter tokenAuthenticationFilter() {
+            return new TokenAuthenticationCheckFilter(providerManager);
+        }
+
+        @Bean
+        public TokenAuthenticationIncludeFilter tokenAuthenticationIncludeFilter() {
+            return new TokenAuthenticationIncludeFilter();
+        }
+
+    }
+
+    @Configuration
+    @Order(5)
     public static class PublicApiConfig extends WebSecurityConfigurerAdapter {
 
         private ConfigurationProvider appConfigProvider;

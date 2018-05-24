@@ -3,6 +3,7 @@ package ru.bugmakers.controller.mobile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import ru.bugmakers.config.principal.UserPrincipal;
 import ru.bugmakers.controller.MbController;
 import ru.bugmakers.dto.request.mobile.ListenerProfileMobileRq;
 import ru.bugmakers.dto.response.MbResponse;
+import ru.bugmakers.dto.response.mobile.ChangeListenerAvatarMobileRs;
 import ru.bugmakers.entity.Email;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.service.ArtistProfileEditService;
@@ -84,12 +86,15 @@ public class ListenerProfileMobile extends MbController {
     @PostMapping(value = "/avatar.change")
     public ResponseEntity<MbResponse> changeListenerAvatar(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                            MultipartHttpServletRequest rq) {
+        ChangeListenerAvatarMobileRs rs;
         try {
-            artistProfileEditService.artistAvatarChange(userPrincipal.getUser(), MultipartUtils.findAvatarPart(rq));
+            String avatarChange = artistProfileEditService.artistAvatarChange(userPrincipal.getUser(), MultipartUtils.findAvatarPart(rq));
+            Assert.notNull(avatarChange, "avatarChange is Null");
+            rs = new ChangeListenerAvatarMobileRs(avatarChange);
         } catch (Exception e) {
             return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(MbResponse.success());
+        return ResponseEntity.ok(rs);
     }
 
     @PostMapping(value = "/password.change")

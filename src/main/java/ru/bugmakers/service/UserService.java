@@ -3,6 +3,7 @@ package ru.bugmakers.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.bugmakers.dto.common.UserDTO;
@@ -22,10 +23,16 @@ import java.util.regex.Pattern;
 public class UserService {
 
     private UserRepo userRepo;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     public void setUserRepo(UserRepo userRepo) {
         this.userRepo = userRepo;
+    }
+
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User saveUser(User user) {
@@ -152,8 +159,9 @@ public class UserService {
             throw MbException.create(MbError.CME03);
         }
         if (code.equals(user.getPasswordChangeCode())) {
-            user.setPassword(password);
+            user.setPassword(passwordEncoder.encode(password));
             user.setPasswordChangeCode(null);
+            updateUser(user);
         } else {
             throw MbException.create(MbError.PRE01);
         }

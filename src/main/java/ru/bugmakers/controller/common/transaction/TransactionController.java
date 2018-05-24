@@ -68,7 +68,7 @@ public class TransactionController {
                 transaction.setRecipientId(recipientId);
                 transaction.setSenderMoneyBearerKind(MoneyBearerKind.CARD);
                 transaction.setRecipientMoneyBearerKind(MoneyBearerKind.WALLET);
-                transaction.setAmount(new BigDecimal(map.get(AMOUNT)));
+                transaction.setAmount(new BigDecimal(map.get(WITHDRAW_AMOUNT)));
                 transaction.setNumber(operationId);
                 transaction.setStatus(Status.ACCEPTED);
                 transactionService.saveTransaction(transaction);

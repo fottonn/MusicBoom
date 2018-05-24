@@ -51,7 +51,7 @@ public class UserDTO implements Serializable {
     private List<String> photos;
     @JsonProperty("name_representation")
     private String nameRepresentation;
-    private boolean registered;
+    private Boolean registered;
     @JsonProperty("referrer_id")
     private Long referrerId;
 
@@ -359,11 +359,11 @@ public class UserDTO implements Serializable {
         this.cardNumber = cardNumber;
     }
 
-    public boolean isRegistered() {
+    public Boolean isRegistered() {
         return registered;
     }
 
-    public void setRegistered(boolean registered) {
+    public void setRegistered(Boolean registered) {
         this.registered = registered;
     }
 

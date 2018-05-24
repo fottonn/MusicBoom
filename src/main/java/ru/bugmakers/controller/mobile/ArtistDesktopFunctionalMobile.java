@@ -116,4 +116,23 @@ public class ArtistDesktopFunctionalMobile extends MbController {
         return ResponseEntity.ok(rs);
     }
 
+    @PostMapping(value = "/performance.check")
+    public ResponseEntity<MbResponse> checkPerformance(@AuthenticationPrincipal UserPrincipal principal) {
+
+        MbResponse rs;
+
+        try {
+
+            if (activeEventService.isExistsEventByUserId(principal.getUser().getId())) {
+                rs = MbResponse.success();
+            } else {
+                throw MbException.create(MbError.CME02);
+            }
+
+        } catch (Exception e) {
+            return ResponseEntity.ok(MbResponse.error(e));
+        }
+        return ResponseEntity.ok(rs);
+    }
+
 }

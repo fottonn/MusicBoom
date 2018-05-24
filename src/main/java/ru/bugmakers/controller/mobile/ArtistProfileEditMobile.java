@@ -3,6 +3,7 @@ package ru.bugmakers.controller.mobile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,9 +14,14 @@ import ru.bugmakers.controller.MbController;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.dto.request.mobile.ArtistEditRqMobile;
 import ru.bugmakers.dto.response.MbResponse;
+import ru.bugmakers.dto.response.mobile.ChangeArtistAvatarMobileRs;
+import ru.bugmakers.dto.response.mobile.ChangeListenerAvatarMobileRs;
+import ru.bugmakers.dto.response.mobile.PhotosUploadArtistMobileRs;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.service.ArtistProfileEditService;
 import ru.bugmakers.utils.MultipartUtils;
+
+import java.util.List;
 
 /**
  * Профиль юзера музыкантаа
@@ -48,12 +54,14 @@ public class ArtistProfileEditMobile extends MbController {
     @PostMapping(value = "/avatar.change")
     public ResponseEntity<MbResponse> changeArtistAvatar(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                          MultipartHttpServletRequest rq) {
+        ChangeArtistAvatarMobileRs avatarMobileRs;
         try {
-            artistProfileEditService.artistAvatarChange(userPrincipal.getUser(), MultipartUtils.findAvatarPart(rq));
+            String avatarUrl = artistProfileEditService.artistAvatarChange(userPrincipal.getUser(), MultipartUtils.findAvatarPart(rq));
+            avatarMobileRs = new ChangeArtistAvatarMobileRs(avatarUrl);
         } catch (Exception e) {
             return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(MbResponse.success());
+        return ResponseEntity.ok(avatarMobileRs);
     }
 
     @PostMapping(value = "/password.change")
@@ -61,6 +69,16 @@ public class ArtistProfileEditMobile extends MbController {
                                                            @RequestBody ArtistEditRqMobile rq) {
         try {
             artistProfileEditService.artistPasswordChange(userPrincipal.getUser(), rq.getOldPassword(), rq.getNewPassword());
+        } catch (Exception e) {
+            return ResponseEntity.ok(MbResponse.error(e));
+        }
+        return ResponseEntity.ok(MbResponse.success());
+    }
+
+    @PostMapping(value = "/avatar.delete")
+    public ResponseEntity<MbResponse> deleteAvatar(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        try {
+            artistProfileEditService.artistAvatarDelete(userPrincipal.getUser());
         } catch (Exception e) {
             return ResponseEntity.ok(MbResponse.error(e));
         }
@@ -127,13 +145,15 @@ public class ArtistProfileEditMobile extends MbController {
     @PostMapping(value = "/photos.upload")
     public ResponseEntity<MbResponse> artistUploadPhotos(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                                          MultipartHttpServletRequest rq) {
+        PhotosUploadArtistMobileRs rs;
         try {
-            artistProfileEditService.artistUploadPhotos(userPrincipal.getUser(), MultipartUtils.findImageParts(rq));
+            List<String> artistUploadPhotos = artistProfileEditService.artistUploadPhotos(userPrincipal.getUser(), MultipartUtils.findImageParts(rq));
+            Assert.notEmpty(artistUploadPhotos,"artistUploadPhotos is empty");
+            rs = new PhotosUploadArtistMobileRs(artistUploadPhotos);
         } catch (Exception e) {
             return ResponseEntity.ok(MbResponse.error(e));
         }
-        return ResponseEntity.ok(MbResponse.success());
-
+        return ResponseEntity.ok(rs);
     }
 }
 

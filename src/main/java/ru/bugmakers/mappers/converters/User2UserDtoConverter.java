@@ -84,6 +84,7 @@ public class User2UserDtoConverter implements MbConverter<User, UserDTO> {
                 .withPhotos(photoService.getPhotosByUserId(source.getId()))
                 .withRegistered(source.isRegistered())
                 .withNameRepresentation(source.getNameRepresentation() != null ? source.getNameRepresentation() : NameRepresentation.NICKNAME)
+                .withAboutMe(source.getAboutMe())
                 ;
     }
 

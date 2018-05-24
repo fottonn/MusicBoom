@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
 
-import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -25,6 +24,7 @@ public class TransactionRequestValidator implements MbValidator<Map<String, Stri
     public static final String SEPARATOR = "&";
     public static final String OPERATION_ID = "operation_id";
     public static final String AMOUNT = "amount";
+    public static final String WITHDRAW_AMOUNT = "withdraw_amount";
     public static final String LABEL = "label";
     private static final String NOTIFICATION_TYPE = "notification_type";
     private static final String CURRENCY = "currency";

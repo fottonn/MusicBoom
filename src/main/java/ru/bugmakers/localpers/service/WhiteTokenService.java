@@ -31,4 +31,9 @@ public class WhiteTokenService {
     public WhiteToken saveWhiteToken(WhiteToken whiteToken) {
         return whiteTokenRepo.saveAndFlush(whiteToken);
     }
+
+    @Transactional("jpaLocalTransactionManager")
+    public void deleteWhiteToken(String token) {
+        whiteTokenRepo.deleteWhiteTokenByToken(token);
+    }
 }
