@@ -1,5 +1,6 @@
 package ru.bugmakers.controller.common.registration;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,14 +42,18 @@ public class RegistrationController extends MbController {
         try {
             registrationRequestValidator.validate(rq);
             SocialProvider provider;
-
-            try {
-                provider = SocialProvider.valueOf(rq.getProvider().toUpperCase());
-                if (rq.getSocialId() == null) {
-                    throw MbException.create(MbError.RGE13);
-                }
-            } catch (IllegalArgumentException e) {
+            String rqProvider = rq.getProvider();
+            if (StringUtils.isBlank(rqProvider)) {
                 provider = null;
+            } else {
+                try {
+                    provider = SocialProvider.valueOf(rqProvider.toUpperCase());
+                    if (rq.getSocialId() == null) {
+                        throw MbException.create(MbError.RGE13);
+                    }
+                } catch (IllegalArgumentException e) {
+                    throw MbException.create(MbError.RGE14);
+                }
             }
 
             Registrator registrator = registratorCreator.getRegistrator(provider);
