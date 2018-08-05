@@ -14,7 +14,11 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-import static ru.bugmakers.config.jwt.TokenData.*;
+import static ru.bugmakers.config.jwt.TokenData.TOKEN_CREATE_DATE;
+import static ru.bugmakers.config.jwt.TokenData.TOKEN_KEY;
+import static ru.bugmakers.config.jwt.TokenData.TOKEN_LIFE_TIME;
+import static ru.bugmakers.config.jwt.TokenData.USERNAME;
+import static ru.bugmakers.config.jwt.TokenData.USER_ID;
 
 /**
  * Created by Ivan

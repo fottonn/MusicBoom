@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.entity.User;
-import ru.bugmakers.enums.NameRepresentation;
 import ru.bugmakers.exceptions.MbError;
 import ru.bugmakers.exceptions.MbException;
 

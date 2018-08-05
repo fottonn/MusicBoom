@@ -15,7 +15,6 @@ import ru.bugmakers.dto.common.UserDTO;
 import ru.bugmakers.dto.request.mobile.ArtistEditRqMobile;
 import ru.bugmakers.dto.response.MbResponse;
 import ru.bugmakers.dto.response.mobile.ChangeArtistAvatarMobileRs;
-import ru.bugmakers.dto.response.mobile.ChangeListenerAvatarMobileRs;
 import ru.bugmakers.dto.response.mobile.PhotosUploadArtistMobileRs;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.service.ArtistProfileEditService;

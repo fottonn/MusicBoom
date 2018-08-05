@@ -31,7 +31,10 @@ import java.util.Arrays;
 
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
-import static ru.bugmakers.enums.Role.*;
+import static ru.bugmakers.enums.Role.ADMIN;
+import static ru.bugmakers.enums.Role.ARTIST;
+import static ru.bugmakers.enums.Role.LISTENER;
+import static ru.bugmakers.enums.Role.OPERATOR;
 
 /**
  * Created by Ivan

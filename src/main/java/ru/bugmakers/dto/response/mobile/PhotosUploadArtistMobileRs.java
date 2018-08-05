@@ -1,6 +1,5 @@
 package ru.bugmakers.dto.response.mobile;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import ru.bugmakers.dto.response.MbResponse;
 
 import java.util.List;

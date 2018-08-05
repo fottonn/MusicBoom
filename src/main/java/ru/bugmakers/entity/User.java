@@ -4,16 +4,43 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import ru.bugmakers.entity.auth.FbAuth;
 import ru.bugmakers.entity.auth.GoogleAuth;
 import ru.bugmakers.entity.auth.VkAuth;
-import ru.bugmakers.enums.*;
+import ru.bugmakers.enums.NameRepresentation;
+import ru.bugmakers.enums.Rank;
+import ru.bugmakers.enums.Role;
+import ru.bugmakers.enums.Sex;
+import ru.bugmakers.enums.UserType;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.SecondaryTable;
+import javax.persistence.SecondaryTables;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import static ru.bugmakers.entity.EntityConstants.*;
+import static ru.bugmakers.entity.EntityConstants.TLG_CONTACT;
+import static ru.bugmakers.entity.EntityConstants.USER_GEN;
+import static ru.bugmakers.entity.EntityConstants.USER_LOGIN;
+import static ru.bugmakers.entity.EntityConstants.USER_SEQ;
+import static ru.bugmakers.entity.EntityConstants.VK_CONTACT;
+import static ru.bugmakers.entity.EntityConstants.WHATSAPP_CONTACT;
 
 /**
  * Created by Ayrat on 16.11.2017.

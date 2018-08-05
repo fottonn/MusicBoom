@@ -19,7 +19,9 @@ import ru.bugmakers.validator.TransactionRequestValidator;
 import java.math.BigDecimal;
 import java.util.Map;
 
-import static ru.bugmakers.validator.TransactionRequestValidator.*;
+import static ru.bugmakers.validator.TransactionRequestValidator.LABEL;
+import static ru.bugmakers.validator.TransactionRequestValidator.OPERATION_ID;
+import static ru.bugmakers.validator.TransactionRequestValidator.WITHDRAW_AMOUNT;
 
 /**
  * Created by Ivan

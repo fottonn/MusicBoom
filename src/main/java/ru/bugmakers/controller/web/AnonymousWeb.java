@@ -2,24 +2,16 @@ package ru.bugmakers.controller.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.bugmakers.dto.ArtistsLocation;
-import ru.bugmakers.dto.request.web.TransactionWebRq;
 import ru.bugmakers.dto.response.MbResponse;
 import ru.bugmakers.dto.response.mobile.MapPerformersResponseMobile;
-import ru.bugmakers.entity.Transaction;
-import ru.bugmakers.enums.MoneyBearerKind;
-import ru.bugmakers.enums.Status;
-import ru.bugmakers.exceptions.MbError;
-import ru.bugmakers.exceptions.MbException;
 import ru.bugmakers.localpers.entity.ActiveEvent;
 import ru.bugmakers.localpers.service.ActiveEventService;
 import ru.bugmakers.mappers.converters.ActiveEvent2ArtistLocationConverter;
-import ru.bugmakers.service.TransactionService;
-import ru.bugmakers.service.UserService;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -7,7 +7,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import ru.bugmakers.entity.User;
 import ru.bugmakers.enums.Role;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Ivan
